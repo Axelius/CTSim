@@ -1,0 +1,238 @@
+/*
+ ============================================================================
+ Name        : Simulator.c
+ Author      : Alexander Winkler
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <Math.h>
+#include <limits.h>
+#include <time.h>
+
+#define ROWS 512
+#define COLS 512
+#define MAXANGLES 200
+#define SINOGRAMSIZE 512
+#define PI 3.1415926535897932384626433832795028841971693993751058f
+
+
+//forward Declarations
+int allocateRaw(int row, int col);
+int loadPGMToRaw(FILE *data);
+int allocateResult(int row, int col);
+int project(int angle);
+int exportPGM(FILE* out, unsigned int** write, int x, int y);
+int freeRaw(int row, int col);
+
+unsigned int **raw;
+unsigned int **result;
+
+int main(void) {
+	time_t start;
+	time_t stop;
+	time(&start);
+	double run = 0.0;
+
+	int a = 0;
+	(void)allocateRaw(ROWS,COLS);
+	(void)allocateResult(MAXANGLES, SINOGRAMSIZE);
+	FILE *file = fopen("Shepp_logan.pgm","r");
+	FILE *outFile = fopen("o2.pgm", "wb");
+	(void)loadPGMToRaw(file);
+
+	for(a = 0; a<MAXANGLES; a++){
+		project(a);
+	}
+	freeRaw(ROWS,COLS);
+	printf("projected\n");
+	fflush(stdout);
+	printf("exporting\n");
+	fflush(stdout);
+
+
+	exportPGM(outFile, result,MAXANGLES, SINOGRAMSIZE);
+	time(&stop);
+	run = difftime(stop, start);
+
+
+
+
+
+
+
+
+
+	printf("success\nRuntime:%f", run);
+	return EXIT_SUCCESS;
+}
+
+int allocateRaw(int row, int col) {
+	int i = 0;
+	raw = malloc(row * sizeof(int *));
+
+	if(raw == 0){
+		fprintf(stderr, "out of memory\n");
+		return 1;
+	}
+	for(i = 0; i < row; i++) {
+		raw[i] = malloc(col * sizeof(int));
+		//printf("pointer[%d]: %p\n", i, raw[i]);
+		if(raw[i] == 0){
+			fprintf(stderr, "out of memory\n");
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int freeRaw(int row, int col) {
+	int i = 0;
+	for(i = 0; i < row; i++) {
+		free(raw[i]);
+	}
+	free(raw);
+	return 0;
+}
+
+int allocateResult(int row, int col) {
+	int i = 0;
+	int j = 0;
+	result = malloc(row * sizeof(int *));
+
+	if(result == 0){
+		fprintf(stderr, "out of memory\n");
+		return 1;
+	}
+	for(i = 0; i < row; i++) {
+		result[i] = malloc(col * sizeof(int));
+		//printf("pointer[%d]: %p\n", i, raw[i]);
+		if(raw[i] == 0){
+			fprintf(stderr, "out of memory\n");
+			return 1;
+		}
+		for(j = 0; j<col; j++){
+			result[i][j] = 0;
+		}
+	}
+	return 0;
+}
+
+int loadPGMToRaw(FILE *data){
+	int return_value = 0;
+	int i = 0;
+	int j = 0;
+	char str[200];
+	int noOneCares = 0;
+
+
+	//Read P2
+	fgets(str, 200, data);
+	if(!(str[0] == 'P' && str[1] == '2')){
+		printf("Not a pgm!");
+		return 1;
+	}
+
+
+	fgets(str, 200, data); //Hopefully a commentary
+	fscanf(data,"%d",&noOneCares);
+	fscanf(data,"%d",&noOneCares);
+	fgets(str, 200, data);
+
+	fgets(str, 200, data);//colordepth, we dont care about
+
+
+
+	for(i=0; i < ROWS; i++){
+		for(j = 0; j<COLS; j++){
+			fscanf(data,"%d",&(raw[i][j]));
+		}
+
+	}
+
+	//	for(i=0; i < ROWS; i++){
+	//		for(j = 0; j<COLS; j++){
+	//			printf("%d ",(raw[i][j]));
+	//		}
+	//		printf("\n");
+	//	}
+
+
+
+	return return_value;
+}
+
+int project(int angle){
+	int t = 0;
+	int x = 0;
+	int y = 0;
+	int count = angle;
+	angle = angle - MAXANGLES/2;
+	int s = 0;
+	double alpha = (((double)(angle))/((double)MAXANGLES))*(PI);
+
+
+	printf("alpha: %f\n",  (alpha));
+	fflush(stdout);
+
+	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE; s++){
+		for(t = -COLS; t<COLS; t++){
+			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
+			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
+			if(x>=0 && x<COLS && y>=0 && y <COLS){
+				result[count][s+SINOGRAMSIZE/2] += raw[x][y];
+			}
+//			if((int)(t*sin(alpha)+s*cos(alpha)+0.5)>=-COLS/2 && (int)(t*sin(alpha)+s*cos(alpha)+0.5)<COLS/2 && (int)(-t*cos(alpha)+s*sin(alpha)+0.5)>=-COLS/2 && (int)(-t*cos(alpha)+s*sin(alpha)+0.5)<COLS/2){
+//				result[count][s+SINOGRAMSIZE/2] += raw[(int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2)][(int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2)];
+//			}
+		}
+	}
+
+	return 0;
+}
+
+int exportPGM(FILE* out, unsigned int** write, int x, int y){
+
+	int i= 0;
+	int j = 0;
+	int min = write[0][0];
+	int max = write[0][0];
+
+
+	//Output as a picture file
+	for(i = 0; i<x;i++){
+		for(j = 0; j<y; j++){
+			if(result[i][j]<min){
+				min = write[i][j];
+				//printf("newmin\n");
+			}
+
+			if(result[i][j]>max){
+				max = write[i][j];
+				//printf("newmax:%d\n", max);
+			}
+		}
+	}
+	//printf("fileout: %p\n",  (out));
+	//fflush(stdout);
+	//FILE *res = fopen("result.pgm", "wb");
+	fprintf(out, "P2\n# Created by Sim\n%d %d\n255\n", y, x);
+	for(i = 0; i<x;i++){
+		for(j = 0; j<y; j++){
+			//printf("%d \n",(int)(((((double)write[i][j])-min)/((double)max-(double)min))*255.0));
+			//fflush(stdout);
+			fprintf(out,"%d ",(int)(((((double)write[i][j])-min)/((double)max-(double)min))*255.0));
+		}
+	}
+
+	fclose(out);
+	return 0;
+}
+
+
+
+
