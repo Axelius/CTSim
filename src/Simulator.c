@@ -32,7 +32,8 @@ int freeRaw(int row, int col);
 unsigned int **raw;
 unsigned int **result;
 
-int main(void) {
+int mainn(void) {
+
 	time_t start;
 	time_t stop;
 	time(&start);
@@ -41,7 +42,7 @@ int main(void) {
 	int a = 0;
 	(void)allocateRaw(ROWS,COLS);
 	(void)allocateResult(MAXANGLES, SINOGRAMSIZE);
-	FILE *file = fopen("Shepp_logan.pgm","r");
+	FILE *file = fopen("slices/Shepp_logan.pgm","r");
 	FILE *outFile = fopen("o2.pgm", "wb");
 	(void)loadPGMToRaw(file);
 

@@ -153,7 +153,7 @@ void backProject(float deltaTheta, float *resultImage, float *sinogram){
 
 
 
-int mainn(int argc, char *argv[]){
+int main(int argc, char *argv[]){
 	int ret = 0;
 	ret = startReconstruction();
 	return ret;
@@ -164,7 +164,7 @@ int startReconstruction(){
 	int return_value = 0;
 	char str[200];
 
-	FILE *dataFile = fopen("o3.pgm","r");
+	FILE *dataFile = fopen("sinograms/o2.pgm","r");
 
 	//Read P2
 	fgets(str, 200, dataFile);
