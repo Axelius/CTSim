@@ -3,8 +3,8 @@
  Name        : Simulator.c
  Author      : Alexander Winkler
  Version     :
- Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Copyright   : Whatever you want to do with it
+ Description : CT Artefact Simulation: Inputs a slice and outputs a sinogram
  ============================================================================
  */
 
@@ -81,7 +81,6 @@ int allocateRaw(int row, int col) {
 	}
 	for(i = 0; i < row; i++) {
 		raw[i] = malloc(col * sizeof(int));
-		//printf("pointer[%d]: %p\n", i, raw[i]);
 		if(raw[i] == 0){
 			fprintf(stderr, "out of memory\n");
 			return 1;
@@ -110,7 +109,6 @@ int allocateResult(int row, int col) {
 	}
 	for(i = 0; i < row; i++) {
 		result[i] = malloc(col * sizeof(int));
-		//printf("pointer[%d]: %p\n", i, raw[i]);
 		if(raw[i] == 0){
 			fprintf(stderr, "out of memory\n");
 			return 1;
@@ -153,13 +151,6 @@ int loadPGMToRaw(FILE *data){
 		}
 
 	}
-
-	//	for(i=0; i < ROWS; i++){
-	//		for(j = 0; j<COLS; j++){
-	//			printf("%d ",(raw[i][j]));
-	//		}
-	//		printf("\n");
-	//	}
 
 
 

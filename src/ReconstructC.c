@@ -1,7 +1,12 @@
-/* 	ctreconstruct.cu
-	Adam Arnesen and Patrick Ostler
-	Winter 2010, ECEn 629, Dr. Brent Nelson
-*/
+/*
+ ============================================================================
+ Name        : ReconstructC.c
+ Author      : Alexander Winkler, Adam Arnesen and Patrick Ostler
+ Version     :
+ Copyright   : Whatever you want to do with it
+ Description : CT Reconstrcution In C: Takes a Sinogram and does a FBP to reconstruct a slice
+ ============================================================================
+ */
 
 #include <stdio.h>
 #include <math.h>
