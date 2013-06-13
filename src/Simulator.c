@@ -16,9 +16,10 @@
 
 #define ROWS 512
 #define COLS 512
-#define MAXANGLES 200
-#define SINOGRAMSIZE 512
+#define MAXANGLES 100
+#define SINOGRAMSIZE 256
 #define PI 3.1415926535897932384626433832795028841971693993751058f
+#define ATTF 1
 
 
 //forward Declarations
@@ -32,7 +33,7 @@ int freeRaw(int row, int col);
 unsigned int **raw;
 unsigned int **result;
 
-int mainn(void) {
+int simulation(void) {
 
 	time_t start;
 	time_t stop;
@@ -42,10 +43,10 @@ int mainn(void) {
 	int a = 0;
 	(void)allocateRaw(ROWS,COLS);
 	(void)allocateResult(MAXANGLES, SINOGRAMSIZE);
-	FILE *file = fopen("slices/Shepp_logan.pgm","r");
+	FILE *file = fopen("slices/CT000029.pgm","r");
 	FILE *outFile = fopen("o2.pgm", "wb");
 	(void)loadPGMToRaw(file);
-
+	printf("Starting Simulation\n");
 	for(a = 0; a<MAXANGLES; a++){
 		project(a);
 	}
@@ -68,7 +69,7 @@ int mainn(void) {
 
 
 
-	printf("success\nRuntime:%f", run);
+	printf("Simulation finished\nRuntime:%lf\n", run);
 	return EXIT_SUCCESS;
 }
 
@@ -168,15 +169,22 @@ int project(int angle){
 	double alpha = (((double)(angle))/((double)MAXANGLES))*(PI);
 
 
-	printf("alpha: %f\n",  (alpha));
-	fflush(stdout);
+//	printf("alpha: %f\n",  (alpha));
+//	fflush(stdout);
 
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE; s++){
 		for(t = -COLS; t<COLS; t++){
 			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
 			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
 			if(x>=0 && x<COLS && y>=0 && y <COLS){
-				result[count][s+SINOGRAMSIZE/2] += raw[x][y];
+				//if(raw[x][y] == 255){
+					//printf("Metal found\n");
+					//fflush(stdout);
+					//[count][s+SINOGRAMSIZE/2] = UINT_MAX/ATTF;
+				//}
+				//if(result[count][s+SINOGRAMSIZE/2] < UINT_MAX/ATTF){
+					result[count][s+SINOGRAMSIZE/2] += raw[x][y];
+				//}
 			}
 //			if((int)(t*sin(alpha)+s*cos(alpha)+0.5)>=-COLS/2 && (int)(t*sin(alpha)+s*cos(alpha)+0.5)<COLS/2 && (int)(-t*cos(alpha)+s*sin(alpha)+0.5)>=-COLS/2 && (int)(-t*cos(alpha)+s*sin(alpha)+0.5)<COLS/2){
 //				result[count][s+SINOGRAMSIZE/2] += raw[(int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2)][(int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2)];
@@ -189,8 +197,9 @@ int project(int angle){
 
 int exportPGM(FILE* out, unsigned int** write, int x, int y){
 
-	int i= 0;
+	int i = 0;
 	int j = 0;
+
 	int min = write[0][0];
 	int max = write[0][0];
 
@@ -198,21 +207,30 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 	//Output as a picture file
 	for(i = 0; i<x;i++){
 		for(j = 0; j<y; j++){
-			if(result[i][j]<min){
+			if(write[i][j]<min){
 				min = write[i][j];
 				//printf("newmin\n");
 			}
 
-			if(result[i][j]>max){
+			if(write[i][j]>max){
 				max = write[i][j];
 				//printf("newmax:%d\n", max);
 			}
+			//printf("i:%d,j:%d\n",i,j);
+			//fflush(stdout);
 		}
 	}
+
+
+
+
 	//printf("fileout: %p\n",  (out));
 	//fflush(stdout);
 	//FILE *res = fopen("result.pgm", "wb");
+	printf("here?\n");
+			fflush(stdout);
 	fprintf(out, "P2\n# Created by Sim\n%d %d\n255\n", y, x);
+
 	for(i = 0; i<x;i++){
 		for(j = 0; j<y; j++){
 			//printf("%d \n",(int)(((((double)write[i][j])-min)/((double)max-(double)min))*255.0));

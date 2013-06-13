@@ -16,9 +16,9 @@
 
 #define PI 3.141592653589793238462643f
 #define FILTER_WIDTH 1024  	//This is the length of the sinc filter.
-#define IMG_WIDTH 512		//This is the width of the reconstructed image.
-#define IMG_HEIGHT 512		//This is the height of the reconstructed image.
-#define NUM_ANGLES 200		//This is the number of projetion angles from the CT data.
+#define IMG_WIDTH 1024		//This is the width of the reconstructed image.
+#define IMG_HEIGHT 1024		//This is the height of the reconstructed image.
+#define NUM_ANGLES 100		//This is the number of projetion angles from the CT data.
 int imgwidth = 0;
 int imgheight = 0;
 int numangles = 0;
@@ -153,9 +153,20 @@ void backProject(float deltaTheta, float *resultImage, float *sinogram){
 
 
 
-int main(int argc, char *argv[]){
+int reconstruction(void){
+	printf("Starting Reconstruction\n");
 	int ret = 0;
+	time_t start;
+	time_t stop;
+	time(&start);
+	double run = 0.0;
+
 	ret = startReconstruction();
+
+	time(&stop);
+	printf("Reconstruction finished\n");
+	run = difftime(stop, start);
+	printf("Runtime: %lf", run);
 	return ret;
 
 }
@@ -164,7 +175,7 @@ int startReconstruction(){
 	int return_value = 0;
 	char str[200];
 
-	FILE *dataFile = fopen("sinograms/o2.pgm","r");
+	FILE *dataFile = fopen("o2.pgm","r");
 
 	//Read P2
 	fgets(str, 200, dataFile);
