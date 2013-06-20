@@ -7,6 +7,8 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
+#include <stdio.h>
+
 #define OFF 0
 #define FATAL 1
 #define ERROR 2
@@ -15,7 +17,7 @@
 #define DEBUG 5
 #define TRACE 6
 #define ALL 7
-#define LOGLEVEL WARN
+#define LOGLEVEL DEBUG
 
 
 

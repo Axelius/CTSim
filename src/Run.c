@@ -4,18 +4,37 @@
  *  Created on: 06.06.2013
  *      Author: Alexander
  */
-#include "Logger.h"
 #include "Run.h"
 
 
 int main(int argc, char *argv[]){
-	char pathToSlice[] = "slices/CT000029.pgm";
-	char pathToOutputSinogram[] = "o2.pgm";
-	char pathToOutputReconstruction[] = "outData.pgm";
+	if(argc != 3){
+		printhelp();
+		printf("argv[0]=%s\n",argv[0]);
+		logIt(ERROR, "Unsupported number of arguments.");
+		return 1;
+	}
+	char pathToSlice[200];
+	char pathToOutputReconstruction[200];
+	char pathToOutputSinogram[] = "simulatedSinogram.pgm";
+	char msg[200];
+
+	sprintf(pathToSlice, argv[1]);
+	//pathToSlice = argv[1]; //"slices/CT000029.pgm";
+	sprintf(pathToOutputReconstruction, argv[2]);
+	//"outData.pgm";
+	sprintf(msg, "pathToSlice=%s", pathToSlice);
+	logIt(DEBUG, msg);
+	sprintf(msg, "pathToOutputReconstruction=%s", pathToOutputReconstruction);
+	logIt(DEBUG, msg);
 
 	int ret = 0;
 	ret = simulation(pathToSlice, pathToOutputSinogram);
 	reconstruction(pathToOutputSinogram, pathToOutputReconstruction);
 	return ret;
+}
+
+void printhelp(){
+	printf("USAGE: CTSim [pathToSlice] [pathToOutputReconstruction]\n");
 }
 

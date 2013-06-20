@@ -5,7 +5,7 @@
  *      Author: Alexander
  */
 
-#include <stdio.h>
+
 #include "Logger.h"
 
 

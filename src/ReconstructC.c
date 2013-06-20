@@ -15,7 +15,6 @@
 #include "Logger.h"
 #include "Run.h"
 
-#define PI 3.141592653589793238462643f
 #define FILTER_WIDTH 512  	//This is the length of the sinc filter.
 #define IMG_WIDTH 512		//This is the width of the reconstructed image.
 #define IMG_HEIGHT 512		//This is the height of the reconstructed image.
@@ -29,6 +28,7 @@ char *sinoPath;
 int startReconstruction(void);
 
 int reconstruct(FILE *dataFile);
+int reconstruction(char *pathToSino, char *pathToOutput);
 
 /*
 	h is the sync filtere stored only in device memory.  There is no need to
@@ -41,7 +41,7 @@ struct timespec beg0, beg1, beg2, beg3, end0, end1, end2, end3;
 	This kernel creates a basic sync function to be used as a filter for the sinogram
  */
 void createFilter(){
-	logIt(INFO, "createFilter() started.");
+	logIt(DEBUG, "createFilter() started.");
 
 	int idx;
 	for(idx = -imgwidth; idx < imgwidth; idx++){
@@ -51,7 +51,7 @@ void createFilter(){
 		h[idx+imgwidth] = (0.5f*(idx==0?1.0f:(sin(PI*idx)/(PI*idx)))) - (0.25f*pow((idx==0?1.0f:(sin(PI*idx/2.0f)/(PI*idx/2.0f))), 2));
 
 	}
-	logIt(INFO, "createFilter() finished.");
+	logIt(DEBUG, "createFilter() finished.");
 }
 
 /*
@@ -59,7 +59,7 @@ void createFilter(){
 	each line of the sinogram with the 'h' filter.
  */
 void filterSinogram(float *img, float *img_res){
-	logIt(INFO, "filterSinogram(float *img, float *img_res) started.");
+	logIt(DEBUG, "filterSinogram(float *img, float *img_res) started.");
 	int j, k, i;
 	for (j = 0; j < numangles; j++){
 		for (k = 0; k < imgwidth; k++){
@@ -79,7 +79,7 @@ void filterSinogram(float *img, float *img_res){
 			img_res[gLoc] = sum;
 		}
 	}
-	logIt(INFO, "filterSinogram(float *img, float *img_res) finished.");
+	logIt(DEBUG, "filterSinogram(float *img, float *img_res) finished.");
 }
 
 /*
@@ -91,7 +91,7 @@ void filterSinogram(float *img, float *img_res){
 	and therefore the next line of the sinogram.
  */
 void backProject(float deltaTheta, float *resultImage, float *sinogram){
-	logIt(INFO, "backProject(float deltaTheta, float *resultImage, float *sinogram) started.");
+	logIt(DEBUG, "backProject(float deltaTheta, float *resultImage, float *sinogram) started.");
 	int i, j, k;
 	float cosTheta;
 	float sinTheta;
@@ -152,30 +152,21 @@ void backProject(float deltaTheta, float *resultImage, float *sinogram){
 			resultImage[k + j*imgwidth] = finalPixel;
 		}
 	}
-	logIt(INFO, "backProject(float deltaTheta, float *resultImage, float *sinogram) finished.");
+	logIt(DEBUG, "backProject(float deltaTheta, float *resultImage, float *sinogram) finished.");
 }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-int reconstruction(char *pathToSino, char *pathToOutput){
-	logIt(INFO, "reconstruction(char *pathToSino, char *pathToOutput) started.");
+int reconstruction(char *pathToSino, char *pathToOutput) {
+	logIt(DEBUG, "reconstruction(char *pathToSino, char *pathToOutput) started.");
 	outputPath = pathToOutput;
 	sinoPath = pathToSino;
-	printf("Debug: outputpath: %s", outputPath);
-	printf("Starting Reconstruction\n");
-	fflush(stdout);
+	char msg[80];
+	sprintf(msg, "Debug: outputpath: %s", outputPath);
+	logIt(DEBUG, msg);
+	logIt(INFO, "Starting Reconstruction.");
 	int ret = 0;
 	time_t start;
 	time_t stop;
@@ -185,10 +176,11 @@ int reconstruction(char *pathToSino, char *pathToOutput){
 	ret = startReconstruction();
 
 	time(&stop);
-	printf("Reconstruction finished\n");
 	run = difftime(stop, start);
-	printf("Runtime: %lf", run);
-	logIt(INFO, "reconstruction(char *pathToSino, char *pathToOutput) finished.");
+	//printf("Runtime: %lf", run);
+	sprintf(msg, "Reconstruction finished. Runtime: %lf.", run);
+	logIt(INFO, msg);
+	logIt(DEBUG, "reconstruction(char *pathToSino, char *pathToOutput) finished.");
 	return ret;
 
 }
@@ -196,7 +188,7 @@ int reconstruction(char *pathToSino, char *pathToOutput){
 
 
 int startReconstruction(){
-	logIt(INFO, "startReconstruction() started.");
+	logIt(DEBUG, "startReconstruction() started.");
 	int return_value = 0;
 	char str[200];
 
@@ -213,8 +205,9 @@ int startReconstruction(){
 	fgets(str, 200, dataFile); //Hopefully a commentary
 	fscanf(dataFile,"%d",&imgwidth);
 	fscanf(dataFile,"%d",&numangles);
-	printf("width: %d, angles: %d\n", imgwidth, numangles);
-	fflush(stdout);
+	char msg[30];
+	sprintf(msg, "width: %d, angles: %d", imgwidth, numangles);
+	logIt(TRACE, msg);
 	fgets(str, 200, dataFile);
 
 	fgets(str, 200, dataFile);//colordepth, we dont care about
@@ -236,7 +229,7 @@ int startReconstruction(){
 
 	return_value = reconstruct(dataFile);
 
-	logIt(INFO, "startReconstruction() finished.");
+	logIt(DEBUG, "startReconstruction() finished.");
 	return return_value;
 }
 
@@ -244,7 +237,7 @@ int startReconstruction(){
 	This is the primary host code.
  */
 int reconstruct(FILE *dataFile){
-	logIt(INFO, "reconstruct(FILE *dataFile) started.");
+	logIt(DEBUG, "reconstruct(FILE *dataFile) started.");
 	int j, i;
 	float min, max;
 	FILE *fileOut;
@@ -288,7 +281,7 @@ int reconstruct(FILE *dataFile){
 	// Back Project and reconstruct full image pixel by pixel.
 
 	backProject(deltaTheta, output, filt_sinogram);
-	logIt(INFO, "Backprojection finished.")
+	logIt(INFO, "Backprojection finished.");
 	fileOut = fopen(outputPath, "wb");
 	fprintf(fileOut, "P2\n%d %d\n255\n", imgwidth, imgheight);
 
@@ -352,7 +345,7 @@ int reconstruct(FILE *dataFile){
 	free(output);
 	fclose(fileOut);
 
-	logIt(INFO, "reconstruct(FILE *dataFile) finished.");
+	logIt(DEBUG, "reconstruct(FILE *dataFile) finished.");
 	return 0;
 }
 
