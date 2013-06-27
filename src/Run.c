@@ -28,6 +28,8 @@ int main(int argc, char *argv[]){
 
 	int ret = 0;
 	setUpAttenuation();
+	printf("WATER, 1.00005E+01: %f:%f\n", 1.00005E+01, getInterpolatedAttenuation(WATER, 2.00000E+01));
+		return 0;
 	ret = simulation(pathToSlice, pathToOutputSinogram);
 	reconstruction(pathToOutputSinogram, pathToOutputReconstruction);
 	return ret;

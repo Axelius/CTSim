@@ -250,6 +250,78 @@ int getAttenuation(int material, int kV, int positionX, int positionY){
 
 }
 
+double getInterpolatedAttenuation(int material, double energy){
+	logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) started.");
+	attenuation* mat;
+	size_t matLength;
+	int i = 0;
+	switch(material){
+	case IRON:
+		logIt(TRACE, "Material ID%d: iron", material);
+		mat = iron;
+		matLength = ironLength;
+		break;
+	case BONE:
+		logIt(TRACE, "Material ID%d: bone", material);
+		mat = bone;
+		matLength = boneLength;
+		break;
+	case WATER:
+		logIt(TRACE, "Material ID%d: water", material);
+		mat = water;
+		matLength = waterLength;
+		break;
+	case AIR:
+		logIt(TRACE, "Material ID%d: air", material);
+		mat = air;
+		matLength = airLength;
+		break;
+	case MUSCLE:
+		logIt(TRACE, "Material ID%d: muscle", material);
+		mat = muscle;
+		matLength = muscleLength;
+		break;
+	case TISSUE:
+		logIt(TRACE, "Material ID%d: tissue", material);
+		mat = tissue;
+		matLength = tissueLength;
+		break;
+	default:
+		logIt(ERROR, "Material ID%d not found!", material);
+		logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+		return 0.0f;
+	}
+
+
+
+
+	if(energy < mat[0].energy){
+		//extrapolate in the lower end
+		logIt(TRACE, "extrapolating in the lower end");
+		logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+		return ((mat[1].mu - mat[0].mu)/(mat[1].energy - mat[0].energy))*(energy - mat[0].energy) + mat[0].mu;
+	}
+	for(i = 0; i<matLength; i++){
+		if(energy-mat[i].energy < 0.000001){
+			logIt(TRACE, "perfect match");
+			logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+			return mat[i].mu;
+		}
+		if(energy>mat[i].energy && energy<mat[i+1].energy){
+			//logIt(TRACE, "%f<%f<%f", mat[i].energy, energy, mat[i+1].energy);
+			//interpolate here
+			logIt(TRACE, "interpolate between element[%d]: (energy: %f, mu: %f) and element[%d]: (energy: %f, mu: %f)", i, mat[i].energy, mat[i].mu, i+1, mat[i+1].energy, mat[i+1].mu);
+			logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+			return ((mat[i+1].mu - mat[i].mu)/(mat[i+1].energy - mat[i].energy))*(energy - mat[i].energy) + mat[i].mu;
+		}
+	}
+	//extrapolate in the upper end
+	//logIt(TRACE, "%f>%f", energy, mat[i].energy);
+	logIt(TRACE, "extrapolating in the upper end");
+	logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+	return ((mat[matLength-1].mu - mat[matLength-2].mu)/(mat[matLength-1].energy - mat[matLength-2].energy))*(energy - mat[matLength-1].energy) + mat[matLength-1].mu;
+}
+
 void setUpAttenuation(){
 	logIt(DEBUG, "setUpAttenuation() started.");
 	readAttenuationFile("MassAttenuationCoefficients/iron.txt", &iron, &ironLength);
