@@ -15,13 +15,11 @@
 unsigned int **raw;
 unsigned int **result;
 
+
 int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	logIt(DEBUG, "simulation(char *pathToSlice, char *pathToOutputSinogram) started.");
-	char msg[50];
-	sprintf(msg, "pathToOutputSinogram: %s", pathToOutputSinogram );
-	logIt(INFO, msg);
-	sprintf(msg, "pathToSlice: %s", pathToSlice);
-	logIt(INFO, msg);
+	logIt(INFO, "pathToOutputSinogram: %s", pathToOutputSinogram );
+	logIt(INFO, "pathToSlice: %s", pathToSlice);
 	time_t start;
 	time_t stop;
 	time(&start);
@@ -56,8 +54,7 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	run = difftime(stop, start);
 
 
-	sprintf(msg, "Simulation finished. Runtime: %lf.", run);
-	logIt(INFO, msg);
+	logIt(INFO,  "Simulation finished. Runtime: %lf.", run);
 	fclose(outFile);
 	fclose(file);
 	logIt(DEBUG, "simulation(char *pathToSlice, char *pathToOutputSinogram) finished.");
@@ -174,12 +171,13 @@ int project(int angle){
 
 	//	printf("alpha: %f\n",  (alpha));
 	//	fflush(stdout);
-
+	//TODO: Loop over all materials
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
 		for(t = -COLS; t<COLS; t++){
 			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
 			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
 			if(x>=0 && x<COLS && y>=0 && y <COLS){
+				//TODO: Loop over all x ray intensities
 				if(raw[x][y] == 255){
 					logIt(DEBUG, "Metal found.");
 					result[count][s+SINOGRAMSIZE/2] = UINT_MAX/ATTF;
@@ -246,6 +244,88 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 	fclose(out);
 	logIt(DEBUG, "exportPGM(FILE* out, unsigned int** write, int x, int y) finished.");
 	return 0;
+}
+
+int getAttenuation(int material, int kV, int positionX, int positionY){
+
+}
+
+void setUpAttenuation(){
+	logIt(DEBUG, "setUpAttenuation() started.");
+	readAttenuationFile("MassAttenuationCoefficients/iron.txt", &iron, &ironLength);
+	readAttenuationFile("MassAttenuationCoefficients/boneCortical.txt", &bone, &boneLength);
+	readAttenuationFile("MassAttenuationCoefficients/water.txt", &water, &waterLength);
+	readAttenuationFile("MassAttenuationCoefficients/air.txt", &air, &airLength);
+	readAttenuationFile("MassAttenuationCoefficients/muscleSceletal.txt", &muscle, &muscleLength);
+	readAttenuationFile("MassAttenuationCoefficients/tissueSoft.txt", &tissue, &tissueLength);
+	int i = 0;
+	if(LOGLEVEL == TRACE){
+		for(i = 0; i<ironLength; i++){
+			logIt(TRACE, "iron[%d]: iron.energy: %f, iron.mu: %f\n", i, iron[i].energy, iron[i].mu);
+		}
+		for(i = 0; i<boneLength; i++){
+			logIt(TRACE, "bone[%d]: bone.energy: %f, bone.mu: %f\n", i, bone[i].energy, bone[i].mu);
+		}
+
+		for(i = 0; i<waterLength; i++){
+			logIt(TRACE, "water[%d]: water.energy: %f, water.mu: %f\n", i, water[i].energy, water[i].mu);
+		}
+
+		for(i = 0; i<airLength; i++){
+			logIt(TRACE, "air[%d]: air.energy: %f, air.mu: %f\n", i, air[i].energy, air[i].mu);
+		}
+
+		for(i = 0; i<muscleLength; i++){
+			logIt(TRACE, "muscle[%d]: muscle.energy: %f, muscle.mu: %f\n", i, muscle[i].energy, muscle[i].mu);
+		}
+
+		for(i = 0; i<tissueLength; i++){
+			logIt(TRACE, "tissue[%d]: tissue.energy: %f, tissue.mu: %f\n", i, tissue[i].energy, tissue[i].mu);
+		}
+	}
+
+
+
+
+	logIt(DEBUG, "setUpAttenuation() finished.");
+}
+
+void readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength){
+	logIt(DEBUG, "readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength) started.");
+	char line[200];
+	int i = 0;
+	int numAlloc;
+	FILE* read = fopen(pathToAttFile, "r");
+	while(fgets(line, 200, read) != NULL){
+		logIt(TRACE, "Line%d: %s", i, line);
+		i++;
+	}
+	logIt(TRACE, "%d lines found.", i);
+	numAlloc = i-6;
+	*attLength = i-6;
+	*att = malloc(numAlloc * sizeof(attenuation));
+	if(att == 0){
+		logIt(ERROR, "out of memory");
+	}
+	logIt(TRACE,  "Allocated memory for %d attenuation elements.", numAlloc);
+	fclose(read);
+	read = fopen(pathToAttFile, "r");
+	logIt(TRACE, "File reopened");
+	i = 0;
+	//read the header of the file and discard it
+	fgets(line, 200, read);
+	fgets(line, 200, read);
+	fgets(line, 200, read);
+	fgets(line, 200, read);
+
+	while(i< numAlloc && fgets(line, 200, read) != NULL){
+		fscanf(read, "%E  %E", &(((*att)[i]).energy), &(((*att)[i]).mu));
+		logIt(TRACE, "att[%d]: energy: %f, mu: %f\n",i, (((*att)[i]).energy), (((*att)[i]).mu));
+		i++;
+	}
+	//attenuation from the file should now be in the attenuation struct
+	fclose(read);
+	logIt(DEBUG, "readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength) finished.");
 }
 
 

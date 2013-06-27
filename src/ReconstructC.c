@@ -45,9 +45,7 @@ void createFilter(){
 
 	int idx;
 	for(idx = -imgwidth; idx < imgwidth; idx++){
-		char message [40];
-		sprintf(message, "idx+imgwidth = %d", (idx+imgwidth));
-		logIt(TRACE, message);
+		logIt(TRACE, "idx+imgwidth = %d", (idx+imgwidth));
 		h[idx+imgwidth] = (0.5f*(idx==0?1.0f:(sin(PI*idx)/(PI*idx)))) - (0.25f*pow((idx==0?1.0f:(sin(PI*idx/2.0f)/(PI*idx/2.0f))), 2));
 
 	}
@@ -163,9 +161,7 @@ int reconstruction(char *pathToSino, char *pathToOutput) {
 	logIt(DEBUG, "reconstruction(char *pathToSino, char *pathToOutput) started.");
 	outputPath = pathToOutput;
 	sinoPath = pathToSino;
-	char msg[80];
-	sprintf(msg, "Debug: outputpath: %s", outputPath);
-	logIt(DEBUG, msg);
+	logIt(DEBUG, "Debug: outputpath: %s", outputPath);
 	logIt(INFO, "Starting Reconstruction.");
 	int ret = 0;
 	time_t start;
@@ -177,9 +173,7 @@ int reconstruction(char *pathToSino, char *pathToOutput) {
 
 	time(&stop);
 	run = difftime(stop, start);
-	//printf("Runtime: %lf", run);
-	sprintf(msg, "Reconstruction finished. Runtime: %lf.", run);
-	logIt(INFO, msg);
+	logIt(INFO,  "Reconstruction finished. Runtime: %lf.", run);
 	logIt(DEBUG, "reconstruction(char *pathToSino, char *pathToOutput) finished.");
 	return ret;
 
@@ -205,9 +199,7 @@ int startReconstruction(){
 	fgets(str, 200, dataFile); //Hopefully a commentary
 	fscanf(dataFile,"%d",&imgwidth);
 	fscanf(dataFile,"%d",&numangles);
-	char msg[30];
-	sprintf(msg, "width: %d, angles: %d", imgwidth, numangles);
-	logIt(TRACE, msg);
+	logIt(TRACE, "width: %d, angles: %d", imgwidth, numangles);
 	fgets(str, 200, dataFile);
 
 	fgets(str, 200, dataFile);//colordepth, we dont care about

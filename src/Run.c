@@ -23,12 +23,11 @@ int main(int argc, char *argv[]){
 	//pathToSlice = argv[1]; //"slices/CT000029.pgm";
 	sprintf(pathToOutputReconstruction, argv[2]);
 	//"outData.pgm";
-	sprintf(msg, "pathToSlice=%s", pathToSlice);
-	logIt(DEBUG, msg);
-	sprintf(msg, "pathToOutputReconstruction=%s", pathToOutputReconstruction);
-	logIt(DEBUG, msg);
+	logIt(DEBUG, "pathToSlice=%s", pathToSlice);
+	logIt(DEBUG, "pathToOutputReconstruction=%s", pathToOutputReconstruction);
 
 	int ret = 0;
+	setUpAttenuation();
 	ret = simulation(pathToSlice, pathToOutputSinogram);
 	reconstruction(pathToOutputSinogram, pathToOutputReconstruction);
 	return ret;
