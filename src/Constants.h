@@ -11,7 +11,7 @@
 //Simulation Constants
 
 //This is the number of projection angles for the CT data.
-#define NUM_ANGLES 100
+#define NUM_ANGLES 60
 
 //rows of the input and output image
 #define ROWS 512
@@ -26,10 +26,10 @@
 #define MINENERGY 20
 
 //Maximum Energy Level of the X-ray beams in KeV
-#define MAXENERGY 140
+#define MAXENERGY 60
 
 //number of simulations for energy levels
-#define ENERGYLEVELS 4
+#define ENERGYLEVELS 3
 
 
 

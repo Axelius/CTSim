@@ -13,8 +13,8 @@
 void logIt(int messageLevel, const char *fmt, ...){
 	va_list args;
 	va_start(args, fmt);
-	char msg[256];
 	if(messageLevel <= LOGLEVEL){
+		char msg[256];
 		printf("[LogIt] ");
 		switch(messageLevel){
 		case FATAL: printf("FATAL: "); break;

@@ -15,6 +15,7 @@ int main(int argc, char *argv[]){
 		logIt(ERROR, "Unsupported number of arguments. Exiting...");
 		return 1;
 	}
+
 	char pathToSlice[200];
 	char pathToOutputReconstruction[200];
 	char pathToOutputSinogram[] = "simulatedSinogram.pgm";
