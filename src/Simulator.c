@@ -9,45 +9,48 @@
  */
 
 #include "Simulator.h"
+#include <string.h>
 
-
-
-unsigned int **raw;
-unsigned int **result;
 
 
 int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	logIt(DEBUG, "simulation(char *pathToSlice, char *pathToOutputSinogram) started.");
-	logIt(INFO, "pathToOutputSinogram: %s", pathToOutputSinogram );
-	logIt(INFO, "pathToSlice: %s", pathToSlice);
 	time_t start;
 	time_t stop;
 	time(&start);
 	double run = 0.0;
+	logIt(INFO, "pathToOutputSinogram: %s", pathToOutputSinogram );
+	logIt(INFO, "pathToSlice: %s", pathToSlice);
 
+	setUpRawFiles(pathToSlice);
 
 
 	int a = 0;
-	(void)allocateRaw(ROWS,COLS);
+
+
+	allocateAllRaws();
 	(void)allocateResult(NUM_ANGLES, SINOGRAMSIZE);
-	FILE *file = fopen(pathToSlice,"r");
 	FILE *outFile = fopen(pathToOutputSinogram, "wb");
 
 
-	(void)loadPGMToRaw(file);
+	(void)loadPGMToRaw(&ironRaw,	ironImage);
+	(void)loadPGMToRaw(&boneRaw,	boneImage);
+	(void)loadPGMToRaw(&waterRaw,	waterImage);
+	(void)loadPGMToRaw(&airRaw,		airImage);
+	(void)loadPGMToRaw(&muscleRaw,	muscleImage);
+	(void)loadPGMToRaw(&tissueRaw,	tissueImage);
 
 	logIt(INFO, "Starting Simulation.");
 
 	logIt(INFO, "Starting projection.");
 	for(a = 0; a<NUM_ANGLES; a++){
+		logIt(INFO, "Projection %d of %d finished.", a, NUM_ANGLES);
 		project(a);
 	}
-	logIt(INFO, "Projection finished.");
+	logIt(INFO, "Projection completed.");
 
 
-	freeRaw(ROWS,COLS);
-
-
+	freeAllRaws();
 	exportPGM(outFile, result, NUM_ANGLES, SINOGRAMSIZE);
 
 	time(&stop);
@@ -56,41 +59,44 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 
 	logIt(INFO,  "Simulation finished. Runtime: %lf.", run);
 	fclose(outFile);
-	fclose(file);
+	closeAllInputImages();
 	logIt(DEBUG, "simulation(char *pathToSlice, char *pathToOutputSinogram) finished.");
 	return EXIT_SUCCESS;
 }
 
-int allocateRaw(int row, int col) {
-	logIt(DEBUG, "allocateRaw(int row, int col) started.");
+int allocateRaw(unsigned int ***raw, int row, int col) {
+	logIt(DEBUG, "int allocateRaw(unsigned int ***raw, int row, int col) started.");
 	int i = 0;
-	raw = malloc(row * sizeof(int *));
 
-	if(raw == 0){
+	*raw = malloc(row * sizeof(unsigned int *));
+
+	if(*raw == 0){
 		logIt(ERROR, "out of memory");
 		fprintf(stderr, "out of memory\n");
 		return 1;
 	}
+
 	for(i = 0; i < row; i++) {
-		raw[i] = malloc(col * sizeof(int));
-		if(raw[i] == 0){
+		(*raw)[i] = malloc(col * sizeof(unsigned int));
+		if((*raw)[i] == 0){
 			logIt(ERROR, "out of memory in inner loop");
 			fprintf(stderr, "out of memory\n");
 			return 1;
 		}
 	}
-	logIt(DEBUG, "allocateRaw(int row, int col) finished.");
+
+	logIt(DEBUG, "int allocateRaw(unsigned int ***raw, int row, int col) finished.");
 	return 0;
 }
 
-int freeRaw(int row, int col) {
-	logIt(DEBUG, "freeRaw(int row, int col) started.");
+int freeRaw(unsigned int ***raw, int row, int col) {
+	logIt(DEBUG, "int freeRaw(unsigned int ***raw, int row, int col) started.");
 	int i = 0;
 	for(i = 0; i < row; i++) {
-		free(raw[i]);
+		free((*raw)[i]);
 	}
-	free(raw);
-	logIt(DEBUG, "freeRaw(int row, int col) finished.");
+	free(*raw);
+	logIt(DEBUG, "int freeRaw(unsigned int ***raw, int row, int col) finished.");
 	return 0;
 }
 
@@ -107,7 +113,7 @@ int allocateResult(int row, int col) {
 	}
 	for(i = 0; i < row; i++) {
 		result[i] = malloc(col * sizeof(int));
-		if(raw[i] == 0){
+		if(result[i] == 0){
 			logIt(ERROR, "out of memory in inner loop");
 			fprintf(stderr, "out of memory\n");
 			return 1;
@@ -120,8 +126,8 @@ int allocateResult(int row, int col) {
 	return 0;
 }
 
-int loadPGMToRaw(FILE *data){
-	logIt(DEBUG, "loadPGMToRaw(FILE *data) started.");
+int loadPGMToRaw(unsigned int ***raw, FILE *data){
+	logIt(DEBUG, "loadPGMToRaw(unsigned int ***raw, FILE *data) started.");
 	int return_value = 0;
 	int i = 0;
 	int j = 0;
@@ -129,6 +135,7 @@ int loadPGMToRaw(FILE *data){
 	int noOneCares = 0;
 
 
+	logIt(TRACE, "here??");
 	//Read P2
 	fgets(str, 200, data);
 	if(!(str[0] == 'P' && str[1] == '2')){
@@ -148,13 +155,13 @@ int loadPGMToRaw(FILE *data){
 
 	for(i=0; i < ROWS; i++){
 		for(j = 0; j<COLS; j++){
-			fscanf(data,"%d",&(raw[i][j]));
+			fscanf(data,"%d",&((*raw)[i][j]));
 		}
 
 	}
 
 
-	logIt(DEBUG, "loadPGMToRaw(FILE *data) finished.");
+	logIt(DEBUG, "loadPGMToRaw(unsigned int ***raw, FILE *data) finished.");
 	return return_value;
 }
 
@@ -166,25 +173,20 @@ int project(int angle){
 	int count = angle;
 	angle = angle - NUM_ANGLES/2;
 	int s = 0;
+	int mat = 0;
+	double energy = MINENERGY;
 	double alpha = (((double)(angle))/((double)NUM_ANGLES))*(PI);
 
-
-	//	printf("alpha: %f\n",  (alpha));
-	//	fflush(stdout);
 	//TODO: Loop over all materials
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
 		for(t = -COLS; t<COLS; t++){
 			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
 			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
 			if(x>=0 && x<COLS && y>=0 && y <COLS){
-				//TODO: Loop over all x ray intensities
-				if(raw[x][y] == 255){
-					logIt(DEBUG, "Metal found.");
-					result[count][s+SINOGRAMSIZE/2] = UINT_MAX/ATTF;
-				}
-				else {
-					//if(result[count][s+SINOGRAMSIZE/2] != UINT_MAX/ATTF){
-					result[count][s+SINOGRAMSIZE/2] += raw[x][y];
+				for(energy = MINENERGY; energy<=MAXENERGY; energy+=((MAXENERGY-MINENERGY)/ENERGYLEVELS)){
+					for(mat = MINMAT; mat< MAXMAT; mat++){
+						result[count][s+SINOGRAMSIZE/2] += getAttenuation(mat, energy, x,y);//raw[x][y];
+					}
 				}
 			}
 			//			if((int)(t*sin(alpha)+s*cos(alpha)+0.5)>=-COLS/2 && (int)(t*sin(alpha)+s*cos(alpha)+0.5)<COLS/2 && (int)(-t*cos(alpha)+s*sin(alpha)+0.5)>=-COLS/2 && (int)(-t*cos(alpha)+s*sin(alpha)+0.5)<COLS/2){
@@ -246,12 +248,47 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 	return 0;
 }
 
-int getAttenuation(int material, int kV, int positionX, int positionY){
+int getAttenuation(int material, double kV, int positionX, int positionY) {
+	logIt(TRACE, "getAttenuation(int material, double kV, int positionX, int positionY) started.");
+	unsigned int **imageRaw;
+	switch(material){
+	case IRON:
+		logIt(TRACE, "Material ID%d: iron", material);
+		imageRaw = ironRaw;
+		break;
+	case BONE:
+		logIt(TRACE, "Material ID%d: bone", material);
+		imageRaw = boneRaw;
+		break;
+	case WATER:
+		logIt(TRACE, "Material ID%d: water", material);
+		imageRaw = waterRaw;
+		break;
+	case AIR:
+		logIt(TRACE, "Material ID%d: air", material);
+		imageRaw = airRaw;
+		break;
+	case MUSCLE:
+		logIt(TRACE, "Material ID%d: muscle", material);
+		imageRaw = muscleRaw;
+		break;
+	case TISSUE:
+		logIt(TRACE, "Material ID%d: tissue", material);
+		imageRaw = tissueRaw;
+		break;
+	default:
+		logIt(ERROR, "Material ID%d not found!", material);
+		logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
+		return 0.0f;
+	}
 
+
+
+	return (int)(getInterpolatedAttenuation(material, kV)*((double)imageRaw[positionX][positionY]));
 }
 
-double getInterpolatedAttenuation(int material, double energy){
-	logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) started.");
+double getInterpolatedAttenuation(int material, double energy) {
+	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) started.");
 	attenuation* mat;
 	size_t matLength;
 	int i = 0;
@@ -288,40 +325,40 @@ double getInterpolatedAttenuation(int material, double energy){
 		break;
 	default:
 		logIt(ERROR, "Material ID%d not found!", material);
-		logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+		logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 		return 0.0f;
 	}
-
 
 
 
 	if(energy < mat[0].energy){
 		//extrapolate in the lower end
 		logIt(TRACE, "extrapolating in the lower end");
-		logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+		logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 		return ((mat[1].mu - mat[0].mu)/(mat[1].energy - mat[0].energy))*(energy - mat[0].energy) + mat[0].mu;
 	}
 	for(i = 0; i<matLength; i++){
 		if(energy-mat[i].energy < 0.000001){
 			logIt(TRACE, "perfect match");
-			logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+			logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 			return mat[i].mu;
 		}
 		if(energy>mat[i].energy && energy<mat[i+1].energy){
 			//logIt(TRACE, "%f<%f<%f", mat[i].energy, energy, mat[i+1].energy);
 			//interpolate here
 			logIt(TRACE, "interpolate between element[%d]: (energy: %f, mu: %f) and element[%d]: (energy: %f, mu: %f)", i, mat[i].energy, mat[i].mu, i+1, mat[i+1].energy, mat[i+1].mu);
-			logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+			logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 			return ((mat[i+1].mu - mat[i].mu)/(mat[i+1].energy - mat[i].energy))*(energy - mat[i].energy) + mat[i].mu;
 		}
 	}
 	//extrapolate in the upper end
 	//logIt(TRACE, "%f>%f", energy, mat[i].energy);
 	logIt(TRACE, "extrapolating in the upper end");
-	logIt(DEBUG, "getInterpolatedAttenuation(int material, double energy) finished.");
+	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 	return ((mat[matLength-1].mu - mat[matLength-2].mu)/(mat[matLength-1].energy - mat[matLength-2].energy))*(energy - mat[matLength-1].energy) + mat[matLength-1].mu;
 }
 
+//Reads all attenuation coefficient tables. Path to them is hardcoded
 void setUpAttenuation(){
 	logIt(DEBUG, "setUpAttenuation() started.");
 	readAttenuationFile("MassAttenuationCoefficients/iron.txt", &iron, &ironLength);
@@ -330,6 +367,8 @@ void setUpAttenuation(){
 	readAttenuationFile("MassAttenuationCoefficients/air.txt", &air, &airLength);
 	readAttenuationFile("MassAttenuationCoefficients/muscleSceletal.txt", &muscle, &muscleLength);
 	readAttenuationFile("MassAttenuationCoefficients/tissueSoft.txt", &tissue, &tissueLength);
+
+	//Log attenuations if loglevel == trace
 	int i = 0;
 	if(LOGLEVEL == TRACE){
 		for(i = 0; i<ironLength; i++){
@@ -361,7 +400,7 @@ void setUpAttenuation(){
 
 	logIt(DEBUG, "setUpAttenuation() finished.");
 }
-
+//Reads table of attenuation coefficients and saves them to attenuation array
 void readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength){
 	logIt(DEBUG, "readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength) started.");
 	char line[200];
@@ -400,6 +439,73 @@ void readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLeng
 	logIt(DEBUG, "readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength) finished.");
 }
 
+void setUpRawFiles(char *pathToSlices){
+	logIt(DEBUG, "setUpRawFiles(char *pathToSlices) started.");
+	char paths[256];
 
+	strcpy(paths, pathToSlices);
+	strcat(paths, "/air.pgm");
+	logIt(TRACE, "Path to air: %s", paths);
+	airImage = fopen(paths,"r");
 
+	strcpy(paths, pathToSlices);
+	strcat(paths, "/bone.pgm");
+	logIt(TRACE, "Path to bone: %s", paths);
+	boneImage = fopen(paths,"r");
+
+	strcpy(paths, pathToSlices);
+	strcat(paths, "/iron.pgm");
+	logIt(TRACE, "Path to iron: %s", paths);
+	ironImage = fopen(paths,"r");
+
+	strcpy(paths, pathToSlices);
+	strcat(paths, "/muscle.pgm");
+	logIt(TRACE, "Path to muscle: %s", paths);
+	muscleImage = fopen(paths,"r");
+
+	strcpy(paths, pathToSlices);
+	strcat(paths, "/tissue.pgm");
+	logIt(TRACE, "Path to tissue: %s", paths);
+	tissueImage = fopen(paths,"r");
+
+	strcpy(paths, pathToSlices);
+	strcat(paths, "/water.pgm");
+	logIt(TRACE, "Path to water: %s", paths);
+	waterImage = fopen(paths,"r");
+
+	logIt(DEBUG, "setUpRawFiles(char *pathToSlices) finished.");
+}
+
+void allocateAllRaws() {
+	logIt(DEBUG, "allocateAllRaws()  started.");
+	(void) allocateRaw(&ironRaw, ROWS, COLS);
+	(void) allocateRaw(&boneRaw, ROWS, COLS);
+	(void) allocateRaw(&waterRaw, ROWS, COLS);
+	(void) allocateRaw(&airRaw, ROWS, COLS);
+	(void) allocateRaw(&muscleRaw, ROWS, COLS);
+	(void) allocateRaw(&tissueRaw, ROWS, COLS);
+	logIt(DEBUG, "allocateAllRaws()  finished.");
+}
+
+void freeAllRaws() {
+	logIt(DEBUG, "freeAllRaws()  started.");
+	freeRaw(&ironRaw, ROWS, COLS);
+	freeRaw(&boneRaw, ROWS, COLS);
+	freeRaw(&waterRaw, ROWS, COLS);
+	freeRaw(&airRaw, ROWS, COLS);
+	freeRaw(&muscleRaw, ROWS, COLS);
+	freeRaw(&tissueRaw, ROWS, COLS);
+	logIt(DEBUG, "freeAllRaws()  finished.");
+}
+
+void closeAllInputImages() {
+	logIt(DEBUG, "closeAllInputImages()  started.");
+	fclose(airImage);
+	fclose(boneImage);
+	fclose(ironImage);
+	fclose(muscleImage);
+	fclose(tissueImage);
+	fclose(waterImage);
+	logIt(DEBUG, "closeAllInputImages()  finished.");
+}
 

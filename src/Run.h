@@ -2,7 +2,7 @@
  * Run.h
  *
  *  Created on: 13.06.2013
- *      Author: Alexander
+ *      Author: Alexander Winkler
  */
 
 #ifndef RUN_H_
@@ -10,11 +10,15 @@
 
 #include "Logger.h"
 #include "Simulator.h"
+#include "ReconstructC.h"
 
 
-#define NUM_ANGLES 200 		//This is the number of projetion angles for the CT data.
+
+
+
 
 void printhelp(void);
+int main(int argc, char *argv[]);
 
 
 

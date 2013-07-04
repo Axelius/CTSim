@@ -8,39 +8,13 @@
  ============================================================================
  */
 
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <time.h>
-#include "Logger.h"
-#include "Run.h"
+#include "ReconstructC.h"
 
-#define FILTER_WIDTH 512  	//This is the length of the sinc filter.
-#define IMG_WIDTH 512		//This is the width of the reconstructed image.
-#define IMG_HEIGHT 512		//This is the height of the reconstructed image.
-
-int imgwidth = 0;
-int imgheight = 0;
-int numangles = 0;
-char *outputPath;
-char *sinoPath;
-
-int startReconstruction(void);
-
-int reconstruct(FILE *dataFile);
-int reconstruction(char *pathToSino, char *pathToOutput);
-
-/*
-	h is the sync filtere stored only in device memory.  There is no need to
-	ever pull this into host memory.
- */
-float h[2*IMG_WIDTH];
-struct timespec beg0, beg1, beg2, beg3, end0, end1, end2, end3;
 
 /*
 	This kernel creates a basic sync function to be used as a filter for the sinogram
  */
-void createFilter(){
+void createFilter() {
 	logIt(DEBUG, "createFilter() started.");
 
 	int idx;
@@ -56,7 +30,7 @@ void createFilter(){
 	This kernel filters the original sinogram data line by line by convolving
 	each line of the sinogram with the 'h' filter.
  */
-void filterSinogram(float *img, float *img_res){
+void filterSinogram(float *img, float *img_res) {
 	logIt(DEBUG, "filterSinogram(float *img, float *img_res) started.");
 	int j, k, i;
 	for (j = 0; j < numangles; j++){
@@ -273,7 +247,7 @@ int reconstruct(FILE *dataFile){
 	// Back Project and reconstruct full image pixel by pixel.
 
 	backProject(deltaTheta, output, filt_sinogram);
-	logIt(INFO, "Backprojection finished.");
+	logIt(DEBUG, "Backprojection finished.");
 	fileOut = fopen(outputPath, "wb");
 	fprintf(fileOut, "P2\n%d %d\n255\n", imgwidth, imgheight);
 

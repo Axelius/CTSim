@@ -2,7 +2,7 @@
  * Logger.h
  *
  *  Created on: 13.06.2013
- *      Author: Alexander
+ *      Author: Alexander Winkler
  */
 #ifndef LOGGER_H_
 #define LOGGER_H_
@@ -19,9 +19,9 @@
 #define DEBUG 5
 #define TRACE 6
 #define ALL 7
-#define LOGLEVEL TRACE
+#define LOGLEVEL INFO
 
-void logItLegacy(int messageLevel, const char *message);
+//void logItLegacy(int messageLevel, const char *message);
 void logIt(int messageLevel, const char *fmt, ...);
 
 
