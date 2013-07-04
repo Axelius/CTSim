@@ -11,7 +11,7 @@
 //Simulation Constants
 
 //This is the number of projection angles for the CT data.
-#define NUM_ANGLES 10
+#define NUM_ANGLES 100
 
 //rows of the input and output image
 #define ROWS 512

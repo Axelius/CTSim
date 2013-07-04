@@ -18,7 +18,6 @@ int main(int argc, char *argv[]){
 	char pathToSlice[200];
 	char pathToOutputReconstruction[200];
 	char pathToOutputSinogram[] = "simulatedSinogram.pgm";
-	//char msg[200];
 
 	sprintf(pathToSlice, argv[1]);
 	sprintf(pathToOutputReconstruction, argv[2]);

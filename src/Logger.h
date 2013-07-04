@@ -21,7 +21,6 @@
 #define ALL 7
 #define LOGLEVEL INFO
 
-//void logItLegacy(int messageLevel, const char *message);
 void logIt(int messageLevel, const char *fmt, ...);
 
 

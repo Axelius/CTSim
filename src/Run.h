@@ -14,9 +14,6 @@
 
 
 
-
-
-
 void printhelp(void);
 int main(int argc, char *argv[]);
 
