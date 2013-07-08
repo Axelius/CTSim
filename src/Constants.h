@@ -11,7 +11,7 @@
 //Simulation Constants
 
 //This is the number of projection angles for the CT data.
-#define NUM_ANGLES 1600
+#define NUM_ANGLES 200
 
 //rows of the input and output image
 #define ROWS 512
@@ -30,6 +30,9 @@
 
 //number of simulations for energy levels
 #define ENERGYLEVELS 3
+
+//number of threads the simulation uses
+#define NUMBEROFTHREADS 4
 
 
 
