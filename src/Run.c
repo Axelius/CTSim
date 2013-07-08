@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
 	if(argc != 3){
 		printhelp();
 		printf("argv[0]=%s\n",argv[0]);
-		logIt(ERROR, "Unsupported number of arguments. Exiting...");
+		logIt(ERR, "Unsupported number of arguments. Exiting...");
 		return 1;
 	}
 

@@ -165,7 +165,7 @@ int startReconstruction(){
 	//Read P2
 	fgets(str, 200, dataFile);
 	if(!(str[0] == 'P' && str[1] == '2')){
-		logIt(ERROR, "Not a pgm.");
+		logIt(ERR, "Not a pgm.");
 		return 1;
 	}
 
@@ -223,7 +223,7 @@ int reconstruct(FILE *dataFile){
 
 
 	if (dataFile == NULL){
-		logIt(ERROR, "Data file: data was not found.");
+		logIt(ERR, "Data file: data was not found.");
 		return 0;
 	}
 

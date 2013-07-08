@@ -36,7 +36,7 @@ int getAttenuation(int material, double kV, int positionX, int positionY) {
 		imageRaw = tissueRaw;
 		break;
 	default:
-		logIt(ERROR, "Material ID%d not found!", material);
+		logIt(ERR, "Material ID%d not found!", material);
 		logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 		return 0.0f;
 	}
@@ -83,7 +83,7 @@ double getInterpolatedAttenuationValue(int material, double energy) {
 		matLength = tissueLength;
 		break;
 	default:
-		logIt(ERROR, "Material ID%d not found!", material);
+		logIt(ERR, "Material ID%d not found!", material);
 		logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 		return 0.0f;
 	}
@@ -173,7 +173,7 @@ void readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLeng
 	*attLength = i-6;
 	*att = malloc(numAlloc * sizeof(attenuation));
 	if(att == 0){
-		logIt(ERROR, "out of memory");
+		logIt(ERR, "out of memory");
 	}
 	logIt(TRACE,  "Allocated memory for %d attenuation elements.", numAlloc);
 	fclose(read);

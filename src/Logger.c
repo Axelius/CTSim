@@ -18,7 +18,7 @@ void logIt(int messageLevel, const char *fmt, ...){
 		printf("[LogIt] ");
 		switch(messageLevel){
 		case FATAL: printf("FATAL: "); break;
-		case ERROR: printf("ERROR: "); break;
+		case ERR: printf("ERROR: "); break;
 		case WARN: printf("WARN: "); break;
 		case INFO: printf("INFO: "); break;
 		case DEBUG: printf("DEBUG: "); break;

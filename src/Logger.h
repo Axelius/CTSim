@@ -13,13 +13,13 @@
 
 #define OFF 0
 #define FATAL 1
-#define ERROR 2
+#define ERR 2
 #define WARN 3
 #define INFO 4
 #define DEBUG 5
 #define TRACE 6
 #define ALL 7
-#define LOGLEVEL INFO
+#define LOGLEVEL DEBUG
 
 void logIt(int messageLevel, const char *fmt, ...);
 

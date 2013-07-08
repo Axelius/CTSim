@@ -12,6 +12,11 @@
 #include <stdlib.h>
 #include <Math.h>
 #include <limits.h>
+#include <string.h>
+#include <windows.h>
+
+
+
 #include <time.h>
 #include "Logger.h"
 #include "Constants.h"
@@ -46,6 +51,11 @@ FILE *muscleImage;
 FILE *tissueImage;
 FILE *waterImage;
 
+typedef struct {
+   int data1;
+   int data2;
+}t;
+
 
 
 void allocateUnsignedIntArray(unsigned int ***raw, int row, int col);
@@ -58,6 +68,7 @@ void setUpRawFiles(char *pathToSlices);
 void allocateAllRaws(void);
 void closeAllInputImages(void);
 void freeAllRaws(void);
+DWORD WINAPI projectFromTo(void * param);
 
 
 #endif /* SIMULATOR_H_ */
