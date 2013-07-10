@@ -15,12 +15,18 @@
 #include <ctype.h>
 
 void readSettingsFromConfigFile(char *conFile){
-	printf("\a");
 	logIt(DEBUG, "readSettingsFromConfigFile(char *conFile) started.");
 	char line[256];
 	char temp[256];
 	int i = 0;
 	FILE *config = fopen(conFile, "r");
+	if(config == NULL){
+		logIt(TRACE, "ConfigFile doesnt exist. Creating default one.");
+		config = fopen(conFile, "wb");
+		fprintf(config, "pathToSlice=slices/Segmentation1\npathToOutputReconstruction=outData.pgm\npathToOutputSinogram=simulatedSinogram.pgm\nminEnergy=30\nmaxEnergy=120\nenergyLevels=4\nnumberOfThreads=4\nnumberOfProjectionAngles=100");
+	}
+
+	setCFGToDefault();
 
 	while(fgets(line, 256, config) != NULL){
 		char* p = temp;
@@ -53,12 +59,39 @@ void readSettingsFromConfigFile(char *conFile){
 			strcpy(cfg.pathToOutputReconstruction, line + strlen("pathtooutputreconstruction="));
 			logIt(TRACE, "cfg.pathToOutputReconstruction=%s", cfg.pathToOutputReconstruction);
 		}
+		if(prefix(temp, "minenergy=")){
+			logIt(TRACE, "minenergy found in Config File");
+			cfg.minEnergy = atoi(line + strlen("minenergy="));
+			logIt(TRACE, "cfg.minEnergy=%d", cfg.minEnergy);
+		}
+		if(prefix(temp, "maxenergy=")){
+			logIt(TRACE, "maxenergy found in Config File");
+			cfg.maxEnergy = atoi(line + strlen("maxenergy="));
+			logIt(TRACE, "cfg.maxEnergy=%d", cfg.maxEnergy);
+		}
+		if(prefix(temp, "numberofthreads=")){
+			logIt(TRACE, "numberofthreads found in Config File");
+			cfg.numberOfThreads = atoi(line + strlen("numberofthreads="));
+			logIt(TRACE, "cfg.numberOfThreads=%d", cfg.numberOfThreads);
+		}
+		if(prefix(temp, "energylevels=")){
+			logIt(TRACE, "energylevels found in Config File");
+			cfg.energyLevels = atoi(line + strlen("energylevels="));
+			logIt(TRACE, "cfg.energyLevels=%d", cfg.energyLevels);
+		}
+		if(prefix(temp, "numberofprojectionangles=")){
+			logIt(TRACE, "numberOfProjectionAngles found in Config File");
+			cfg.numberOfProjectionAngles = atoi(line + strlen("numberOfProjectionAngles="));
+			logIt(TRACE, "cfg.numberOfProjectionAngles=%d", cfg.numberOfProjectionAngles);
+		}
+
 
 
 		i++;
 	}
 	logIt(DEBUG, cfgString());
-
+	fclose(config);
+	logIt(DEBUG, "readSettingsFromConfigFile(char *conFile) finished.");
 }
 
 int calculateStringLength(char *string) {
@@ -82,7 +115,20 @@ int prefix(char * string, char * prefix){
 char* cfgString(){
 	char* message = malloc(1024 * sizeof(char));
 
-	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram);
+	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfThreads=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfThreads);
 	return message;
 
+}
+
+void setCFGToDefault(){
+	logIt(DEBUG, "setCFGToDefault() started.");
+	strcpy(cfg.pathToSlice , "slices/segmentation1");
+	strcpy(cfg.pathToOutputReconstruction , "outdata.pgm");
+	strcpy(cfg.pathToOutputSinogram , "simulatedsinogram.pgm");
+	cfg.minEnergy = 30;
+	cfg.maxEnergy = 140;
+	cfg.energyLevels = 2;
+	cfg.numberOfThreads = 4;
+	cfg.numberOfProjectionAngles = 100;
+	logIt(DEBUG, "setCFGToDefault() finished.");
 }

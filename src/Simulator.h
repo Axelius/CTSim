@@ -21,6 +21,7 @@
 #include "Logger.h"
 #include "Constants.h"
 #include "Attenuation.h"
+#include "ConfigReader.h"
 
 
 #define IRON 1

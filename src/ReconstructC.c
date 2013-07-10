@@ -243,7 +243,7 @@ int reconstruct(FILE *dataFile){
 	// Filtere the lines of the sinogram using the generated filter.
 	filterSinogram(orig_sinogram, filt_sinogram);
 
-	float deltaTheta = PI/NUM_ANGLES;  //delta theta in radians
+	float deltaTheta = PI/cfg.numberOfProjectionAngles;  //delta theta in radians
 	// Back Project and reconstruct full image pixel by pixel.
 
 	backProject(deltaTheta, output, filt_sinogram);

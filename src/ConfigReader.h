@@ -12,6 +12,11 @@ typedef struct {
 	char pathToSlice[200];
 	char pathToOutputReconstruction[200];
 	char pathToOutputSinogram[200];
+	int minEnergy;
+	int maxEnergy;
+	int energyLevels;
+	int numberOfThreads;
+	int numberOfProjectionAngles;
 } config;
 
 config cfg;
@@ -19,7 +24,8 @@ config cfg;
 void readSettingsFromConfigFile(char *conFile);
 int calculateStringLength(char *string);
 int prefix(char *pre, char *str);
-char* cfgString();
+char* cfgString(void);
+void setCFGToDefault(void);
 
 
 #endif /* CONFIGREADER_H_ */

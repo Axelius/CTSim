@@ -29,7 +29,7 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 
 
 	allocateAllRaws();
-	allocateUnsignedIntArray(&result, NUM_ANGLES, SINOGRAMSIZE);
+	allocateUnsignedIntArray(&result, cfg.numberOfProjectionAngles, SINOGRAMSIZE);
 	FILE *outFile = fopen(pathToOutputSinogram, "wb");
 
 
@@ -43,35 +43,36 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	logIt(INFO, "Starting simulation.");
 
 	logIt(INFO, "Starting projection.");
-	HANDLE hThread[NUMBEROFTHREADS];
-	DWORD threadID[NUMBEROFTHREADS];
-	t *arg[NUMBEROFTHREADS];
+	HANDLE *hThread = (HANDLE *) malloc(cfg.numberOfThreads * sizeof(HANDLE));
+	//HANDLE hThread[NUMBEROFTHREADS];
+	DWORD *threadID = (DWORD *) malloc(cfg.numberOfThreads * sizeof(DWORD));
+	t **arg = (t **) malloc(cfg.numberOfThreads * sizeof(t *));
 
 	int startvalue = 0;
-	int endvalue = (NUM_ANGLES/NUMBEROFTHREADS);
-	for(i = 0; i<NUMBEROFTHREADS; i++){
+	int endvalue = (cfg.numberOfProjectionAngles/cfg.numberOfThreads);
+	for(i = 0; i<cfg.numberOfThreads; i++){
 		arg[i] = (t *)malloc(sizeof(t));
 		arg[i]->data1 = startvalue;
-		if(i != NUMBEROFTHREADS-1){
+		if(i != cfg.numberOfThreads-1){
 			arg[i]->data2 = endvalue;
 		}
 		else{
-			arg[i]->data2 = NUM_ANGLES;
+			arg[i]->data2 = cfg.numberOfProjectionAngles;
 		}
 
 		hThread[i] = (HANDLE) CreateThread(NULL, 0, projectFromTo, (void *) arg[i], 0, &threadID[i]);
 		logIt(DEBUG, "Thread started: ThreadID: %d, from  angle %d to %d.", i, arg[i]->data1, arg[i]->data2);
-		startvalue += (NUM_ANGLES/NUMBEROFTHREADS);
-		endvalue += (NUM_ANGLES/NUMBEROFTHREADS);
+		startvalue += (cfg.numberOfProjectionAngles/cfg.numberOfThreads);
+		endvalue += (cfg.numberOfProjectionAngles/cfg.numberOfThreads);
 
 	}
 
 
 
 	logIt(DEBUG, "Waiting for Threads to finish.");
-	WaitForMultipleObjects(NUMBEROFTHREADS,hThread,TRUE,INFINITE);
+	WaitForMultipleObjects(cfg.numberOfThreads,hThread,TRUE,INFINITE);
 
-	for(i = 0; i<NUMBEROFTHREADS; i++){
+	for(i = 0; i<cfg.numberOfThreads; i++){
 		CloseHandle(hThread[i]);
 	}
 
@@ -84,7 +85,7 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 
 
 	freeAllRaws();
-	exportPGM(outFile, result, NUM_ANGLES, SINOGRAMSIZE);
+	exportPGM(outFile, result, cfg.numberOfProjectionAngles, SINOGRAMSIZE);
 
 	time(&stop);
 	run = difftime(stop, start);
@@ -191,18 +192,18 @@ int project(int angle){
 	int x = 0;
 	int y = 0;
 	int count = angle;
-	angle = angle - NUM_ANGLES/2;
+	angle = angle - cfg.numberOfProjectionAngles/2;
 	int s = 0;
 	int mat = 0;
-	double energy = MINENERGY;
-	double alpha = (((double)(angle))/((double)NUM_ANGLES))*(PI);
+	double energy = cfg.minEnergy;
+	double alpha = (((double)(angle))/((double)cfg.numberOfProjectionAngles))*(PI);
 
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
 		for(t = -COLS; t<COLS; t++){
 			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
 			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
 			if(x>=0 && x<COLS && y>=0 && y <COLS){
-				for(energy = MINENERGY; energy<=MAXENERGY; energy+=((MAXENERGY-MINENERGY)/ENERGYLEVELS)){
+				for(energy = cfg.minEnergy; energy<=cfg.maxEnergy; energy+=((cfg.maxEnergy-cfg.minEnergy)/cfg.energyLevels)){
 					for(mat = MINMAT; mat< MAXMAT; mat++){
 						result[count][s+SINOGRAMSIZE/2] += getAttenuation(mat, energy, x,y);
 					}

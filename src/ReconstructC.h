@@ -14,6 +14,7 @@
 #include <time.h>
 #include "Logger.h"
 #include "Constants.h"
+#include "ConfigReader.h"
 
 
 int imgwidth;

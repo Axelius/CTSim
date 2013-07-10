@@ -30,6 +30,7 @@ int main(int argc, char *argv[]){
 	int ret = 0;
 	setUpAttenuation();
 	logIt(INFO, "Everything set up successfully. Starting simulation...");
+
 	ret = simulation(cfg.pathToSlice, cfg.pathToOutputSinogram);
 	reconstruction(cfg.pathToOutputSinogram, cfg.pathToOutputReconstruction);
 	logIt(INFO, "Reconstructed image saved as %s. Exiting...", cfg.pathToOutputReconstruction);
