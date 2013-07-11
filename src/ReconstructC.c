@@ -182,20 +182,8 @@ int startReconstruction(){
 
 	fgets(str, 200, dataFile);//colordepth, we dont care about
 
-	//printf("width: %d, height: %d", imgwidth, numangles);
 
-
-
-	//while(! feof(dataFile)){
-	//	fgets(str, 200, dataFile);
-	//	printf(str);
-	//}
-
-
-
-	//imgwidth = 512;		//This is the width of the reconstructed image.
 	imgheight = 512;		//This is the height of the reconstructed image.
-	//numangles = 200;		//This is the number of projetion angles from the CT data.
 
 	return_value = reconstruct(dataFile);
 

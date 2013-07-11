@@ -236,10 +236,8 @@ int project(int angle){
 }
 
 int exportPGM(FILE* out, unsigned int** write, int x, int y){
-
 	int i = 0;
 	int j = 0;
-
 	unsigned int min = write[0][0];
 	unsigned int max = write[0][0];
 	logIt(DEBUG, "exportPGM(FILE* out, unsigned int** write, int x, int y) started.");
@@ -250,33 +248,24 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 	for(i = 0; i<x;i++){
 		for(j = 0; j<y; j++){
 
-			//printf("i:%d,j:%d\n",i,j);
-			//fflush(stdout);
 			if(write[i][j]<min){
 				logIt(TRACE, "New min found");
 				min = write[i][j];
-				//printf("newmin\n");
 			}
 
 			if(write[i][j]>max){
 				logIt(TRACE, "New max found");
 				max = write[i][j];
-				//printf("newmax:%d\n", max);
 			}
 
 		}
 	}
 
 
-
-	//FILE *res = fopen("result.pgm", "wb");
 	fprintf(out, "P2\n# Created by Sim\n%d %d\n255\n", y, x);
-	//fprintf(out, "P2\n# Created by Sim\n%d %d\n255\n", y, x);
 
 	for(i = 0; i<x;i++){
 		for(j = 0; j<y; j++){
-			//printf("%d \n",(int)(((((double)write[i][j])-min)/((double)max-(double)min))*255.0));
-			//fflush(stdout);
 			fprintf(out,"%d ",(int)(((((double)write[i][j])-min)/((double)max-(double)min))*255.0));
 		}
 	}
