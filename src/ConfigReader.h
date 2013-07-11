@@ -2,7 +2,7 @@
  * ConfigReader.h
  *
  *  Created on: 04.07.2013
- *      Author: Alexander
+ *      Author: Alexander Winkler
  */
 
 #ifndef CONFIGREADER_H_

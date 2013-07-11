@@ -19,9 +19,26 @@
 #define DEBUG 5
 #define TRACE 6
 #define ALL 7
-#define LOGLEVEL DEBUG
 
-void logIt(int messageLevel, const char *fmt, ...);
+#define VERBOSELOGGER 1
+#define NONVERBOSELOGGER 2
+
+
+#define LOGGERSTYLE VERBOSELOGGER
+#define LOGLEVEL INFO
+
+
+
+#if LOGGERSTYLE == VERBOSELOGGER
+	#define logIt(messageLevel, fmt, ...) logItVerb(messageLevel, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__);
+#else
+	#define logIt(messageLevel, fmt, ...) logItNonVerb(messageLevel, fmt, ##__VA_ARGS__);
+#endif
+
+
+
+void logItNonVerb(int messageLevel, const char *fmt, ...);
+void logItVerb(int messageLevel, const char * file, const char * function, const int line, const char *fmt, ...);
 
 
 

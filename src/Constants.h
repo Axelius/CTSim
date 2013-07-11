@@ -10,8 +10,6 @@
 
 //Simulation Constants
 
-//This is the number of projection angles for the CT data.
-//#define NUM_ANGLES 60
 
 //rows of the input and output image
 #define ROWS 512
@@ -21,19 +19,6 @@
 
 //Width of the sinogram
 #define SINOGRAMSIZE 512
-
-//Minimum Energy Level of the X-ray beams in KeV
-//#define MINENERGY 20
-
-//Maximum Energy Level of the X-ray beams in KeV
-//#define MAXENERGY 60
-
-//number of simulations for energy levels
-//#define ENERGYLEVELS 3
-
-//number of threads the simulation uses
-//#define NUMBEROFTHREADS 4
-
 
 
 //Really, what could this be ;)

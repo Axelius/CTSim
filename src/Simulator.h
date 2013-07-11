@@ -59,7 +59,7 @@ typedef struct {
 
 
 
-void allocateUnsignedIntArray(unsigned int ***raw, int row, int col);
+void allocateUnsignedIntArray(unsigned int ***raw, unsigned int row, unsigned int col);
 int loadPGMToRaw(unsigned int ***raw, FILE *data);
 int project(int angle);
 int exportPGM(FILE* out, unsigned int** write, int x, int y);

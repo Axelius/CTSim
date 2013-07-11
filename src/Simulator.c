@@ -14,23 +14,32 @@
 
 
 int simulation(char *pathToSlice, char *pathToOutputSinogram) {
-	logIt(DEBUG, "simulation(char *pathToSlice, char *pathToOutputSinogram) started.");
+
 	time_t start;
 	time_t stop;
-	time(&start);
+
+	HANDLE *hThread;
+	DWORD *threadID;
+	t **arg;
 	double run = 0.0;
-	logIt(INFO, "pathToOutputSinogram: %s", pathToOutputSinogram );
-	logIt(INFO, "pathToSlice: %s", pathToSlice);
+	int startvalue = 0;
+	int endvalue = 0;
+	int i = 0;
+	FILE *outFile;
+	time(&start);
+	logIt(DEBUG, "simulation(char *pathToSlice, char *pathToOutputSinogram) started.");
+	logIt(TRACE, "pathToOutputSinogram: %s", pathToOutputSinogram );
+	logIt(TRACE, "pathToSlice: %s", pathToSlice);
 
 	setUpRawFiles(pathToSlice);
 
 
-	int i = 0;
+
 
 
 	allocateAllRaws();
 	allocateUnsignedIntArray(&result, cfg.numberOfProjectionAngles, SINOGRAMSIZE);
-	FILE *outFile = fopen(pathToOutputSinogram, "wb");
+	outFile = fopen(pathToOutputSinogram, "wb");
 
 
 	(void)loadPGMToRaw(&ironRaw,	ironImage);
@@ -40,16 +49,16 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	(void)loadPGMToRaw(&muscleRaw,	muscleImage);
 	(void)loadPGMToRaw(&tissueRaw,	tissueImage);
 
+
 	logIt(INFO, "Starting simulation.");
 
 	logIt(INFO, "Starting projection.");
-	HANDLE *hThread = (HANDLE *) malloc(cfg.numberOfThreads * sizeof(HANDLE));
-	//HANDLE hThread[NUMBEROFTHREADS];
-	DWORD *threadID = (DWORD *) malloc(cfg.numberOfThreads * sizeof(DWORD));
-	t **arg = (t **) malloc(cfg.numberOfThreads * sizeof(t *));
+	hThread = (HANDLE *) malloc(cfg.numberOfThreads * sizeof(HANDLE));
+	threadID = (DWORD *) malloc(cfg.numberOfThreads * sizeof(DWORD));
+	arg = (t **) malloc(cfg.numberOfThreads * sizeof(t *));
 
-	int startvalue = 0;
-	int endvalue = (cfg.numberOfProjectionAngles/cfg.numberOfThreads);
+	startvalue = 0;
+	endvalue = (cfg.numberOfProjectionAngles/cfg.numberOfThreads);
 	for(i = 0; i<cfg.numberOfThreads; i++){
 		arg[i] = (t *)malloc(sizeof(t));
 		arg[i]->data1 = startvalue;
@@ -76,12 +85,12 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 		CloseHandle(hThread[i]);
 	}
 
-
-	//	for(a = 0; a<NUM_ANGLES; a++){
-	//		project(a);
-	//		logIt(INFO, "Projection %d of %d finished.", a, NUM_ANGLES);
-	//	}
-	logIt(INFO, "Projection completed.");
+//	int a = 0;
+//		for(a = 0; a<cfg.numberOfProjectionAngles; a++){
+//			project(a);
+//			logIt(INFO, "Projection %d of %d finished.", a, cfg.numberOfProjectionAngles);
+//		}
+//	logIt(INFO, "Projection completed.");
 
 
 	freeAllRaws();
@@ -99,11 +108,11 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 }
 
 DWORD WINAPI projectFromTo(void * param){
-	logIt(DEBUG, "projectFromTo(void *param) started.");
+
 	t *args = (t*) param;
 	int fromAngle = args->data1;
 	int toAngle = args->data2;
-
+	logIt(DEBUG, "projectFromTo(void *param) started.");
 	for(;fromAngle<toAngle; fromAngle++){
 		project(fromAngle);
 	}
@@ -111,9 +120,10 @@ DWORD WINAPI projectFromTo(void * param){
 	return 0;
 }
 
-void allocateUnsignedIntArray(unsigned int ***raw, int row, int col) {
-	logIt(DEBUG, "allocateUnsignedIntArray(unsigned int ***raw, int row, int col) started.");
+void allocateUnsignedIntArray(unsigned int ***raw, unsigned int row, unsigned int col) {
 	int i = 0;
+	logIt(DEBUG, "allocateUnsignedIntArray(unsigned int ***raw, int row, int col) started.");
+
 
 	*raw = malloc(row * sizeof(unsigned int *));
 
@@ -136,8 +146,9 @@ void allocateUnsignedIntArray(unsigned int ***raw, int row, int col) {
 }
 
 void freeUnsignedIntArray(unsigned int ***raw, int row, int col) {
-	logIt(DEBUG, "freeUnsignedIntArray(unsigned int ***raw, int row, int col) started.");
 	int i = 0;
+	logIt(DEBUG, "freeUnsignedIntArray(unsigned int ***raw, int row, int col) started.");
+
 	for(i = 0; i < row; i++) {
 		free((*raw)[i]);
 	}
@@ -148,12 +159,13 @@ void freeUnsignedIntArray(unsigned int ***raw, int row, int col) {
 
 
 int loadPGMToRaw(unsigned int ***raw, FILE *data){
-	logIt(DEBUG, "loadPGMToRaw(unsigned int ***raw, FILE *data) started.");
+
 	int return_value = 0;
 	int i = 0;
 	int j = 0;
 	char str[200];
 	int noOneCares = 0;
+	logIt(DEBUG, "loadPGMToRaw(unsigned int ***raw, FILE *data) started.");
 
 
 	logIt(TRACE, "here??");
@@ -176,10 +188,12 @@ int loadPGMToRaw(unsigned int ***raw, FILE *data){
 
 	for(i=0; i < ROWS; i++){
 		for(j = 0; j<COLS; j++){
-			fscanf(data,"%d",&((*raw)[i][j]));
+			fscanf(data,"%u",&((*raw)[i][j]));
 		}
 
 	}
+
+
 
 
 	logIt(DEBUG, "loadPGMToRaw(unsigned int ***raw, FILE *data) finished.");
@@ -187,16 +201,17 @@ int loadPGMToRaw(unsigned int ***raw, FILE *data){
 }
 
 int project(int angle){
-	logIt(DEBUG, "project(int angle) started.");
 	int t = 0;
 	int x = 0;
 	int y = 0;
 	int count = angle;
-	angle = angle - cfg.numberOfProjectionAngles/2;
 	int s = 0;
 	int mat = 0;
 	double energy = cfg.minEnergy;
 	double alpha = (((double)(angle))/((double)cfg.numberOfProjectionAngles))*(PI);
+
+	logIt(DEBUG, "project(int angle) started.");
+	angle = angle - cfg.numberOfProjectionAngles/2;
 
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
 		for(t = -COLS; t<COLS; t++){
@@ -207,7 +222,7 @@ int project(int angle){
 					for(mat = MINMAT; mat< MAXMAT; mat++){
 						result[count][s+SINOGRAMSIZE/2] += getAttenuation(mat, energy, x,y);
 
-						logIt(FATAL, "result[%d][%d] += getAttenuation(mat = %d, energy = %f, x = %d,y=%d) =	%d", count, s+SINOGRAMSIZE/2, mat, energy, x,y, getAttenuation(mat, energy, x,y));
+						//logIt(FATAL, "result[%d][%d] += getAttenuation(mat = %d, energy = %f, x = %d,y=%d) =	%d", count, s+SINOGRAMSIZE/2, mat, energy, x,y, getAttenuation(mat, energy, x,y));
 					}
 					if(energy-cfg.maxEnergy < 0.0001){
 						break;
@@ -221,12 +236,13 @@ int project(int angle){
 }
 
 int exportPGM(FILE* out, unsigned int** write, int x, int y){
-	logIt(DEBUG, "exportPGM(FILE* out, unsigned int** write, int x, int y) started.");
+
 	int i = 0;
 	int j = 0;
 
-	int min = write[0][0];
-	int max = write[0][0];
+	unsigned int min = write[0][0];
+	unsigned int max = write[0][0];
+	logIt(DEBUG, "exportPGM(FILE* out, unsigned int** write, int x, int y) started.");
 
 
 	//Output as a picture file
@@ -273,8 +289,9 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 
 
 void setUpRawFiles(char *pathToSlices){
-	logIt(DEBUG, "setUpRawFiles(char *pathToSlices) started.");
 	char paths[256];
+	logIt(DEBUG, "setUpRawFiles(char *pathToSlices) started.");
+
 
 	strcpy(paths, pathToSlices);
 	strcat(paths, "/air.pgm");

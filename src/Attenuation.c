@@ -7,9 +7,10 @@
 
 #include "Attenuation.h"
 
-int getAttenuation(int material, double kV, int positionX, int positionY) {
-	logIt(TRACE, "getAttenuation(int material, double kV, int positionX, int positionY) started.");
+unsigned int getAttenuation(int material, double kV, int positionX, int positionY) {
 	unsigned int **imageRaw;
+	logIt(TRACE, "getAttenuation(int material, double kV, int positionX, int positionY) started.");
+
 	switch(material){
 	case IRON:
 		logIt(TRACE, "Material ID%d: iron", material);
@@ -43,15 +44,15 @@ int getAttenuation(int material, double kV, int positionX, int positionY) {
 
 
 	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
-	return (int)(getInterpolatedAttenuationValue(material, kV)*((double)imageRaw[positionX][positionY]));
+	return (unsigned int)(getInterpolatedAttenuationValue(material, kV) * ((double)imageRaw[positionX][positionY]));
 }
 
 double getInterpolatedAttenuationValue(int material, double energy) {
-	//logIt(TRACE, "getInterpolatedAttenuation(int material = %d, double energy = %f) started.", material, energy);
-	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) started.");
 	attenuation* mat;
 	size_t matLength;
 	int i = 0;
+	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) started.");
+
 	switch(material){
 	case IRON:
 		logIt(TRACE, "Material ID%d: iron", material);
@@ -95,7 +96,7 @@ double getInterpolatedAttenuationValue(int material, double energy) {
 		//extrapolate in the lower end
 		logIt(TRACE, "extrapolating in the lower end");
 		logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
-		return ((mat[1].mu - mat[0].mu)/(mat[1].energy - mat[0].energy))*(energy - mat[0].energy) + mat[0].mu;
+		return (((mat[1].mu - mat[0].mu)/(mat[1].energy - mat[0].energy))*(energy - mat[0].energy) + mat[0].mu);
 	}
 	for(i = 0; i<matLength; i++){
 		if(energy-mat[i].energy < 0.000001){
@@ -107,17 +108,18 @@ double getInterpolatedAttenuationValue(int material, double energy) {
 			//interpolate here
 			logIt(TRACE, "interpolate between element[%d]: (energy: %f, mu: %f) and element[%d]: (energy: %f, mu: %f)", i, mat[i].energy, mat[i].mu, i+1, mat[i+1].energy, mat[i+1].mu);
 			logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
-			return ((mat[i+1].mu - mat[i].mu)/(mat[i+1].energy - mat[i].energy))*(energy - mat[i].energy) + mat[i].mu;
+			return (((mat[i+1].mu - mat[i].mu)/(mat[i+1].energy - mat[i].energy))*(energy - mat[i].energy) + mat[i].mu);
 		}
 	}
 	//extrapolate in the upper end
 	logIt(TRACE, "extrapolating in the upper end");
 	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
-	return ((mat[matLength-1].mu - mat[matLength-2].mu)/(mat[matLength-1].energy - mat[matLength-2].energy))*(energy - mat[matLength-1].energy) + mat[matLength-1].mu;
+	return (((mat[matLength-1].mu - mat[matLength-2].mu)/(mat[matLength-1].energy - mat[matLength-2].energy))*(energy - mat[matLength-1].energy) + mat[matLength-1].mu);
 }
 
 //Reads all attenuation coefficient tables. Path to them is hardcoded
 void setUpAttenuation(){
+	int i;
 	logIt(DEBUG, "setUpAttenuation() started.");
 	readAttenuationFile("MassAttenuationCoefficients/iron.txt", &iron, &ironLength);
 	readAttenuationFile("MassAttenuationCoefficients/boneCortical.txt", &bone, &boneLength);
@@ -127,7 +129,7 @@ void setUpAttenuation(){
 	readAttenuationFile("MassAttenuationCoefficients/tissueSoft.txt", &tissue, &tissueLength);
 
 	//Log attenuations if loglevel == trace
-	int i = 0;
+	i = 0;
 	if(LOGLEVEL == TRACE){
 		for(i = 0; i<ironLength; i++){
 			logIt(TRACE, "iron[%d]: iron.energy: %f, iron.mu: %f\n", i, iron[i].energy, iron[i].mu);
@@ -160,11 +162,14 @@ void setUpAttenuation(){
 }
 //Reads table of attenuation coefficients and saves them to attenuation array
 void readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength){
-	logIt(DEBUG, "readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength) started.");
 	char line[200];
 	int i = 0;
 	int numAlloc;
-	FILE* read = fopen(pathToAttFile, "r");
+	FILE* read;
+	logIt(DEBUG, "readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength) started.");
+
+	read = fopen(pathToAttFile, "r");
+
 	while(fgets(line, 200, read) != NULL){
 		logIt(TRACE, "Line%d: %s", i, line);
 		i++;

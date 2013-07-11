@@ -8,26 +8,14 @@
 
 
 int main(int argc, char *argv[]){
+	int ret = 0;
 	readSettingsFromConfigFile("config.cfg");
 
-//	if(argc != 3){
-//		printhelp();
-//		printf("argv[0]=%s\n",argv[0]);
-//		logIt(ERR, "Unsupported number of arguments. Exiting...");
-//		return 1;
-//	}
-
-//	char pathToSlice[200];
-//	char pathToOutputReconstruction[200];
-//	char pathToOutputSinogram[] = "simulatedSinogram.pgm";
-
-//	sprintf(pathToSlice, argv[1]);
-//	sprintf(pathToOutputReconstruction, argv[2]);
 
 	logIt(DEBUG, "pathToSlice=%s", cfg.pathToSlice);
 	logIt(DEBUG, "pathToOutputReconstruction=%s", cfg.pathToOutputReconstruction);
 
-	int ret = 0;
+
 	setUpAttenuation();
 	logIt(INFO, "Everything set up successfully. Starting simulation...");
 

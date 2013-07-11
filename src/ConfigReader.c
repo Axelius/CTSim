@@ -15,33 +15,35 @@
 #include <ctype.h>
 
 void readSettingsFromConfigFile(char *conFile){
-	logIt(DEBUG, "readSettingsFromConfigFile(char *conFile) started.");
 	char line[256];
 	char temp[256];
+	char * bla;
 	int i = 0;
-	FILE *config = fopen(conFile, "r");
+	char* p;
+	FILE *config;
+	logIt(DEBUG, "readSettingsFromConfigFile(char *conFile) started.");
+	config = fopen(conFile, "r");
+
 	if(config == NULL){
 		logIt(TRACE, "ConfigFile doesnt exist. Creating default one.");
 		config = fopen(conFile, "wb");
-		fprintf(config, "pathToSlice=slices/Segmentation1\npathToOutputReconstruction=outData.pgm\npathToOutputSinogram=simulatedSinogram.pgm\nminEnergy=30\nmaxEnergy=120\nenergyLevels=4\nnumberOfThreads=4\nnumberOfProjectionAngles=100");
+		fprintf(config, "pathToSlice=slices/Segmentation1\npathToOutputReconstruction=outData.pgm\npathToOutputSinogram=simulatedSinogram.pgm\nminEnergy=30\nmaxEnergy=120\nenergyLevels=4\nnumberOfProjectionAngles=100\nnumberOfThreads=4\n");
 	}
 
 	setCFGToDefault();
 
 	while(fgets(line, 256, config) != NULL){
-		char* p = temp;
-		//logIt(DEBUG, "Reading line %d: %s", i, line);
+		p = temp;
 		strcpy(temp, line);
-		for( ; *p; ++p) *p = tolower(*p); //String in p is now lowercase
-		char * bla = line;
+		for( ; *p; ++p) *p = (char)tolower(*p); //String in p is now lowercase
+		bla = line;
 		for(; *bla; ++bla){
 			if(*bla == '\n' || *bla == '\r'){
 				*bla = '\0';
 			}
 		}
+		logIt(TRACE, "To Lower Case: %s", temp);
 
-
-		logIt(DEBUG, "To Lower Case: %s", temp);
 
 		//pathtoOutputSinogram
 		if(prefix(temp, "pathtooutputsinogram=")){
@@ -89,6 +91,8 @@ void readSettingsFromConfigFile(char *conFile){
 
 		i++;
 	}
+
+
 	logIt(DEBUG, "Config File read completely");
 
 	repairInvalidCFGEntries();
@@ -119,10 +123,8 @@ int prefix(char * string, char * prefix){
 
 char* cfgString(){
 	char* message = malloc(1024 * sizeof(char));
-
-	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfThreads=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfThreads);
+	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads);
 	return message;
-
 }
 
 void setCFGToDefault(){

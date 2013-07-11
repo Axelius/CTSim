@@ -15,9 +15,10 @@
 	This kernel creates a basic sync function to be used as a filter for the sinogram
  */
 void createFilter() {
+	int idx;
 	logIt(DEBUG, "createFilter() started.");
 
-	int idx;
+
 	for(idx = -imgwidth; idx < imgwidth; idx++){
 		logIt(TRACE, "idx+imgwidth = %d", (idx+imgwidth));
 		h[idx+imgwidth] = (0.5f*(idx==0?1.0f:(sin(PI*idx)/(PI*idx)))) - (0.25f*pow((idx==0?1.0f:(sin(PI*idx/2.0f)/(PI*idx/2.0f))), 2));
@@ -31,8 +32,9 @@ void createFilter() {
 	each line of the sinogram with the 'h' filter.
  */
 void filterSinogram(float *img, float *img_res) {
-	logIt(DEBUG, "filterSinogram(float *img, float *img_res) started.");
 	int j, k, i;
+	logIt(DEBUG, "filterSinogram(float *img, float *img_res) started.");
+
 	for (j = 0; j < numangles; j++){
 		for (k = 0; k < imgwidth; k++){
 			int gLoc = k + j*imgwidth;
@@ -63,13 +65,14 @@ void filterSinogram(float *img, float *img_res) {
 	and therefore the next line of the sinogram.
  */
 void backProject(float deltaTheta, float *resultImage, float *sinogram){
-	logIt(DEBUG, "backProject(float deltaTheta, float *resultImage, float *sinogram) started.");
+
 	int i, j, k;
 	float cosTheta;
 	float sinTheta;
 	float ninety = PI/2.0f;
 	float one_eighty = PI;
-
+	int index;
+	logIt(DEBUG, "backProject(float deltaTheta, float *resultImage, float *sinogram) started.");
 	//iterate over each row of the sinogram each thread gets one pixel from the line.
 	for (j = 0; j < imgheight; j++){
 		for (k = 0; k < imgwidth; k++){
@@ -78,7 +81,7 @@ void backProject(float deltaTheta, float *resultImage, float *sinogram){
 			for(i = 0; i < numangles; i++){
 				cosTheta = cos(theta);
 				sinTheta = sin(theta);
-				int index;
+
 
 				//Check for boundary conditions, infinite slope lines
 				if (theta == 0.0f){
@@ -132,16 +135,17 @@ void backProject(float deltaTheta, float *resultImage, float *sinogram){
 
 
 int reconstruction(char *pathToSino, char *pathToOutput) {
+	int ret = 0;
+	double run = 0.0;
+	time_t start;
+	time_t stop;
 	logIt(DEBUG, "reconstruction(char *pathToSino, char *pathToOutput) started.");
+	time(&start);
 	outputPath = pathToOutput;
 	sinoPath = pathToSino;
 	logIt(DEBUG, "Debug: outputpath: %s", outputPath);
 	logIt(INFO, "Starting Reconstruction.");
-	int ret = 0;
-	time_t start;
-	time_t stop;
-	time(&start);
-	double run = 0.0;
+
 
 	ret = startReconstruction();
 
@@ -156,12 +160,12 @@ int reconstruction(char *pathToSino, char *pathToOutput) {
 
 
 int startReconstruction(){
-	logIt(DEBUG, "startReconstruction() started.");
+
 	int return_value = 0;
 	char str[200];
 
 	FILE *dataFile = fopen(sinoPath,"r");
-
+	logIt(DEBUG, "startReconstruction() started.");
 	//Read P2
 	fgets(str, 200, dataFile);
 	if(!(str[0] == 'P' && str[1] == '2')){
@@ -203,15 +207,18 @@ int startReconstruction(){
 	This is the primary host code.
  */
 int reconstruct(FILE *dataFile){
-	logIt(DEBUG, "reconstruct(FILE *dataFile) started.");
+	FILE *input;
 	int j, i;
 	float min, max;
 	FILE *fileOut;
 	float *orig_sinogram;
 	float *filt_sinogram;
 	float *output;
+	float deltaTheta;
 	size_t size_sinogram = imgwidth*numangles*sizeof(float);
 	size_t size_result = imgwidth*imgheight*sizeof(float);
+	logIt(DEBUG, "reconstruct(FILE *dataFile) started.");
+
 	output = (float *)malloc(size_result);
 
 
@@ -243,7 +250,7 @@ int reconstruct(FILE *dataFile){
 	// Filtere the lines of the sinogram using the generated filter.
 	filterSinogram(orig_sinogram, filt_sinogram);
 
-	float deltaTheta = PI/cfg.numberOfProjectionAngles;  //delta theta in radians
+	deltaTheta = PI/cfg.numberOfProjectionAngles;  //delta theta in radians
 	// Back Project and reconstruct full image pixel by pixel.
 
 	backProject(deltaTheta, output, filt_sinogram);
@@ -292,7 +299,7 @@ int reconstruct(FILE *dataFile){
 			max = orig_sinogram[j];
 		}
 	}
-	FILE *input = fopen("input.pgm", "wb");
+	input = fopen("input.pgm", "wb");
 	fprintf(input, "P2\n%d %d\n255\n", imgwidth, numangles);
 	for(i=0; i < numangles*imgwidth; i++){
 		fprintf(input,"%d ",(int)((orig_sinogram[i]-min)/(max-min)*255.0));
