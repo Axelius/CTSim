@@ -201,6 +201,7 @@ int loadPGMToRaw(unsigned int ***raw, FILE *data){
 }
 
 int project(int angle){
+	double alpha;
 	int t = 0;
 	int x = 0;
 	int y = 0;
@@ -208,10 +209,11 @@ int project(int angle){
 	int s = 0;
 	int mat = 0;
 	double energy = cfg.minEnergy;
-	double alpha = (((double)(angle))/((double)cfg.numberOfProjectionAngles))*(PI);
+
 
 	logIt(DEBUG, "project(int angle) started.");
 	angle = angle - cfg.numberOfProjectionAngles/2;
+	alpha = (((double)(angle))/((double)cfg.numberOfProjectionAngles))*(PI);
 
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
 		for(t = -COLS; t<COLS; t++){
