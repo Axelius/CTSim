@@ -26,6 +26,7 @@ int calculateStringLength(char *string);
 int prefix(char *pre, char *str);
 char* cfgString(void);
 void setCFGToDefault(void);
+void repairInvalidCFGEntries(void);
 
 
 #endif /* CONFIGREADER_H_ */

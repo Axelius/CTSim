@@ -89,6 +89,11 @@ void readSettingsFromConfigFile(char *conFile){
 
 		i++;
 	}
+	logIt(DEBUG, "Config File read completely");
+
+	repairInvalidCFGEntries();
+
+
 	logIt(DEBUG, cfgString());
 	fclose(config);
 	logIt(DEBUG, "readSettingsFromConfigFile(char *conFile) finished.");
@@ -131,4 +136,63 @@ void setCFGToDefault(){
 	cfg.numberOfThreads = 4;
 	cfg.numberOfProjectionAngles = 100;
 	logIt(DEBUG, "setCFGToDefault() finished.");
+}
+
+void repairInvalidCFGEntries(){
+	int repairs = 0;
+	logIt(DEBUG, "Cleaning up invalid configurations if necessary:");
+	if(cfg.minEnergy == cfg.maxEnergy){
+		logIt(INFO, "cfg.minEnergy == cfg.maxEnergy. Repairing...");
+		cfg.energyLevels = 1;
+		(cfg.minEnergy)--;
+		repairs++;
+	}
+	if(cfg.energyLevels <=0){
+		logIt(INFO, "cfg.energyLevels <=0. Repairing...");
+		cfg.energyLevels = 1;
+		repairs++;
+	}
+	if(cfg.numberOfThreads <=0){
+		logIt(INFO, "cfg.numberOfThreads <=0. Repairing...");
+		cfg.numberOfThreads = 1;
+		repairs++;
+	}
+	if(cfg.numberOfProjectionAngles<=0){
+		logIt(INFO, "cfg.numberOfProjectionAngles<=0. Repairing...");
+		cfg.numberOfProjectionAngles = 1;
+		repairs++;
+	}
+	if(cfg.minEnergy<0){
+		logIt(INFO, "cfg.minEnergy<0. Repairing...");
+		cfg.minEnergy = 0;
+		repairs++;
+	}
+	if(cfg.maxEnergy < cfg.minEnergy){
+		logIt(INFO, "cfg.maxEnergy < cfg.minEnergy. Repairing...");
+		cfg.maxEnergy = cfg.minEnergy+1;
+		repairs++;
+	}
+	if(cfg.pathToOutputReconstruction[0] == '\0'){
+		logIt(INFO, "cfg.pathToOutputReconstruction is empty. Repairing...");
+		strcpy(cfg.pathToOutputReconstruction, "outData.pgm");
+		repairs++;
+	}
+	if(cfg.pathToOutputSinogram[0] == '\0'){
+		logIt(INFO, "cfg.pathToOutputSinogram is empty. Repairing...");
+		strcpy(cfg.pathToOutputSinogram, "simulatedSinogram.pgm");
+		repairs++;
+	}
+	if(cfg.pathToSlice[0] == '\0'){
+		logIt(INFO, "cfg.pathToSlice is empty. Repairing...");
+		strcpy(cfg.pathToSlice, "slices/Segmentation1");
+		repairs++;
+	}
+	if(cfg.energyLevels == 1){
+		cfg.maxEnergy = cfg.minEnergy;
+	}
+
+
+	if(repairs == 0){
+		logIt(DEBUG, "CFG seems to be valid. Nothing repaired.");
+	}
 }

@@ -206,6 +206,11 @@ int project(int angle){
 				for(energy = cfg.minEnergy; energy<=cfg.maxEnergy; energy+=((cfg.maxEnergy-cfg.minEnergy)/cfg.energyLevels)){
 					for(mat = MINMAT; mat< MAXMAT; mat++){
 						result[count][s+SINOGRAMSIZE/2] += getAttenuation(mat, energy, x,y);
+
+						logIt(FATAL, "result[%d][%d] += getAttenuation(mat = %d, energy = %f, x = %d,y=%d) =	%d", count, s+SINOGRAMSIZE/2, mat, energy, x,y, getAttenuation(mat, energy, x,y));
+					}
+					if(energy-cfg.maxEnergy < 0.0001){
+						break;
 					}
 				}
 			}

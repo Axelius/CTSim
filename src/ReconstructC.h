@@ -33,7 +33,7 @@ int reconstruction(char *pathToSino, char *pathToOutput);
 	ever pull this into host memory.
  */
 float h[2*IMG_WIDTH];
-struct timespec beg0, beg1, beg2, beg3, end0, end1, end2, end3;
+//struct timespec beg0, beg1, beg2, beg3, end0, end1, end2, end3;
 
 void createFilter(void);
 void filterSinogram(float *img, float *img_res);

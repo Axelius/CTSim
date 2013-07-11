@@ -42,11 +42,12 @@ int getAttenuation(int material, double kV, int positionX, int positionY) {
 	}
 
 
-
+	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
 	return (int)(getInterpolatedAttenuationValue(material, kV)*((double)imageRaw[positionX][positionY]));
 }
 
 double getInterpolatedAttenuationValue(int material, double energy) {
+	//logIt(TRACE, "getInterpolatedAttenuation(int material = %d, double energy = %f) started.", material, energy);
 	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) started.");
 	attenuation* mat;
 	size_t matLength;
