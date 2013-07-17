@@ -85,12 +85,12 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 		CloseHandle(hThread[i]);
 	}
 
-//	int a = 0;
-//		for(a = 0; a<cfg.numberOfProjectionAngles; a++){
-//			project(a);
-//			logIt(INFO, "Projection %d of %d finished.", a, cfg.numberOfProjectionAngles);
-//		}
-//	logIt(INFO, "Projection completed.");
+	//	int a = 0;
+	//		for(a = 0; a<cfg.numberOfProjectionAngles; a++){
+	//			project(a);
+	//			logIt(INFO, "Projection %d of %d finished.", a, cfg.numberOfProjectionAngles);
+	//		}
+	//	logIt(INFO, "Projection completed.");
 
 
 	freeAllRaws();
@@ -216,23 +216,30 @@ int project(int angle){
 	alpha = (((double)(angle))/((double)cfg.numberOfProjectionAngles))*(PI);
 
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
+		int photonCount = PHOTONSTARTCOUNT;
 		for(t = -COLS; t<COLS; t++){
 			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
 			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
 			if(x>=0 && x<COLS && y>=0 && y <COLS){
+				unsigned int accuAtt = 0;
 				for(energy = cfg.minEnergy; energy<=cfg.maxEnergy; energy+=((cfg.maxEnergy-cfg.minEnergy)/cfg.energyLevels)){
-					for(mat = MINMAT; mat< MAXMAT; mat++){
-						result[count][s+SINOGRAMSIZE/2] += getAttenuation(mat, energy, x,y);
 
-						//logIt(FATAL, "result[%d][%d] += getAttenuation(mat = %d, energy = %f, x = %d,y=%d) =	%d", count, s+SINOGRAMSIZE/2, mat, energy, x,y, getAttenuation(mat, energy, x,y));
-					}
+					for(mat = MINMAT; photonCount > 0 && mat< MAXMAT; mat++){
+
+						accuAtt += (photonCount * getAttenuation(mat, energy, x,y));
+
+					}//loop over mats finished
+					photonCount -= (photonCount * getAttenuation(mat, energy, x,y))/PHOTONSTARTCOUNT;
+					logIt(TRACE, "PhotonCount=%d", photonCount);
 					if(energy-cfg.maxEnergy < 0.0001){
 						break;
 					}
-				}
+				}//loop over energies
+				result[count][s+SINOGRAMSIZE/2] += (accuAtt/PHOTONSTARTCOUNT);
 			}
 		}
 	}
+
 	logIt(DEBUG, "project(int angle) finished.");
 	return 0;
 }

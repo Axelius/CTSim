@@ -25,20 +25,19 @@
 
 
 #define LOGGERSTYLE VERBOSELOGGER
-#define LOGLEVEL INFO
+#define LOGLEVEL DEBUG
 
 
 
 #if LOGGERSTYLE == VERBOSELOGGER
-	#define logIt(messageLevel, fmt, ...) logItVerb(messageLevel, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__);
+	#define logIt(messageLevel, fmt, ...) _logItVerb(messageLevel, __FILE__, __func__, __LINE__, fmt, ##__VA_ARGS__)
 #else
-	#define logIt(messageLevel, fmt, ...) logItNonVerb(messageLevel, fmt, ##__VA_ARGS__);
+	#define logIt(messageLevel, fmt, ...) _logItNonVerb(messageLevel, fmt, ##__VA_ARGS__)
 #endif
 
 
-
-void logItNonVerb(int messageLevel, const char *fmt, ...);
-void logItVerb(int messageLevel, const char * file, const char * function, const int line, const char *fmt, ...);
+void _logItNonVerb(int messageLevel, const char *fmt, ...);
+void _logItVerb(int messageLevel, const char * file, const char * function, const int line, const char *fmt, ...);
 
 
 
