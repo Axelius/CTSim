@@ -26,8 +26,11 @@ void readSettingsFromConfigFile(char *conFile){
 
 	if(config == NULL){
 		logIt(TRACE, "ConfigFile doesnt exist. Creating default one.");
+		fclose(config);
 		config = fopen(conFile, "wb");
-		fprintf(config, "pathToSlice=slices/Segmentation1\npathToOutputReconstruction=outData.pgm\npathToOutputSinogram=simulatedSinogram.pgm\nminEnergy=30\nmaxEnergy=120\nenergyLevels=4\nnumberOfProjectionAngles=100\nnumberOfThreads=4\n");
+		fprintf(config, "pathToSlice=slices/Segmentation1\npathToOutputReconstruction=outData.pgm\npathToOutputSinogram=simulatedSinogram.pgm\npathToXRaySpectra=Data/XRaySpectra\nminEnergy=30\nmaxEnergy=120\nenergyLevels=4\nnumberOfProjectionAngles=100\nnumberOfThreads=4\ntubeEnergy=80");
+		fclose(config);
+		config = fopen(conFile, "r");
 	}
 
 	setCFGToDefault();
@@ -86,6 +89,16 @@ void readSettingsFromConfigFile(char *conFile){
 			cfg.numberOfProjectionAngles = atoi(line + strlen("numberOfProjectionAngles="));
 			logIt(TRACE, "cfg.numberOfProjectionAngles=%d", cfg.numberOfProjectionAngles);
 		}
+		if(prefix(temp, "pathtoxrayspectra=")){
+			logIt(TRACE, "pathtoxrayspectra found in Config File");
+			strcpy(cfg.pathToXRaySpectra, line + strlen("pathtoxrayspectra="));
+			logIt(TRACE, "cfg.pathToXRaySpectra=%s", cfg.pathToXRaySpectra);
+		}
+		if(prefix(temp, "tubeenergy=")){
+			logIt(TRACE, "tubeEnergy found in Config File");
+			cfg.tubeEnergy = atoi(line + strlen("tubeenergy="));
+			logIt(TRACE, "cfg.tubeEnergy=%d", cfg.tubeEnergy);
+		}
 
 
 
@@ -122,8 +135,10 @@ int prefix(char * string, char * prefix){
 }
 
 char* cfgString(){
-	char* message = malloc(1024 * sizeof(char));
-	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads);
+	logIt(TRACE, "cfgString() started.");
+	char* message = malloc(1024* sizeof(char));
+	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s , pathToXRaySpectra=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d, cfg.tubeEnergy=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.pathToXRaySpectra, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads, cfg.tubeEnergy);
+	logIt(TRACE, "cfgString() finished.");
 	return message;
 }
 
@@ -132,11 +147,13 @@ void setCFGToDefault(){
 	strcpy(cfg.pathToSlice , "slices/segmentation1");
 	strcpy(cfg.pathToOutputReconstruction , "outdata.pgm");
 	strcpy(cfg.pathToOutputSinogram , "simulatedsinogram.pgm");
+	strcpy(cfg.pathToXRaySpectra , "Data/XRaySpectra");
 	cfg.minEnergy = 30;
 	cfg.maxEnergy = 140;
 	cfg.energyLevels = 2;
 	cfg.numberOfThreads = 4;
 	cfg.numberOfProjectionAngles = 100;
+	cfg.tubeEnergy = 80;
 	logIt(DEBUG, "setCFGToDefault() finished.");
 }
 
@@ -149,22 +166,27 @@ void repairInvalidCFGEntries(){
 		(cfg.minEnergy)--;
 		repairs++;
 	}
-	if(cfg.energyLevels <=0){
+	if(cfg.energyLevels <= 0){
 		logIt(INFO, "cfg.energyLevels <=0. Repairing...");
 		cfg.energyLevels = 1;
 		repairs++;
 	}
-	if(cfg.numberOfThreads <=0){
+	if(cfg.tubeEnergy <= 0){
+		logIt(INFO, "cfg.tubeEnergy <=0. Repairing...");
+		cfg.tubeEnergy = 80;
+		repairs++;
+	}
+	if(cfg.numberOfThreads <= 0){
 		logIt(INFO, "cfg.numberOfThreads <=0. Repairing...");
 		cfg.numberOfThreads = 1;
 		repairs++;
 	}
-	if(cfg.numberOfProjectionAngles<=0){
+	if(cfg.numberOfProjectionAngles <= 0){
 		logIt(INFO, "cfg.numberOfProjectionAngles<=0. Repairing...");
 		cfg.numberOfProjectionAngles = 1;
 		repairs++;
 	}
-	if(cfg.minEnergy<0){
+	if(cfg.minEnergy < 0){
 		logIt(INFO, "cfg.minEnergy<0. Repairing...");
 		cfg.minEnergy = 0;
 		repairs++;
@@ -187,6 +209,11 @@ void repairInvalidCFGEntries(){
 	if(cfg.pathToSlice[0] == '\0'){
 		logIt(INFO, "cfg.pathToSlice is empty. Repairing...");
 		strcpy(cfg.pathToSlice, "slices/Segmentation1");
+		repairs++;
+	}
+	if(cfg.pathToXRaySpectra[0] == '\0'){
+		logIt(INFO, "cfg.pathXRaySpectra is empty. Repairing...");
+		strcpy(cfg.pathToXRaySpectra, "Data/XRaySpectra");
 		repairs++;
 	}
 	if(cfg.energyLevels == 1){

@@ -53,6 +53,14 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	logIt(INFO, "Starting simulation.");
 
 	logIt(INFO, "Starting projection.");
+
+	precalculatedPhotonCounts = malloc(cfg.energyLevels * sizeof(int));
+	for(i = 0; i<cfg.energyLevels;i++){
+		precalculatedPhotonCounts[i] = (getPhotonCount(cfg.minEnergy + i * ((cfg.maxEnergy - cfg.minEnergy)/cfg.energyLevels)))/2;
+		logIt(DEBUG, "precalculatedPhotonCounts[%d] = %d", i, precalculatedPhotonCounts[i]);
+	}
+
+
 	hThread = (HANDLE *) malloc(cfg.numberOfThreads * sizeof(HANDLE));
 	threadID = (DWORD *) malloc(cfg.numberOfThreads * sizeof(DWORD));
 	arg = (t **) malloc(cfg.numberOfThreads * sizeof(t *));
@@ -208,34 +216,46 @@ int project(int angle){
 	int count = angle;
 	int s = 0;
 	int mat = 0;
-	double energy = cfg.minEnergy;
+	int energyLevel = cfg.minEnergy;
+	int energyLoopCount = 0;
+
 
 
 	logIt(DEBUG, "project(int angle) started.");
 	angle = angle - cfg.numberOfProjectionAngles/2;
 	alpha = (((double)(angle))/((double)cfg.numberOfProjectionAngles))*(PI);
 
+
+
+
 	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
-		int photonCount = PHOTONSTARTCOUNT;
 		for(t = -COLS; t<COLS; t++){
 			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
 			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
 			if(x>=0 && x<COLS && y>=0 && y <COLS){
 				unsigned int accuAtt = 0;
-				for(energy = cfg.minEnergy; energy<=cfg.maxEnergy; energy+=((cfg.maxEnergy-cfg.minEnergy)/cfg.energyLevels)){
+				energyLevel = cfg.minEnergy;
 
+				for(energyLoopCount = 0; energyLoopCount < cfg.energyLevels; energyLoopCount++, energyLevel += ((cfg.maxEnergy-cfg.minEnergy)/cfg.energyLevels)){
+					int photonCount = precalculatedPhotonCounts[energyLoopCount];
+					//logIt(DEBUG, "photonStartCount=%d", precalculatedPhotonCounts[energyLoopCount]);
+					if(photonCount == 0){
+						if(cfg.maxEnergy - energyLevel < 0.0001){
+							break;
+						}
+						continue;
+					}
 					for(mat = MINMAT; photonCount > 0 && mat< MAXMAT; mat++){
-
-						accuAtt += (photonCount * getAttenuation(mat, energy, x,y));
-
+						accuAtt += (photonCount * getAttenuation(mat, energyLevel, x,y));
 					}//loop over mats finished
-					photonCount -= (photonCount * getAttenuation(mat, energy, x,y))/PHOTONSTARTCOUNT;
-					logIt(TRACE, "PhotonCount=%d", photonCount);
-					if(energy-cfg.maxEnergy < 0.0001){
+					photonCount -= accuAtt;
+					//logIt(DEBUG, "PhotonCount=%d", photonCount);
+
+					if(cfg.maxEnergy - energyLevel < 0.0001){
 						break;
 					}
 				}//loop over energies
-				result[count][s+SINOGRAMSIZE/2] += (accuAtt/PHOTONSTARTCOUNT);
+				result[count][s+SINOGRAMSIZE/2] += (accuAtt);
 			}
 		}
 	}

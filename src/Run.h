@@ -12,6 +12,7 @@
 #include "Simulator.h"
 #include "ReconstructC.h"
 #include "ConfigReader.h"
+#include "XRaySpectrum.h"
 
 
 

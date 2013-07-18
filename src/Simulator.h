@@ -22,6 +22,7 @@
 #include "Constants.h"
 #include "Attenuation.h"
 #include "ConfigReader.h"
+#include "XRaySpectrum.h"
 
 
 #define IRON 1
@@ -43,6 +44,8 @@ unsigned int **muscleRaw;
 unsigned int **tissueRaw;
 
 unsigned int **result;
+
+int *precalculatedPhotonCounts;
 
 
 FILE *airImage;

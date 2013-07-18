@@ -8,8 +8,14 @@
 
 
 int main(int argc, char *argv[]){
+	startLogger("log.txt");
 	int ret = 0;
-	readSettingsFromConfigFile("config.cfg");
+	if(argc != 2){
+		printhelp();
+		return EXIT_FAILURE;
+	}
+	readSettingsFromConfigFile(argv[1]);
+	setUpSpectrum();
 
 
 	logIt(DEBUG, "pathToSlice=%s", cfg.pathToSlice);
@@ -23,10 +29,11 @@ int main(int argc, char *argv[]){
 	reconstruction(cfg.pathToOutputSinogram, cfg.pathToOutputReconstruction);
 	logIt(INFO, "Reconstructed image saved as %s. Exiting...", cfg.pathToOutputReconstruction);
 	logIt(DEBUG, "main(int argc, char *argv[]) finished.");
+	stopLogger();
 	return ret;
 }
 
 void printhelp(){
-	printf("USAGE: CTSim [pathToSlice] [pathToOutputReconstruction]\n");
+	printf("USAGE: CTSim [pathToConfigFile]\n");
 }
 

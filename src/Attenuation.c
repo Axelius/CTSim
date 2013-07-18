@@ -121,12 +121,12 @@ double getInterpolatedAttenuationValue(int material, double energy) {
 void setUpAttenuation(){
 	int i;
 	logIt(DEBUG, "setUpAttenuation() started.");
-	readAttenuationFile("MassAttenuationCoefficients/iron.txt", &iron, &ironLength);
-	readAttenuationFile("MassAttenuationCoefficients/boneCortical.txt", &bone, &boneLength);
-	readAttenuationFile("MassAttenuationCoefficients/water.txt", &water, &waterLength);
-	readAttenuationFile("MassAttenuationCoefficients/air.txt", &air, &airLength);
-	readAttenuationFile("MassAttenuationCoefficients/muscleSceletal.txt", &muscle, &muscleLength);
-	readAttenuationFile("MassAttenuationCoefficients/tissueSoft.txt", &tissue, &tissueLength);
+	readAttenuationFile("Data/MassAttenuationCoefficients/iron.txt", &iron, &ironLength);
+	readAttenuationFile("Data/MassAttenuationCoefficients/boneCortical.txt", &bone, &boneLength);
+	readAttenuationFile("Data/MassAttenuationCoefficients/water.txt", &water, &waterLength);
+	readAttenuationFile("Data/MassAttenuationCoefficients/air.txt", &air, &airLength);
+	readAttenuationFile("Data/MassAttenuationCoefficients/muscleSceletal.txt", &muscle, &muscleLength);
+	readAttenuationFile("Data/MassAttenuationCoefficients/tissueSoft.txt", &tissue, &tissueLength);
 
 	//Log attenuations if loglevel == trace
 	i = 0;

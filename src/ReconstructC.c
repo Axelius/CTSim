@@ -20,7 +20,7 @@ void createFilter() {
 
 
 	for(idx = -imgwidth; idx < imgwidth; idx++){
-		logIt(TRACE, "idx+imgwidth = %d", (idx+imgwidth));
+		//logIt(TRACE, "idx+imgwidth = %d", (idx+imgwidth));
 		h[idx+imgwidth] = (0.5f*(idx==0?1.0f:(sin(PI*idx)/(PI*idx)))) - (0.25f*pow((idx==0?1.0f:(sin(PI*idx/2.0f)/(PI*idx/2.0f))), 2));
 
 	}

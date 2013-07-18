@@ -12,11 +12,13 @@ typedef struct {
 	char pathToSlice[200];
 	char pathToOutputReconstruction[200];
 	char pathToOutputSinogram[200];
+	char pathToXRaySpectra[200];
 	int minEnergy;
 	int maxEnergy;
 	int energyLevels;
 	int numberOfThreads;
 	int numberOfProjectionAngles;
+	int tubeEnergy;
 } config;
 
 config cfg;
