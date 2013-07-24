@@ -56,7 +56,7 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 
 	precalculatedPhotonCounts = malloc(cfg.energyLevels * sizeof(int));
 	for(i = 0; i<cfg.energyLevels;i++){
-		precalculatedPhotonCounts[i] = (getPhotonCount(cfg.minEnergy + i * ((cfg.maxEnergy - cfg.minEnergy)/cfg.energyLevels)))/2;
+		precalculatedPhotonCounts[i] = getPhotonCount(cfg.minEnergy + i * ((cfg.maxEnergy - cfg.minEnergy)/(cfg.energyLevels-1)));
 		logIt(DEBUG, "precalculatedPhotonCounts[%d] = %d", i, precalculatedPhotonCounts[i]);
 	}
 
@@ -227,35 +227,38 @@ int project(int angle){
 
 
 
+	for(energyLoopCount = 0; energyLoopCount < cfg.energyLevels; energyLevel = cfg.minEnergy + ((cfg.maxEnergy-cfg.minEnergy)/(cfg.energyLevels-1))*(++energyLoopCount)){
+		long photonCount = precalculatedPhotonCounts[energyLoopCount];
+		if(photonCount == 0){
+			continue;
+		}
+		//logIt(DEBUG, "loop%d, energy=%d, photonCount=%d", energyLoopCount, energyLevel, photonCount);
 
-	for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
-		for(t = -COLS; t<COLS; t++){
-			x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
-			y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
-			if(x>=0 && x<COLS && y>=0 && y <COLS){
-				unsigned int accuAtt = 0;
-				energyLevel = cfg.minEnergy;
 
-				for(energyLoopCount = 0; energyLoopCount < cfg.energyLevels; energyLoopCount++, energyLevel += ((cfg.maxEnergy-cfg.minEnergy)/cfg.energyLevels)){
-					int photonCount = precalculatedPhotonCounts[energyLoopCount];
-					//logIt(DEBUG, "photonStartCount=%d", precalculatedPhotonCounts[energyLoopCount]);
-					if(photonCount == 0){
-						if(cfg.maxEnergy - energyLevel < 0.0001){
-							break;
-						}
-						continue;
-					}
-					for(mat = MINMAT; photonCount > 0 && mat< MAXMAT; mat++){
-						accuAtt += (photonCount * getAttenuation(mat, energyLevel, x,y));
+		for(s = -SINOGRAMSIZE/2; s<SINOGRAMSIZE/2; s++){
+			photonCount = precalculatedPhotonCounts[energyLoopCount];
+			for(t = -COLS; t<COLS; t++){
+				x = (int)(t*sin(alpha)+s*cos(alpha)+0.5+COLS/2);
+				y = (int)(-t*cos(alpha)+s*sin(alpha)+0.5+COLS/2);
+				if(x>=0 && x<COLS && y>=0 && y <COLS){
+
+					long backUpPhotonCount = photonCount;
+					for(mat = MINMAT; mat<= MAXMAT; mat++){
+						//double temp = (((double) backUpPhotonCount) * (SIZEOFPIXEL * pow(EULER, getAttenuation(mat, energyLevel, x,y))))/10000.0;
+						double temp = (backUpPhotonCount * getAttenuation(mat, energyLevel, x,y) * SIZEOFPIXEL)/1000.0;
+						//logIt(DEBUG, "photonCount=%d, temp=%f", photonCount, temp);
+						photonCount -= (long)temp;
+						result[count][s+SINOGRAMSIZE/2] += (unsigned int)temp;
 					}//loop over mats finished
-					photonCount -= accuAtt;
+
+					if(photonCount<=0){
+						photonCount = 0;
+						//logIt(DEBUG, "Photon beam starved.");
+					}
+
 					//logIt(DEBUG, "PhotonCount=%d", photonCount);
 
-					if(cfg.maxEnergy - energyLevel < 0.0001){
-						break;
-					}
 				}//loop over energies
-				result[count][s+SINOGRAMSIZE/2] += (accuAtt);
 			}
 		}
 	}
@@ -276,6 +279,10 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 	logIt(TRACE, "Output as a picture file");
 	for(i = 0; i<x;i++){
 		for(j = 0; j<y; j++){
+
+			if(write[i][j] > DETECTORSATURATION){
+				write[i][j] = DETECTORSATURATION;
+			}
 
 			if(write[i][j]<min){
 				logIt(TRACE, "New min found");

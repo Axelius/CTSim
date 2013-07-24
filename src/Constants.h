@@ -20,12 +20,17 @@
 //Width of the sinogram
 #define SINOGRAMSIZE 512
 
-//This is the number of photons started per energy level
-#define PHOTONSTARTCOUNT 20000
+//size of a pixel in the slice in cm
+#define SIZEOFPIXEL 0.1f
+
+#define DETECTORSATURATION 1000000
 
 
 //Really, what could this be ;)
 #define PI 3.1415926535897932384626433832795028841971693993751058f
+
+//Euler's number e
+#define EULER 2.7182818284590452353602874713526624977572470936999595749669676277f
 
 
 //Reconstruction Constants

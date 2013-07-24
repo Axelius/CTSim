@@ -44,7 +44,7 @@ unsigned int getAttenuation(int material, double kV, int positionX, int position
 
 
 	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
-	return (unsigned int) (128.0f * (getInterpolatedAttenuationValue(material, kV) * ((double)imageRaw[positionX][positionY])));
+	return (unsigned int) ((getInterpolatedAttenuationValue(material, kV) * ((double)imageRaw[positionX][positionY])));
 }
 
 double getInterpolatedAttenuationValue(int material, double energy) {
