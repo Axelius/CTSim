@@ -7,12 +7,6 @@
 
 
 #include "ConfigReader.h"
-#include "Logger.h"
-#include "Simulator.h"
-#include "ReconstructC.h"
-#include "Run.h"
-#include <string.h>
-#include <ctype.h>
 
 void readSettingsFromConfigFile(char *conFile){
 	char line[256];
@@ -48,7 +42,6 @@ void readSettingsFromConfigFile(char *conFile){
 		logIt(TRACE, "To Lower Case: %s", temp);
 
 
-		//pathtoOutputSinogram
 		if(prefix(temp, "pathtooutputsinogram=")){
 			logIt(TRACE, "pathtoOutputSinogram found in Config File");
 			strcpy(cfg.pathToOutputSinogram , line + strlen("pathtooutputsinogram="));
@@ -99,6 +92,16 @@ void readSettingsFromConfigFile(char *conFile){
 			cfg.tubeEnergy = atoi(line + strlen("tubeenergy="));
 			logIt(TRACE, "cfg.tubeEnergy=%d", cfg.tubeEnergy);
 		}
+		if(prefix(temp, "windowmin=")){
+			logIt(TRACE, "windowMin found in Config File");
+			cfg.windowMin = (unsigned int) strtoul(line + strlen("windowmin="), NULL, 10);
+			logIt(TRACE, "cfg.windowMin=%d", cfg.windowMin);
+		}
+		if(prefix(temp, "windowmax=")){
+			logIt(TRACE, "windowMax found in Config File");
+			cfg.windowMax = (unsigned int) strtoul(line + strlen("windowmax="), NULL, 10);
+			logIt(TRACE, "cfg.windowMax=%d", cfg.windowMax);
+		}
 
 
 
@@ -137,7 +140,7 @@ int prefix(char * string, char * prefix){
 char* cfgString(){
 	logIt(TRACE, "cfgString() started.");
 	char* message = malloc(1024* sizeof(char));
-	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s , pathToXRaySpectra=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d, cfg.tubeEnergy=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.pathToXRaySpectra, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads, cfg.tubeEnergy);
+	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s , pathToXRaySpectra=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d, cfg.tubeEnergy=%d, cfg.windowMin=%d, cfg.windowMax=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.pathToXRaySpectra, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads, cfg.tubeEnergy, cfg.windowMin, cfg.windowMax);
 	logIt(TRACE, "cfgString() finished.");
 	return message;
 }
@@ -154,6 +157,8 @@ void setCFGToDefault(){
 	cfg.numberOfThreads = 4;
 	cfg.numberOfProjectionAngles = 100;
 	cfg.tubeEnergy = 80;
+	cfg.windowMin = 0;
+	cfg.windowMax = UINT_MAX;
 	logIt(DEBUG, "setCFGToDefault() finished.");
 }
 
@@ -218,6 +223,11 @@ void repairInvalidCFGEntries(){
 	}
 	if(cfg.energyLevels == 1){
 		cfg.maxEnergy = cfg.minEnergy;
+	}
+	if(cfg.windowMin >= cfg.windowMax){
+		logIt(INFO, "cfg.windowMin >= cfg.windowMax. Repairing...");
+		cfg.windowMax = UINT_MAX;
+		repairs++;
 	}
 
 

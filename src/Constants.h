@@ -23,7 +23,7 @@
 //size of a pixel in the slice in cm
 #define SIZEOFPIXEL 0.1f
 
-#define DETECTORSATURATION 1000000
+#define DETECTORSATURATION 5000
 
 
 //Really, what could this be ;)

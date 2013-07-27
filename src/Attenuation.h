@@ -35,7 +35,7 @@ size_t tissueLength;
 void setUpAttenuation();
 void readAttenuationFile(char* pathToAttFile, attenuation** att, size_t* attLength);
 double getInterpolatedAttenuationValue(int material, double energy);
-unsigned int getAttenuation(int material, double kV, int positionX, int positionY);
+double getAttenuation(int material, double kV, int positionX, int positionY);
 
 
 

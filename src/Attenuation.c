@@ -7,7 +7,7 @@
 
 #include "Attenuation.h"
 
-unsigned int getAttenuation(int material, double kV, int positionX, int positionY) {
+double getAttenuation(int material, double kV, int positionX, int positionY) {
 	unsigned int **imageRaw;
 	logIt(TRACE, "getAttenuation(int material, double kV, int positionX, int positionY) started.");
 
@@ -44,7 +44,7 @@ unsigned int getAttenuation(int material, double kV, int positionX, int position
 
 
 	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
-	return (unsigned int) ((getInterpolatedAttenuationValue(material, kV) * ((double)imageRaw[positionX][positionY])));
+	return ((getInterpolatedAttenuationValue(material, kV) * ((double)imageRaw[positionX][positionY])))/255.0;
 }
 
 double getInterpolatedAttenuationValue(int material, double energy) {
