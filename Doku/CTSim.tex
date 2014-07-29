@@ -1,0 +1,70 @@
+\documentclass{acm_proc_article-sp}
+\usepackage{times}
+\usepackage{url}
+\usepackage{graphics}
+\usepackage{color}
+\usepackage[pdftex]{hyperref}
+\usepackage[ngerman]{babel}
+\usepackage[babel]{csquotes}
+\usepackage[utf8]{inputenc}
+\hypersetup{%
+pdftitle={Simulation of CT metal artefacts in C}, pdfauthor={Alexander Winkler}, pdfkeywords={your
+keywords}, bookmarksnumbered, pdfstartview={FitH}, colorlinks,
+citecolor=black, filecolor=black, linkcolor=black, urlcolor=black,
+breaklinks=true, }
+\newcommand{\comment}[1]{}
+\definecolor{Orange}{rgb}{1,0.5,0}
+\newcommand{\todo}[1]{\textsf{\textbf{\textcolor{Orange}{[[#1]]}}}}
+
+\begin{document}
+\setlength{\parindent}{10pt}
+\setlength{\parskip}{35pt}
+
+
+
+\title{Simulation of CT metal artefacts in C}
+\numberofauthors{1}
+\author{
+  \alignauthor Alexander Winkler\\
+    \affaddr{Chair for Computer Aided Medical Procedures \& Augmented Reality 2014}\\
+    \affaddr{Technische Universit\"at M\"unchen}\\
+    \email{alexander.winkler@mytum.de} }
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\keywords{CT, metal artefacts, simulation, segmentation, forward projection, X-Ray tube}
+
+\section{Introduction}
+
+\section{Causes of metal artefacts in CT}
+\subsection{Fundamentals of X-Ray physics}
+\subsubsection{Beam hardening}
+non-linear relation between the attenuation values, \(\mu\), and the measured values of the projection
+due to the fact that different bands of the frequency spectrum are differently attenuated
+soft X-ray beams, are more strongly absorbed than the high-energy, hard X-ray beams. This is the reason why this effect is named hardening of the X-ray spectrum and the corresponding image error is named beam-hardening artefact.
+\subsection{Fundamentals of CT reconstruction}
+
+\section{Simulation of CT}
+\subsection{Forward Projection}
+\subsubsection{Overview over the forward projection}
+\subsubsection{Implementation of line integrals}
+\subsubsection{Implementation of beam hardening}
+\subsection{Back Projection}
+\subsection{Parts of the simulator}
+\subsubsection{Segmented CT slice}
+\subsubsection{Simulation of X-Ray tube}
+\subsubsection{Look up tables for attenuation values}
+%http://physics.nist.gov/PhysRefData/XrayMassCoef/ElemTab/z26.html
+\subsection{Miscellaneous parts of the simulator}
+\subsubsection{Logger}
+\subsubsection{Image reading and writing}
+\subsection{Unresolved bugs}
+
+\section{Results}
+
+\section{Conclusion}
+
+\end{document}

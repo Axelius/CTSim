@@ -21,7 +21,7 @@
 #define SINOGRAMSIZE 512
 
 //size of a pixel in the slice in cm
-#define SIZEOFPIXEL 0.1f
+#define SIZEOFPIXEL 0.05f
 
 #define DETECTORSATURATION 5000
 

@@ -8,6 +8,8 @@
 #ifndef SIMULATOR_H_
 #define SIMULATOR_H_
 
+#define _USE_32BIT_TIME_T 1
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <Math.h>
@@ -47,6 +49,7 @@ unsigned int **result;
 double **intensity;
 
 int *precalculatedPhotonCounts;
+
 
 
 FILE *airImage;

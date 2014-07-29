@@ -38,12 +38,12 @@ double getAttenuation(int material, double kV, int positionX, int positionY) {
 		break;
 	default:
 		logIt(ERR, "Material ID%d not found!", material);
-		logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
+		logIt(TRACE, "getAttenuation(int material, double energy) finished.");
 		return 0.0f;
 	}
 
 
-	logIt(TRACE, "getInterpolatedAttenuation(int material, double energy) finished.");
+	logIt(TRACE, "getAttenuation(int material, double energy) finished.");
 	return ((getInterpolatedAttenuationValue(material, kV) * ((double)imageRaw[positionX][positionY])))/255.0;
 }
 

@@ -21,7 +21,6 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	HANDLE *hThread;
 	DWORD *threadID;
 	t **arg;
-	double run = 0.0;
 	int startvalue = 0;
 	int endvalue = 0;
 	int i = 0;
@@ -104,14 +103,14 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	//clamp sinogram
 	for(i = 0; i<cfg.numberOfProjectionAngles;i++){
 		for(j = 0; j<SINOGRAMSIZE; j++){
-			logIt(DEBUG, "result[%d][%d]=	%d", i, j, result[i][j]);
+			logIt(TRACE, "result[%d][%d]=	%d", i, j, result[i][j]);
 			if(result[i][j] > cfg.windowMax){
-				logIt(DEBUG, "Clamp at max");
+				logIt(TRACE, "Clamp at max");
 				result[i][j] = cfg.windowMax;
 			}
 			if(result[i][j] < cfg.windowMin){
+				logIt(TRACE, "Clamp at min");
 				result[i][j] = cfg.windowMin;
-				logIt(DEBUG, "Clamp at min");
 			}
 		}
 	}
@@ -122,10 +121,9 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 	exportPGM(outFile, result, cfg.numberOfProjectionAngles, SINOGRAMSIZE);
 	freeAllRaws();
 	time(&stop);
-	run = difftime(stop, start);
 
 
-	logIt(INFO,  "Simulation finished. Runtime: %lf.", run);
+	logIt(INFO,  "Simulation finished. Runtime: %lf.", difftime(stop, start));
 	fclose(outFile);
 	closeAllInputImages();
 
@@ -162,7 +160,7 @@ void allocateUnsignedIntArray(unsigned int ***raw, unsigned int row, unsigned in
 	}
 
 	for(i = 0; i < row; i++) {
-		(*raw)[i] = malloc(col * sizeof(unsigned int));
+		(*raw)[i] = calloc(col, sizeof(unsigned int));
 		if((*raw)[i] == 0){
 			logIt(ERROR, "out of memory in inner loop");
 			fprintf(stderr, "out of memory\n");
@@ -187,7 +185,7 @@ void allocateDoubleArray(double ***raw, unsigned int row, unsigned int col) {
 	}
 
 	for(i = 0; i < row; i++) {
-		(*raw)[i] = malloc(col * sizeof(double));
+		(*raw)[i] = calloc(col, sizeof(double));
 		if((*raw)[i] == 0){
 			logIt(ERROR, "out of memory in inner loop");
 			fprintf(stderr, "out of memory\n");
@@ -254,6 +252,8 @@ int loadPGMToRaw(unsigned int ***raw, FILE *data){
 }
 
 int project(int angle){
+	time_t projectionStartTime;
+	time_t projectionEndTime;
 	double alpha;
 	int t = 0;
 	int x = 0;
@@ -264,58 +264,52 @@ int project(int angle){
 	int energyLevel = cfg.minEnergy;
 	int energyLoopCount = 0;
 
-
-
-	logIt(DEBUG, "project(int angle) started.");
+	logIt(DEBUG, "project(int angle=%d) started.", angle);
+	time(&projectionStartTime);
 	angle = angle - cfg.numberOfProjectionAngles/2;
 	alpha = (((double)(angle))/((double)cfg.numberOfProjectionAngles))*(PI);
 
 
 
 	for(energyLoopCount = 0; energyLoopCount < cfg.energyLevels; energyLevel = cfg.minEnergy + ((cfg.maxEnergy-cfg.minEnergy)/(cfg.energyLevels-1))*(++energyLoopCount)){
-		int photonCount = precalculatedPhotonCounts[energyLoopCount];
-		if(photonCount == 0){
+		if(precalculatedPhotonCounts[energyLoopCount] == 0){
 			continue;
 		}
 		//logIt(DEBUG, "loop%d, energy=%d, photonCount=%d", energyLoopCount, energyLevel, photonCount);
 
-
-
-		for(s = -SINOGRAMSIZE/2; s < SINOGRAMSIZE/2; s++){
-			photonCount = precalculatedPhotonCounts[energyLoopCount];
-			//result[count][s+SINOGRAMSIZE/2] += photonCount;
-			//intensity[count][s+SINOGRAMSIZE/2] += (double)photonCount;
-			double currentEnergyIntensityCount = (double)photonCount;
-			for(t = -COLS; t < COLS; t++){
+		for(s = -SINOGRAMSIZE/2; s < SINOGRAMSIZE/2; s++){//s=detector element on line
+			intensity[count][s+SINOGRAMSIZE/2] = (double)precalculatedPhotonCounts[energyLoopCount];
+			logIt(TRACE, "intensity[count][s+SINOGRAMSIZE/2] = %f", intensity[count][s+SINOGRAMSIZE/2]);
+			for(t = -COLS; t < COLS; t++){//t=ray length
 				x = (int)( t*sin(alpha) + s*cos(alpha) + 0.0 + COLS/2);
 				y = (int)(-t*cos(alpha) + s*sin(alpha) + 0.0 + COLS/2);
 				if(x >= 0 && x < COLS && y >= 0 && y < COLS){
-
-					double intensityBackup = currentEnergyIntensityCount;
-
+					double accumulatedAttenuationForPixel = 0;
 					for(mat = MINMAT; mat <= MAXMAT; mat++){
-						double temp = SIZEOFPIXEL * getAttenuation(mat, energyLevel, x, y);
-						intensity[count][s+SINOGRAMSIZE/2] += intensityBackup * pow(EULER, -temp);
-						result[count][s+SINOGRAMSIZE/2] += (intensityBackup * temp);
-						//logIt(DEBUG, "intensity[count][s+SINOGRAMSIZE/2] =%f", intensity[count][s+SINOGRAMSIZE/2]);
+						accumulatedAttenuationForPixel += SIZEOFPIXEL * getAttenuation(mat, energyLevel, x, y);
+						//logIt(DEBUG, "intens: %f", intensity[count][s+SINOGRAMSIZE/2]);
+						//result[count][s+SINOGRAMSIZE/2] +=  ((double)precalculatedPhotonCounts[energyLoopCount]) *(intensityBackup * temp);
+						logIt(TRACE, "intensity[%d][%d] =%f",count, s+SINOGRAMSIZE/2, intensity[count][s+SINOGRAMSIZE/2]);
 					}//loop over mats finished
-
-
-
-					//logIt(DEBUG, "result[%d][%d]=%u", count, s+SINOGRAMSIZE/2, result[count][s+SINOGRAMSIZE/2]);
-					if(intensity[count][s+SINOGRAMSIZE/2] <= 0.001){
-						intensity[count][s+SINOGRAMSIZE/2] = 0.0;
-						//logIt(DEBUG, "Photon beam starved.");
+					//logIt(DEBUG, "accPixelAtt: %f", accumulatedAttenuationForPixel);
+					intensity[count][s+SINOGRAMSIZE/2] = intensity[count][s+SINOGRAMSIZE/2] * pow(EULER, -accumulatedAttenuationForPixel);
+					//logIt(DEBUG, "intensity: %f", intensity[count][s+SINOGRAMSIZE/2]);
+					if(intensity[count][s+SINOGRAMSIZE/2] <= 6000){
+						intensity[count][s+SINOGRAMSIZE/2] = 6000.0;
+						logIt(TRACE, "Photon beam starved.");
 						break;
 					}
+
 				}
 
 			}
-			//logIt(DEBUG, "pow(EULER, %u)=%f", result[count][s+SINOGRAMSIZE/2], pow(EULER, result[count][s+SINOGRAMSIZE/2]/1000.0));
-			result[count][s+SINOGRAMSIZE/2] = ((double)precalculatedPhotonCounts[energyLoopCount]/5000.0) * pow(EULER, result[count][s+SINOGRAMSIZE/2]/1000.0);
+			result[count][s+SINOGRAMSIZE/2] += (unsigned int)(intensity[count][s+SINOGRAMSIZE/2] * energyLevel);
+			//logIt(DEBUG, "result: %u", result[count][s+SINOGRAMSIZE/2]);
 		}
 	}
 
+	time(&projectionEndTime);
+	logIt(DEBUG, "Time for one projection: %lf seconds. For %d projections this is %f seconds total using %d threads.", (difftime(projectionEndTime, projectionStartTime)), cfg.numberOfProjectionAngles, ((double) difftime(projectionEndTime, projectionStartTime)) * cfg.numberOfProjectionAngles / (double) cfg.numberOfThreads, cfg.numberOfThreads);
 	logIt(DEBUG, "project(int angle) finished.");
 	return 0;
 }
@@ -335,11 +329,11 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 	for(i = 0; i<x;i++){
 		for(j = 0; j<y; j++){
 			if(write[i][j]<min){
-				logIt(DEBUG, "New min found");
+				logIt(TRACE, "New min found");
 				min = write[i][j];
 			}
 			if(write[i][j]>max){
-				logIt(DEBUG, "New max found");
+				logIt(TRACE, "New max found");
 				max = write[i][j];
 			}
 		}
