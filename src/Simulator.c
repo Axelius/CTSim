@@ -35,8 +35,6 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 
 
 
-
-
 	allocateAllRaws();
 	allocateUnsignedIntArray(&result, cfg.numberOfProjectionAngles, SINOGRAMSIZE);
 	allocateDoubleArray(&intensity, cfg.numberOfProjectionAngles, SINOGRAMSIZE);
@@ -67,7 +65,7 @@ int simulation(char *pathToSlice, char *pathToOutputSinogram) {
 		hThread = (HANDLE *) malloc(cfg.numberOfThreads * sizeof(HANDLE));
 		threadID = (DWORD *) malloc(cfg.numberOfThreads * sizeof(DWORD));
 		arg = (t **) malloc(cfg.numberOfThreads * sizeof(t *));
-
+		//Distribute angles on threads
 		startvalue = 0;
 		endvalue = (cfg.numberOfProjectionAngles/cfg.numberOfThreads);
 		for(i = 0; i<cfg.numberOfThreads; i++){
@@ -219,7 +217,6 @@ int loadPGMToRaw(unsigned int ***raw, FILE *data){
 	logIt(DEBUG, "loadPGMToRaw(unsigned int ***raw, FILE *data) started.");
 
 
-	logIt(TRACE, "here??");
 	//Read P2
 	fgets(str, 200, data);
 	if(!(str[0] == 'P' && str[1] == '2')){
@@ -287,23 +284,18 @@ int project(int angle){
 					double accumulatedAttenuationForPixel = 0;
 					for(mat = MINMAT; mat <= MAXMAT; mat++){
 						accumulatedAttenuationForPixel += SIZEOFPIXEL * getAttenuation(mat, energyLevel, x, y);
-						//logIt(DEBUG, "intens: %f", intensity[count][s+SINOGRAMSIZE/2]);
-						//result[count][s+SINOGRAMSIZE/2] +=  ((double)precalculatedPhotonCounts[energyLoopCount]) *(intensityBackup * temp);
 						logIt(TRACE, "intensity[%d][%d] =%f",count, s+SINOGRAMSIZE/2, intensity[count][s+SINOGRAMSIZE/2]);
 					}//loop over mats finished
-					//logIt(DEBUG, "accPixelAtt: %f", accumulatedAttenuationForPixel);
-					intensity[count][s+SINOGRAMSIZE/2] = intensity[count][s+SINOGRAMSIZE/2] * pow(EULER, -accumulatedAttenuationForPixel);
-					//logIt(DEBUG, "intensity: %f", intensity[count][s+SINOGRAMSIZE/2]);
-					if(intensity[count][s+SINOGRAMSIZE/2] <= 6000){
-						intensity[count][s+SINOGRAMSIZE/2] = 6000.0;
-						logIt(TRACE, "Photon beam starved.");
+					intensity[count][s+SINOGRAMSIZE/2] = intensity[count][s+SINOGRAMSIZE/2] * pow(EULER, -accumulatedAttenuationForPixel*cfg.attenuationMultiplicator);
+					//logIt(DEBUG, "energy: %d, intensity: %f",energyLevel, intensity[count][s+SINOGRAMSIZE/2]);
+					if(intensity[count][s+SINOGRAMSIZE/2] <= cfg.detectorThreshold){
+						intensity[count][s+SINOGRAMSIZE/2] = cfg.detectorThreshold;
+						//logIt(DEBUG, "Photon beam starved.");
 						break;
 					}
-
 				}
-
 			}
-			result[count][s+SINOGRAMSIZE/2] += (unsigned int)(intensity[count][s+SINOGRAMSIZE/2] * energyLevel);
+			result[count][s+SINOGRAMSIZE/2] += (unsigned int)(intensity[count][s+SINOGRAMSIZE/2]);
 			//logIt(DEBUG, "result: %u", result[count][s+SINOGRAMSIZE/2]);
 		}
 	}
@@ -323,9 +315,7 @@ int exportPGM(FILE* out, unsigned int** write, int x, int y){
 	min = write[0][0];
 	max = write[0][0];
 
-
-	//Output as a picture file
-	logIt(TRACE, "Output as a picture file");
+	//FInd maximum and minumum for image normalization
 	for(i = 0; i<x;i++){
 		for(j = 0; j<y; j++){
 			if(write[i][j]<min){

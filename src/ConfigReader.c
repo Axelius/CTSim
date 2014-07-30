@@ -28,7 +28,6 @@ void readSettingsFromConfigFile(char *conFile){
 	}
 
 	setCFGToDefault();
-
 	while(fgets(line, 256, config) != NULL){
 		p = temp;
 		strcpy(temp, line);
@@ -102,6 +101,16 @@ void readSettingsFromConfigFile(char *conFile){
 			cfg.windowMax = (unsigned int) strtoul(line + strlen("windowmax="), NULL, 10);
 			logIt(TRACE, "cfg.windowMax=%d", cfg.windowMax);
 		}
+		if(prefix(temp, "attenuationmultiplicator=")){
+			logIt(TRACE, "attenuationMultiplicator found in Config File");
+			cfg.attenuationMultiplicator = atoi(line + strlen("attenuationmultiplicator="));
+			logIt(TRACE, "cfg.attenuationMultiplicator=%d", cfg.attenuationMultiplicator);
+		}
+		if(prefix(temp, "detectorthreshold=")){
+			logIt(TRACE, "detectorThreshold found in Config File");
+			cfg.detectorThreshold = atoi(line + strlen("detectorthreshold="));
+			logIt(TRACE, "cfg.detectorThreshold=%d", cfg.detectorThreshold);
+		}
 
 
 
@@ -140,7 +149,7 @@ int prefix(char * string, char * prefix){
 char* cfgString(){
 	logIt(TRACE, "cfgString() started.");
 	char* message = malloc(1024* sizeof(char));
-	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s , pathToXRaySpectra=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d, cfg.tubeEnergy=%d, cfg.windowMin=%d, cfg.windowMax=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.pathToXRaySpectra, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads, cfg.tubeEnergy, cfg.windowMin, cfg.windowMax);
+	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s , pathToXRaySpectra=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d, cfg.tubeEnergy=%d, cfg.windowMin=%u, cfg.windowMax=%u, cfg.attenuationMultiplicator=%d, cfg.detectorThreshold=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.pathToXRaySpectra, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads, cfg.tubeEnergy, cfg.windowMin, cfg.windowMax, cfg.attenuationMultiplicator, cfg.detectorThreshold);
 	logIt(TRACE, "cfgString() finished.");
 	return message;
 }
@@ -153,6 +162,8 @@ void setCFGToDefault(){
 	strcpy(cfg.pathToXRaySpectra , "Data/XRaySpectra");
 	cfg.minEnergy = 30;
 	cfg.maxEnergy = 140;
+	cfg.attenuationMultiplicator = 1;
+	cfg.detectorThreshold = 100;
 	cfg.energyLevels = 2;
 	cfg.numberOfThreads = 4;
 	cfg.numberOfProjectionAngles = 100;

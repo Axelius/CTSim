@@ -8,12 +8,12 @@
 
 
 int main(int argc, char *argv[]){
-	startLogger("log.txt");
 	int ret = 0;
 	if(argc != 2){
 		printhelp();
 		return EXIT_FAILURE;
 	}
+	startLogger("log.txt");
 	readSettingsFromConfigFile(argv[1]);
 	setUpSpectrum();
 

@@ -29,6 +29,8 @@ typedef struct {
 	int tubeEnergy;
 	unsigned int windowMin;
 	unsigned int windowMax;
+	int attenuationMultiplicator;
+	int detectorThreshold;
 } config;
 
 config cfg;

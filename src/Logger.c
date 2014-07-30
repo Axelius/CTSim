@@ -10,9 +10,9 @@
 
 void _logItVerb(int messageLevel, const char * file, const char * function, const int line, const char *fmt, ...){
 	if(messageLevel <= LOGLEVEL){
+		char msg[MAXMESSAGELENGTH];
 		va_list args;
 		va_start(args, fmt);
-		char msg[MAXMESSAGELENGTH];
 		switch(messageLevel){
 #if LOGLEVEL >= TRACE
 		case TRACE:	printf("[[LogIt-TRACE][%s].%s.%d] ", file, function, line); break;
@@ -51,9 +51,9 @@ void _logItVerb(int messageLevel, const char * file, const char * function, cons
 
 void _logItNonVerb(int messageLevel, const char *fmt, ...){
 	if(messageLevel <= LOGLEVEL){
+		char msg[MAXMESSAGELENGTH];
 		va_list args;
 		va_start(args, fmt);
-		char msg[MAXMESSAGELENGTH];
 		switch(messageLevel){
 #if LOGLEVEL >= TRACE
 		case TRACE:	printf("[LogIt-TRACE] "); break;
