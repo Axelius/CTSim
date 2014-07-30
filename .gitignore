@@ -18,3 +18,12 @@
 
 #Stackdumps
 *.stackdump
+
+#latex helpers
+*.log
+*.toc
+*.aux
+*.blg
+*.bbl
+*.glo
+*.out
