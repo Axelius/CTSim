@@ -25,6 +25,7 @@
 #include "Attenuation.h"
 #include "ConfigReader.h"
 #include "XRaySpectrum.h"
+#include "pgmImportExport.h"
 
 
 #define IRON 1
@@ -46,7 +47,7 @@ unsigned int **muscleRaw;
 unsigned int **tissueRaw;
 
 unsigned int **result;
-double **intensity;
+
 
 int *precalculatedPhotonCounts;
 
@@ -60,17 +61,14 @@ FILE *tissueImage;
 FILE *waterImage;
 
 typedef struct {
-   int data1;
-   int data2;
+   int startCount;
+   int endCount;
 }t;
 
 
 
 void allocateUnsignedIntArray(unsigned int ***raw, unsigned int row, unsigned int col);
-void allocateDoubleArray(double ***raw, unsigned int row, unsigned int col);
-int loadPGMToRaw(unsigned int ***raw, FILE *data);
-int project(int angle);
-int exportPGM(FILE* out, unsigned int** write, int x, int y);
+int project(int projectionNumber, double angle);
 void freeUnsignedIntArray(unsigned int ***raw, int row, int col);
 int simulation(char *pathToSlice, char *pathToOutputSinogram);
 void setUpRawFiles(char *pathToSlices);

@@ -123,7 +123,7 @@ void readSettingsFromConfigFile(char *conFile){
 	repairInvalidCFGEntries();
 
 
-	logIt(DEBUG, cfgString());
+	logIt(INFO, cfgString());
 	fclose(config);
 	logIt(DEBUG, "readSettingsFromConfigFile(char *conFile) finished.");
 }
@@ -149,7 +149,7 @@ int prefix(char * string, char * prefix){
 char* cfgString(){
 	logIt(TRACE, "cfgString() started.");
 	char* message = malloc(1024* sizeof(char));
-	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s , pathToXRaySpectra=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d, cfg.tubeEnergy=%d, cfg.windowMin=%u, cfg.windowMax=%u, cfg.attenuationMultiplicator=%d, cfg.detectorThreshold=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.pathToXRaySpectra, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads, cfg.tubeEnergy, cfg.windowMin, cfg.windowMax, cfg.attenuationMultiplicator, cfg.detectorThreshold);
+	sprintf(message, "pathToSlice=%s, pathToOutputReconstruction=%s, pathToOutputSinogram=%s, pathToXRaySpectra=%s, cfg.minEnergy=%d, cfg.maxEnergy=%d, cfg.energyLevels=%d, cfg.numberOfProjectionAngles=%d, cfg.numberOfThreads=%d, cfg.tubeEnergy=%d, cfg.windowMin=%u, cfg.windowMax=%u, cfg.attenuationMultiplicator=%d, cfg.detectorThreshold=%d", cfg.pathToSlice, cfg.pathToOutputReconstruction, cfg.pathToOutputSinogram, cfg.pathToXRaySpectra, cfg.minEnergy, cfg.maxEnergy, cfg.energyLevels, cfg.numberOfProjectionAngles, cfg.numberOfThreads, cfg.tubeEnergy, cfg.windowMin, cfg.windowMax, cfg.attenuationMultiplicator, cfg.detectorThreshold);
 	logIt(TRACE, "cfgString() finished.");
 	return message;
 }
@@ -240,9 +240,13 @@ void repairInvalidCFGEntries(){
 		cfg.windowMax = UINT_MAX;
 		repairs++;
 	}
-
+	if(cfg.numberOfThreads > cfg.numberOfProjectionAngles){
+		logIt(INFO, "cfg.numberOfThreads > cfg.numberOfProjectionAngles. Repairing...");
+		cfg.numberOfThreads = cfg.numberOfProjectionAngles;
+		repairs++;
+	}
 
 	if(repairs == 0){
-		logIt(DEBUG, "CFG seems to be valid. Nothing repaired.");
+		logIt(INFO, "CFG seems to be valid.");
 	}
 }

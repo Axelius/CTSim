@@ -136,25 +136,26 @@ void backProject(float deltaTheta, float *resultImage, float *sinogram){
 
 int reconstruction(char *pathToSino, char *pathToOutput) {
 	int ret = 0;
-	double run = 0.0;
-	time_t start;
-	time_t stop;
 	logIt(DEBUG, "reconstruction(char *pathToSino, char *pathToOutput) started.");
-	time(&start);
 	outputPath = pathToOutput;
 	sinoPath = pathToSino;
+    LARGE_INTEGER frequency;
+    LARGE_INTEGER t1, t2;
+    double elapsedTime;
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&t1);
+
 	logIt(DEBUG, "Debug: outputpath: %s", outputPath);
-	logIt(INFO, "Starting Reconstruction.");
+	logIt(INFO, "Starting Reconstruction for %d projections.", cfg.numberOfProjectionAngles);
 
 
 	ret = startReconstruction();
 
-	time(&stop);
-	run = difftime(stop, start);
-	logIt(INFO,  "Reconstruction finished. Runtime: %lf.", run);
+	QueryPerformanceCounter(&t2);
+	elapsedTime = (double)(t2.QuadPart - t1.QuadPart) / frequency.QuadPart;
+	logIt(INFO,  "Reconstruction finished. Runtime: %f seconds.", elapsedTime);
 	logIt(DEBUG, "reconstruction(char *pathToSino, char *pathToOutput) finished.");
 	return ret;
-
 }
 
 
@@ -195,7 +196,6 @@ int startReconstruction(){
 	This is the primary host code.
  */
 int reconstruct(FILE *dataFile){
-	FILE *input;
 	int j, i;
 	float min, max;
 	FILE *fileOut;
@@ -271,32 +271,6 @@ int reconstruct(FILE *dataFile){
 		}
 
 	}
-
-
-
-	min = orig_sinogram[0];
-	max = orig_sinogram[0];
-
-	//Output the input as a picture file
-	for(j = 0; j<numangles*imgwidth; j++){
-		if(orig_sinogram[j]<min){
-			min = orig_sinogram[j];
-		}
-
-		if(orig_sinogram[j]>max){
-			max = orig_sinogram[j];
-		}
-	}
-	input = fopen("input.pgm", "wb");
-	fprintf(input, "P2\n%d %d\n255\n", imgwidth, numangles);
-	for(i=0; i < numangles*imgwidth; i++){
-		fprintf(input,"%d ",(int)((orig_sinogram[i]-min)/(max-min)*255.0));
-	}
-	fclose(input);
-
-
-
-
 
 
 
