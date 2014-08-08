@@ -43,6 +43,10 @@
 % for citing online documents
 \usepackage[hyphens]{url}
 
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
 
 
 \usepackage{tabularx}
@@ -112,17 +116,7 @@
  %% use hypertex version of hyperref
  \usepackage[hypertex,hyperindex=false,colorlinks=false]{hyperref}
 \else %% reduce output size \pdfcompresslevel=9
- %% declare pdfinfo
- %\pdfinfo { 
- %  /Title (my title) 
- %  /Creator (pdfLaTeX) 
- %  /Author (my name) 
- %  /Subject (my subject	) 
- %  /Keywords (my keywords)
- %}
- %% use pdf or jpg graphics
- \usepackage[pdftex]{graphicx}
- \DeclareGraphicsExtensions{.jpg,.JPG,.png,.pdf,.eps}
+
  \graphicspath{{figures/}} 
  
  %% Load float package, for enabling floating extensions

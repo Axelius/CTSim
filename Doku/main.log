@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.22)  30 JUL 2014 14:08
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.22)  8 AUG 2014 17:33
 entering extended mode
 **C:/Narvis/CTSim/Doku/main.tex
 (C:/Narvis/CTSim/Doku/main.tex
@@ -277,13 +277,30 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 \Urlmuskip=\muskip10
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+)
+\Gin@req@height=\dimen117
+\Gin@req@width=\dimen118
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\tabularx.sty"
 Package: tabularx 1999/01/07 v2.07 `tabularx' package (DPC)
-\TX@col@width=\dimen117
-\TX@old@table=\dimen118
-\TX@old@col=\dimen119
-\TX@target=\dimen120
-\TX@delta=\dimen121
+\TX@col@width=\dimen119
+\TX@old@table=\dimen120
+\TX@old@col=\dimen121
+\TX@target=\dimen122
+\TX@delta=\dimen123
 \TX@cols=\count103
 \TX@ftn=\toks19
 )
@@ -322,7 +339,7 @@ Package csquotes Info: Enabling multilingual quotes.
 )
 (C:\Narvis\CTSim\Doku\styles/tumlogo.sty)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
-\bigstrutjot=\dimen122
+\bigstrutjot=\dimen124
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsmath.sty"
 Package: amsmath 2000/07/18 v2.13 AMS math features
@@ -335,11 +352,11 @@ Package: amstext 2000/06/29 v2.01
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsgen.sty"
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks21
-\ex@=\dimen123
+\ex@=\dimen125
 ))
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsbsy.sty"
 Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen124
+\pmbraise@=\dimen126
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ams\math\amsopn.sty"
 Package: amsopn 1999/12/14 v2.01 operator names
@@ -356,7 +373,7 @@ LaTeX Info: Redefining \dots on input line 382.
 LaTeX Info: Redefining \cdots on input line 467.
 \Mathstrutbox@=\box30
 \strutbox@=\box31
-\big@size=\dimen125
+\big@size=\dimen127
 LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 \macc@depth=\count117
@@ -369,12 +386,12 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
 \column@=\count122
 \maxfields@=\count123
 \andhelp@=\toks23
-\eqnshift@=\dimen126
-\alignsep@=\dimen127
-\tagshift@=\dimen128
-\tagwidth@=\dimen129
-\totwidth@=\dimen130
-\lineht@=\dimen131
+\eqnshift@=\dimen128
+\alignsep@=\dimen129
+\tagshift@=\dimen130
+\tagwidth@=\dimen131
+\totwidth@=\dimen132
+\lineht@=\dimen133
 \@envbody=\toks24
 \multlinegap=\skip54
 \multlinetaggap=\skip55
@@ -509,7 +526,7 @@ Language: germanb 2008/06/01 v2.6m German support from the babel system
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\babel.def"
 File: babel.def 2008/07/08 v3.8m Babel common definitions
 \babel@savecnt=\count125
-\U@D=\dimen132
+\U@D=\dimen134
 )
 \l@austrian = a dialect from \language\l@german 
 Package babel Info: Making " an active character on input line 102.
@@ -534,24 +551,7 @@ LaTeX Warning: You have requested package `styles/shortoverview',
                but the package provides `shortoverview'.
 
 Package: shortoverview 
-) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
-Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
-Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\trig.sty"
-Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
-File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
-)
-Package graphics Info: Driver file: pdftex.def on input line 91.
-)
-\Gin@req@height=\dimen133
-\Gin@req@width=\dimen134
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\rotating\rotating.sty"
+) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\rotating\rotating.sty"
 Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
 \c@r@tfl@t=\count126
 \rotFPtop=\skip56
@@ -774,12 +774,14 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 42.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-<styles/IN_Black.pdf, id=93, 29.8716pt x 32.82263pt>
+<styles/IN_Black.pdf, id=121, 29.8716pt x 32.82263pt>
 File: styles/IN_Black.pdf Graphic file (type pdf)
- <use styles/IN_Black.pdf>
+
+<use styles/IN_Black.pdf>
 Package pdftex.def Info: styles/IN_Black.pdf used on input line 53.
 (pdftex.def)             Requested size: 57.22722pt x 62.88148pt.
-) (C:\Narvis\CTSim\Doku\components/abstract.tex [1
+) (C:\Narvis\CTSim\Doku\components/abstract.tex
+[1
 
 
 
@@ -789,15 +791,17 @@ es/IN_Black.pdf>] [2
 ]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 15.
-)
-[3] [4
+) [3] [4
 
 ]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 59.
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <20.74> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 59.
- (C:\Narvis\CTSim\Doku\main.toc)
+ (C:\Narvis\CTSim\Doku\main.toc
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 33.
+)
 \tf@toc=\write5
  [5] [6
 
@@ -818,36 +822,165 @@ Class scrbook Warning: \float@addtolists detected!
 
 ]
 Chapter 2.
-LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 5.
+<images/12_FBP.png, id=207, 481.8pt x 343.2825pt>
+File: images/12_FBP.png Graphic file (type png)
+ <use images/12_FBP.png>
+Package pdftex.def Info: images/12_FBP.png used on input line 14.
+(pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
-LaTeX Warning: Reference `buzug' on page 3 undefined on input line 8.
 
-[3] [4
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\@ifnextchar' on input line 20.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 20.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 20.
+
+[3 <C:/Narvis/CTSim/Doku/images/12_FBP.png>]
+<images/spectrum.png, id=219, 970.3753pt x 606.01407pt>
+File: images/spectrum.png Graphic file (type png)
+
+<use images/spectrum.png>
+Package pdftex.def Info: images/spectrum.png used on input line 27.
+(pdftex.def)             Requested size: 390.01903pt x 243.5757pt.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\@ifnextchar' on input line 31.
+
+[4 <C:/Narvis/CTSim/Doku/images/spectrum.png>] [5] [6
 
 ]
 Chapter 3.
-
-LaTeX Warning: Reference `deMan' on page 5 undefined on input line 12.
-
-[5] [6
-
-]
-Chapter 4.
 [7] [8
 
 ]
+Chapter 4.
+[9] [10
+
+]
 Chapter 5.
-) [9] [10
+[11] [12
 
-] (C:\Narvis\CTSim\Doku\main.bbl
+]
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <24.88> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 78.
+ [13] [14]
+Appendix A.
+<images/15_FBP.png, id=285, 324.21124pt x 292.09125pt>
+File: images/15_FBP.png Graphic file (type png)
+ <use images/15_FBP.png>
+Package pdftex.def Info: images/15_FBP.png used on input line 87.
+(pdftex.def)             Requested size: 216.67871pt x 195.2143pt.
 
-LaTeX Warning: Empty `thebibliography' environment or \BreakBibliography
-               before end of `thebibliography' environment on input line 3.
+<images/14_FBP.png, id=288, 481.8pt x 343.2825pt>
+File: images/14_FBP.png Graphic file (type png)
+ <use images/14_FBP.png>
+Package pdftex.def Info: images/14_FBP.png used on input line 92.
+(pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
+
+<images/13_FBP.png, id=291, 324.21124pt x 292.09125pt>
+File: images/13_FBP.png Graphic file (type png)
+ <use images/13_FBP.png>
+Package pdftex.def Info: images/13_FBP.png used on input line 97.
+(pdftex.def)             Requested size: 216.67871pt x 195.2143pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/11_FBP.png, id=294, 481.8pt x 343.2825pt>
+File: images/11_FBP.png Graphic file (type png)
+ <use images/11_FBP.png>
+Package pdftex.def Info: images/11_FBP.png used on input line 102.
+(pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/06_FBP.png, id=297, 421.575pt x 330.23375pt>
+File: images/06_FBP.png Graphic file (type png)
+ <use images/06_FBP.png>
+Package pdftex.def Info: images/06_FBP.png used on input line 107.
+(pdftex.def)             Requested size: 216.67871pt x 169.73213pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/05_FBP.png, id=300, 481.8pt x 311.1625pt>
+File: images/05_FBP.png Graphic file (type png)
+ <use images/05_FBP.png>
+Package pdftex.def Info: images/05_FBP.png used on input line 112.
+(pdftex.def)             Requested size: 216.67871pt x 139.93637pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/09_FBP.png, id=303, 481.8pt x 343.2825pt>
+File: images/09_FBP.png Graphic file (type png)
+ <use images/09_FBP.png>
+Package pdftex.def Info: images/09_FBP.png used on input line 117.
+(pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/01_FBP.png, id=306, 481.8pt x 343.2825pt>
+File: images/01_FBP.png Graphic file (type png)
+ <use images/01_FBP.png>
+Package pdftex.def Info: images/01_FBP.png used on input line 122.
+(pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/03_FBP.png, id=309, 481.8pt x 343.2825pt>
+File: images/03_FBP.png Graphic file (type png)
+ <use images/03_FBP.png>
+Package pdftex.def Info: images/03_FBP.png used on input line 127.
+(pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/04_FBP.png, id=312, 481.8pt x 364.36125pt>
+File: images/04_FBP.png Graphic file (type png)
+ <use images/04_FBP.png>
+Package pdftex.def Info: images/04_FBP.png used on input line 132.
+(pdftex.def)             Requested size: 216.67871pt x 163.86096pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) [15
+
+ <C:/Narvis/CTSim/Doku/images/15_FBP.png> <C:/Narvis/CTSim/Doku/images/14_FBP.p
+ng>] [16 <C:/Narvis/CTSim/Doku/images/13_FBP.png> <C:/Narvis/CTSim/Doku/images/
+11_FBP.png> <C:/Narvis/CTSim/Doku/images/06_FBP.png>] [17 <C:/Narvis/CTSim/Doku
+/images/05_FBP.png> <C:/Narvis/CTSim/Doku/images/09_FBP.png> <C:/Narvis/CTSim/D
+oku/images/01_FBP.png>] [18 <C:/Narvis/CTSim/Doku/images/03_FBP.png> <C:/Narvis
+/CTSim/Doku/images/04_FBP.png>] (C:\Narvis\CTSim\Doku\main.bbl
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 7.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+Underfull \hbox (badness 1990) in paragraph at lines 4--9
+\OT1/ppl/m/n/10.95 on-line at []$\OT1/pcr/m/n/10.95 http : / / wiki . arnesenfa
+mily . net / doku . php ? id = byu : projects :$
+ []
 
 )
+
+Package caption Warning: Unused \captionsetup[sub] on input line 49.
+See the caption package documentation for explanation.
+
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 74.
- [11
+[19
+
 
 ]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 74.
@@ -855,28 +988,31 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 74.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 74.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 74.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: D71C07A9DDAE3C6E91D8D3B45A1C4EDB;1571.
-
-
-LaTeX Warning: There were undefined references.
-
+(rerunfilecheck)             Checksum: C6204BCB37E6C5CE7F96AF21CD1842C1;2114.
  ) 
 Here is how much of TeX's memory you used:
- 12523 strings out of 494045
- 187216 string characters out of 3145956
- 319327 words of memory out of 3000000
- 15533 multiletter control sequences out of 15000+200000
- 19329 words of font info for 52 fonts, out of 3000000 for 9000
+ 12691 strings out of 494045
+ 189959 string characters out of 3145956
+ 322370 words of memory out of 3000000
+ 15642 multiletter control sequences out of 15000+200000
+ 21898 words of font info for 58 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 51i,10n,55p,842b,400s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,11n,55p,842b,400s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Progra
 m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x
-86)/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKT
-eX 2.9/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on main.pdf (17 pages, 92178 bytes).
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiK
+TeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
+onts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
+e1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/p
+alatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/palatino/
+uplri8a.pfb>
+Output written on main.pdf (25 pages, 1336727 bytes).
 PDF statistics:
- 228 PDF objects out of 1000 (max. 8388607)
- 43 named destinations out of 1000 (max. 500000)
- 190 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 420 PDF objects out of 1000 (max. 8388607)
+ 80 named destinations out of 1000 (max. 500000)
+ 306 words of extra memory for PDF output out of 10000 (max. 10000000)
 

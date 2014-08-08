@@ -1,3 +1,50 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{CUDABackprojection}
+Adam Arnesen.
+\newblock Cuda ct backprojection reconstruction, February 2011.
+\newblock Available online at
+  \url{http://wiki.arnesenfamily.net/doku.php?id=byu:projects:cuda_ct} visited
+  on July 30th 2014.
+
+\bibitem{CausesAndReductionTechniques}
+F~Edward Boas and Dominik Fleischmann.
+\newblock Ct artifacts: causes and reduction techniques.
+\newblock {\em Imaging in Medicine}, 4(2):229--240, 2012.
+
+\bibitem{buzug}
+T.M. Buzug.
+\newblock {\em Computed Tomography: From Photon Statistics to Modern Cone-Beam
+  CT}.
+\newblock Springer, 2008.
+
+\bibitem{deMan}
+Bruno De~Man.
+\newblock Iterative reconstruction for reduction of metal artifacts in computed
+  tomography.
+\newblock {\em status: published}, 2001.
+
+\bibitem{AttenuationTable}
+S.~M.~Seltzer J.~H.~Hubbell.
+\newblock Tables of x-ray mass attenuation coefficients and mass
+  energy-absorption coefficients from 1 kev to 20 mev for elements z = 1 to 92
+  and 48 additional substances of dosimetric interest, May 1996.
+\newblock Available online at
+  \url{http://www.nist.gov/pml/data/xraycoef/index.cfm} visited on July 30th
+  2014.
+
+\bibitem{IIIP_3_1}
+Markus Kowarschik.
+\newblock {Interventional Imaging \& Image Processing: Angiographic X-ray
+  imaging, Basics of X-ray imaging (generation, absorption, and detection of
+  X-rays)}.
+\newblock November 2012.
+
+\bibitem{revisionrads}
+{ReVision Radiology}.
+\newblock Ct metal artifact reduction using the metal deletion technique
+  (mdt)., February 2014.
+\newblock Available online at \url{http://www.revisionrads.com/index.html}
+  visited on August 8th 2014.
 
 \end{thebibliography}
