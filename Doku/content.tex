@@ -8,7 +8,7 @@
 \section{Examples of metal artefacts in CT}
 \par To know why metal artefacts in CT should be simulated, we should first know what these metal artefacts are and how they look like.
 \par The human body usually does not contain any metal objects. However many medical implants are composed of metal as well as many surgical tools. Thus metal can indeed be found quite often in patients who are scanned in CT scanners: Artificial hip bones, dental fillings, pacemakers, intramedullary rods, screws or in the case of inerventional CT surgical tools like needles, trocars etc. are found in many patients. If these patients are scanned in CT artefacts in the tomographic reconstruction are usually encountered, how severe these artefacts are depends mainly on their size and the material they are composed of.
-\par These artefacts usually consist of star like streaks emanating from the metal object going through the whole or large portions of the reconstruction as can be seen in figure \ref{BilateralHipReplacements}. More examples can be found in appendix \ref{chapter:RealMetal}.
+\par These artefacts usually consist of dark stripes between metal objects with light, pin-striped lines covering the surrounding tissue going through the whole or large portions of the reconstruction as can be seen in figure \ref{BilateralHipReplacements}. Especially in cases in which the radiation is completely absorbed due to the thickness of the materials, very bright strips are found radially around the object with the complete image losing its diagnostic value. More examples can be found in appendix \ref{chapter:RealMetal}.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.5\linewidth]{images/12_FBP.png}
@@ -30,14 +30,16 @@
 \end{figure}
 \subsection{Lambert-Beer's Law\cite{buzug}}
 \par Usually all physical mechanisms that lead to the attenuation of radiation intensity behind a homogeneous object are summed up in a single attenuation coefficient \(\mu\). In this simple model the total attenuation of a monochromatic X-Ray beam after passing a distance of \(\Delta\eta\) through an object can be calculated as \[I(\eta + \Delta\eta) = I(\eta) - \mu(\eta)I(\eta)\Delta\eta \] where \(I\) is the radiation intensity - which is proportional to the number of photons.
-\par By reordering and taking the limit \(\Delta\eta \rightarrow 0\) this leads to the differential quotient\[lim_{\Delta\eta\rightarrow 0} \frac{I(\eta + \Delta\eta) - I(\eta)}{\Delta\eta} = \frac{dI}{d\eta} = -\mu(\eta)I(\eta)\]
-\par If the medium is assumed to be homogeneous the medium can be described by a single attenuation constant \(\mu(\eta) = \mu\). By solving this ordinary linear and homogeneous, first-order
-differential equation with constant coefficients this gives the equation \[I(\eta) = I_{0}e^{-\mu\eta}\] know as Beer's law of attenuation.
+\par By reordering and taking the limit \(\Delta\eta \rightarrow 0\) this leads to the differential quotient\[\textrm{lim}_{\Delta\eta\rightarrow 0} \frac{I(\eta + \Delta\eta) - I(\eta)}{\Delta\eta} = \frac{\textrm{d}I}{\textrm{d}\eta} = -\mu(\eta)I(\eta)\]
+\par If the medium is assumed to be homogeneous the medium can be described by a single attenuation constant \(\mu(\eta) = \mu\). By solving this ordinary linear and homogeneous, first-order differential equation with constant coefficients this gives the equation \[I(\eta) = I_{0}e^{-\mu\eta}\] know as Beer's law of attenuation.
 \par The full derivation of the formula with all assumptions and mathematical intermediate steps can be found in \cite{buzug}.
-\subsection{Beam hardening}
-\par non-linear relation between the attenuation values, \(\mu\), and the measured values of the projection
-due to the fact that different bands of the frequency spectrum are differently attenuated
-soft X-ray beams, are more strongly absorbed than the high-energy, hard X-ray beams. This is the reason why this effect is named hardening of the X-ray spectrum and the corresponding image error is named beam-hardening artefact.\cite{buzug}
+\subsection{Beam hardening\cite{buzug}}
+\par X-Ray is colloquially understood to have the property of effectively penetrating material. But from a physical point of view it can be seen that the radiation attenuation is not only dependent on path length but also wavelength dependent and also on the penetrated material.
+\par Thus Lambert-Beer's Law is indeed a simplification. The energy dependence of the attenuation coefficient along the path \(s\) also has to be taken into consideration \(\mu = \mu(\eta,E)\). This leads to \[I(s) = \int_0^{E_{\textrm{max}}}I_0(E)e^{-\int_0^{s}\mu(\eta,E)\textrm{d}\eta}\textrm{d}E\] where \(I_0(E)\) is the X-Ray spectrum.
+\par Reconstruction does not take this non-linear relationship due to the fact that different bands of the frequency spectrum are differently attenuated between the attenuation values, \(\mu\), and the measured values of the projection into account thus impairing the reconstruction.
+\par Soft X-ray beams are more strongly absorbed than high-energy, \emph{hard} X-Ray beams. The individual detector elements in practice only measure the integral intensity over all wavelengths, i.e., they cannot differentiate distinct energies. If a non monochromatic X-Ray beam passes through an object different bands of its spectrum are differently attenuated. Without taking this into account in the reconstruction this leads to so called beam hardening artefacts.
+\par The beam hardening effect is especially prominent for metals that are introduced into the human body as their atomic number Z is relatively high with absorption given by \[\alpha \propto Z^4\lambda^3\] (Due to this relationship for example lead (Pb, Z = 82) shields X-ray radiation about 1583 times better than aluminium (Al, Z = 13))
+\par Thus behind a thick metal object the system detects an \emph{infinitely high} attenuation coefficient. Filtered backprojection does not cope with the inconsistencies in the attenuation values. In the backprojection lines through the object are encountered with extremely high numerical values, which spread across the entire image and are not compensated for by any other projection direction creating star like streaks emanating from the metal object going through the whole or large portions of the reconstruction.\cite{buzug}
 \section{Fundamentals of CT reconstruction}
 
 \chapter{Simulation of CT}

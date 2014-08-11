@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.22)  8 AUG 2014 17:33
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.22)  11 AUG 2014 20:48
 entering extended mode
 **C:/Narvis/CTSim/Doku/main.tex
 (C:/Narvis/CTSim/Doku/main.tex
@@ -822,7 +822,7 @@ Class scrbook Warning: \float@addtolists detected!
 
 ]
 Chapter 2.
-<images/12_FBP.png, id=207, 481.8pt x 343.2825pt>
+<images/12_FBP.png, id=208, 481.8pt x 343.2825pt>
 File: images/12_FBP.png Graphic file (type png)
  <use images/12_FBP.png>
 Package pdftex.def Info: images/12_FBP.png used on input line 14.
@@ -841,7 +841,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `subscript' on input line 20.
 
 [3 <C:/Narvis/CTSim/Doku/images/12_FBP.png>]
-<images/spectrum.png, id=219, 970.3753pt x 606.01407pt>
+<images/spectrum.png, id=220, 970.3753pt x 606.01407pt>
 File: images/spectrum.png Graphic file (type png)
 
 <use images/spectrum.png>
@@ -852,11 +852,16 @@ Package pdftex.def Info: images/spectrum.png used on input line 27.
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\@ifnextchar' on input line 31.
 
-[4 <C:/Narvis/CTSim/Doku/images/spectrum.png>] [5] [6
+[4 <C:/Narvis/CTSim/Doku/images/spectrum.png>]
 
-]
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\@ifnextchar' on input line 36.
+
+[5] [6]
 Chapter 3.
-[7] [8
+[7
+
+] [8
 
 ]
 Chapter 4.
@@ -868,88 +873,88 @@ Chapter 5.
 
 ]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <24.88> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 78.
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 80.
  [13] [14]
 Appendix A.
-<images/15_FBP.png, id=285, 324.21124pt x 292.09125pt>
+<images/15_FBP.png, id=291, 324.21124pt x 292.09125pt>
 File: images/15_FBP.png Graphic file (type png)
  <use images/15_FBP.png>
-Package pdftex.def Info: images/15_FBP.png used on input line 87.
+Package pdftex.def Info: images/15_FBP.png used on input line 89.
 (pdftex.def)             Requested size: 216.67871pt x 195.2143pt.
 
-<images/14_FBP.png, id=288, 481.8pt x 343.2825pt>
+<images/14_FBP.png, id=294, 481.8pt x 343.2825pt>
 File: images/14_FBP.png Graphic file (type png)
  <use images/14_FBP.png>
-Package pdftex.def Info: images/14_FBP.png used on input line 92.
+Package pdftex.def Info: images/14_FBP.png used on input line 94.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
-<images/13_FBP.png, id=291, 324.21124pt x 292.09125pt>
+<images/13_FBP.png, id=297, 324.21124pt x 292.09125pt>
 File: images/13_FBP.png Graphic file (type png)
  <use images/13_FBP.png>
-Package pdftex.def Info: images/13_FBP.png used on input line 97.
+Package pdftex.def Info: images/13_FBP.png used on input line 99.
 (pdftex.def)             Requested size: 216.67871pt x 195.2143pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/11_FBP.png, id=294, 481.8pt x 343.2825pt>
+<images/11_FBP.png, id=300, 481.8pt x 343.2825pt>
 File: images/11_FBP.png Graphic file (type png)
  <use images/11_FBP.png>
-Package pdftex.def Info: images/11_FBP.png used on input line 102.
+Package pdftex.def Info: images/11_FBP.png used on input line 104.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/06_FBP.png, id=297, 421.575pt x 330.23375pt>
+<images/06_FBP.png, id=303, 421.575pt x 330.23375pt>
 File: images/06_FBP.png Graphic file (type png)
  <use images/06_FBP.png>
-Package pdftex.def Info: images/06_FBP.png used on input line 107.
+Package pdftex.def Info: images/06_FBP.png used on input line 109.
 (pdftex.def)             Requested size: 216.67871pt x 169.73213pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/05_FBP.png, id=300, 481.8pt x 311.1625pt>
+<images/05_FBP.png, id=306, 481.8pt x 311.1625pt>
 File: images/05_FBP.png Graphic file (type png)
  <use images/05_FBP.png>
-Package pdftex.def Info: images/05_FBP.png used on input line 112.
+Package pdftex.def Info: images/05_FBP.png used on input line 114.
 (pdftex.def)             Requested size: 216.67871pt x 139.93637pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/09_FBP.png, id=303, 481.8pt x 343.2825pt>
+<images/09_FBP.png, id=309, 481.8pt x 343.2825pt>
 File: images/09_FBP.png Graphic file (type png)
  <use images/09_FBP.png>
-Package pdftex.def Info: images/09_FBP.png used on input line 117.
+Package pdftex.def Info: images/09_FBP.png used on input line 119.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/01_FBP.png, id=306, 481.8pt x 343.2825pt>
+<images/01_FBP.png, id=312, 481.8pt x 343.2825pt>
 File: images/01_FBP.png Graphic file (type png)
  <use images/01_FBP.png>
-Package pdftex.def Info: images/01_FBP.png used on input line 122.
+Package pdftex.def Info: images/01_FBP.png used on input line 124.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/03_FBP.png, id=309, 481.8pt x 343.2825pt>
+<images/03_FBP.png, id=315, 481.8pt x 343.2825pt>
 File: images/03_FBP.png Graphic file (type png)
  <use images/03_FBP.png>
-Package pdftex.def Info: images/03_FBP.png used on input line 127.
+Package pdftex.def Info: images/03_FBP.png used on input line 129.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/04_FBP.png, id=312, 481.8pt x 364.36125pt>
+<images/04_FBP.png, id=318, 481.8pt x 364.36125pt>
 File: images/04_FBP.png Graphic file (type png)
  <use images/04_FBP.png>
-Package pdftex.def Info: images/04_FBP.png used on input line 132.
+Package pdftex.def Info: images/04_FBP.png used on input line 134.
 (pdftex.def)             Requested size: 216.67871pt x 163.86096pt.
 
 
@@ -988,31 +993,34 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 74.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 74.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 74.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C6204BCB37E6C5CE7F96AF21CD1842C1;2114.
+(rerunfilecheck)             Checksum: A28751C63691C9F8816277B8BA072A7E;2119.
  ) 
 Here is how much of TeX's memory you used:
- 12691 strings out of 494045
- 189959 string characters out of 3145956
+ 12695 strings out of 494045
+ 189997 string characters out of 3145956
  322370 words of memory out of 3000000
- 15642 multiletter control sequences out of 15000+200000
- 21898 words of font info for 58 fonts, out of 3000000 for 9000
+ 15644 multiletter control sequences out of 15000+200000
+ 24102 words of font info for 62 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  51i,11n,55p,842b,400s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86
-)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
-onts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
-e1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/p
-alatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/palatino/
-uplri8a.pfb>
-Output written on main.pdf (25 pages, 1336727 bytes).
+{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc} <C:\Users
+\Alexander\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\public\yhmath\dpi600\yhcmex
+10.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb
+><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Progr
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program F
+iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files (x86)/MiK
+TeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/
+fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/
+palatino/uplri8a.pfb>
+Output written on main.pdf (25 pages, 1358473 bytes).
 PDF statistics:
- 420 PDF objects out of 1000 (max. 8388607)
+ 436 PDF objects out of 1000 (max. 8388607)
  80 named destinations out of 1000 (max. 500000)
  306 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -7,8 +7,8 @@
 \contentsline {section}{\numberline {2.2}Fundamentals of X-Ray physics}{3}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Generation of X-Ray radiation\cite {IIIP_3_1}}{4}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Lambert-Beer's Law\cite {buzug}}{4}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Beam hardening}{5}{subsection.2.2.3}
-\contentsline {section}{\numberline {2.3}Fundamentals of CT reconstruction}{5}{section.2.3}
+\contentsline {subsection}{\numberline {2.2.3}Beam hardening\cite {buzug}}{5}{subsection.2.2.3}
+\contentsline {section}{\numberline {2.3}Fundamentals of CT reconstruction}{6}{section.2.3}
 \contentsline {chapter}{\numberline {3}Simulation of CT}{7}{chapter.3}
 \contentsline {section}{\numberline {3.1}Forward Projection}{7}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}Overview over the forward projection}{7}{subsection.3.1.1}
