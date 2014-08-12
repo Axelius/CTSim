@@ -1,5 +1,6 @@
 \chapter{Introduction}
-\par Almost 100 years ago the Austrian mathematician Johann Radon described the mathematical theory computed tomography is based on: He showed that the knowledge of a function \(f(x,y)\) in equivalent to the knowledge of all its line integrals. Thus the function can be reconstructed from an infinite set of its projections.
+\label{intro}
+\par Almost 100 years ago on April 30th 1917 the Austrian mathematician Johann Radon described in "\"Uber die Bestimmung von Funktionen durch ihre Integralwerte l\"angs gewisser Mannigfaltigkeiten" the mathematical theory computed tomography is based on: He showed that the knowledge of a function \(f(x,y)\) in equivalent to the knowledge of all its line integrals. Thus the function can be reconstructed from an infinite set of its projections.\cite{Radon}
 \par X-Ray is an imaging modality which produces projection images of a volume which show also the internals of the object. So in a perfect world by taking X-Ray images from all angles around an object orthogonal slices of the object can be reconstructed perfectly: In an idealized situation with high radiation dose, monochromatic X-Rays, infinite detector resolution, perfect detectors, no motion and no scatter CT images would be a perfect reflection of reality.\cite{CausesAndReductionTechniques}
 \par In reality however these conditions are not met. Thus errors in the reconstruction occur resulting in image artefacts.
 \par Usually especially for commercial CT scanners which are used in medical imaging the reduction of these artefacts is of special interest. But to better understand the causes of these artefacts as well as training of medical doctors to make reasonable diagnoses in the presence of these artefacts simulation is also of interest. In this clinical project we developed a simulator of a CT which produces CT images from segmented patient datasets in which the artefacts usually visible in medical imaging are also simulated in a realistic fashion. Especially the simulation of metal artefacts is of major importance as the resulting image artefacts are a major concern in medical imaging as these artefacts degrade image quality considerably.
@@ -41,10 +42,75 @@
 \par The beam hardening effect is especially prominent for metals that are introduced into the human body as their atomic number Z is relatively high with absorption given by \[\alpha \propto Z^4\lambda^3\] (Due to this relationship for example lead (Pb, Z = 82) shields X-ray radiation about 1583 times better than aluminium (Al, Z = 13))
 \par Thus behind a thick metal object the system detects an \emph{infinitely high} attenuation coefficient. Filtered backprojection does not cope with the inconsistencies in the attenuation values. In the backprojection lines through the object are encountered with extremely high numerical values, which spread across the entire image and are not compensated for by any other projection direction creating star like streaks emanating from the metal object going through the whole or large portions of the reconstruction.\cite{buzug}
 \section{Fundamentals of CT reconstruction}
+\subsection{Sinograms}
+\par As described in section \ref{intro} the knowledge of all line integrals of \emph{projections} of a function \(f(x,y)\) is equivalent to the knowledge of the function itself. With X-Ray being able to create projections of objects opaque to the human eye with this theorem we can create axial slices (or tomographies from \(\tau\acute{o}\mu o\varsigma\) \emph{tomos}, "slice, section" and \(\gamma\rho\acute{\alpha}\varphi\omega\) \emph{gr\'aph\=o}, "to write"\cite{wiktionaryTomography}\cite{wiktionaryTomo}\cite{wiktionaryGraphy}) when we take X-Rays from all angles around the object.
+\par An image of all the projections from a line detector of a single slice of an object is called \emph{sinogram} or mathematically Radon transform: In one axis of the image the angle is gradually increased and along the perpendicular line the projection values from the line detector is plotted.
+\par In figure \ref{shepplogan} the famous Shepp-Logan phantom can be seen created by Larry Shepp and Benjamin F. Logan which serves as a crude model of a human head to develop and test image reconstruction algorithms on. Figure \ref{shepplogansino} is the sinogram of this phantom.\cite{shepploganphantom}
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.28\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/shepp_logan.png}
+		\caption{The famous Shepp Logan phantom (own work, based on \cite{shepploganphantom})}
+		\label{shepplogan}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[b]{0.68\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/shepp_logan_sino.png}
+		\caption{Sinogram of the Shepp Logan phantom (own work, based on \cite{shepploganphantom}): In Y direction the projection angle around the object in increased, in X direction the values of the detector are plotted.}
+		\label{shepplogansino}
+	\end{subfigure}%	
+\end{figure}
+\subsection{Simple Backprojection}
+\par To transform such a sinogram from \(p_\gamma(\xi)\) back into the image space \(f(x,y)\) the basic idea is to \emph{backproject} the values of the detector line along the angle these were acquired from into the image. In the case of \emph{simple backprojection} the would be to \emph{smear back} the values in the direction from which the radiation came. However, although intuitively thsi simple backprojection seems to reverse the process of projection, this procedure does not result in the desired outcome: Due to the fact that the projection \(p_\gamma(\xi)\) is a non-negative
+function, the simple backprojection smears back non-negative values over the entire image, even in areas that were originally (close to) zero. The backprojections from other directions cannot correct these incorrect pixel entries, because the entire set of projections in the sinogram is a set of non-negative functions. Simple backprojection is visualized in \ref{zeng1} and \ref{zeng2} showing that it would result in an overall unacceptable blurring of the image.\cite{buzug}
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[height=3cm]{images/zeng1_Shopped.png}
+		\caption{The simple backprojection of a single point...\cite{zeng}}
+		\label{zeng1}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[height=3cm]{images/zeng2_Shopped.png}
+		\caption{...would result in the pointspread function of a single point.\cite{zeng}}
+		\label{zeng2}
+	\end{subfigure}%
+\end{figure}
+\subsection{Filtered Backprojection}
+\par To correct for this unacceptable blurring so called \emph{filtered backprojection} is employed. Today all modern CT systems implement filtered backprojection (and other more advanced reconstruction algorithms). Essentially before backprojecting a high-pass filter is applied. Graphically this can be seen as adding \emph{"negative wings"} to the projections as can be seen in \ref{zeng3} and \ref{zeng4}. For a mathematical explanation of filtered backprojection and why this is in fact a suitable inversion of the Radon Transform refer to \cite{buzug}.
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[height=3cm]{images/zeng3_Shopped.png}
+		\caption{Applying a high-pass filter before projection ...\cite{zeng}}
+		\label{zeng3}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\includegraphics[height=3cm]{images/zeng4_Shopped.png}
+		\caption{...results in a crisp reconstruction of the tomography.\cite{zeng}}
+		\label{zeng4}
+	\end{subfigure}%
+\end{figure}
+\par Generally the inversion of the Radon transform is an ill-posed problem because the solution is not a continuous function. There are however other techniques for reconstruction, like algebraic and statistical methods and iterative methods.\cite{SchlechtGestellteProbleme}\cite{buzug}
+\par But filtered backprojection is still used in practice as it is computationally fast. Also for our purposes it is the backprojection method of choice as beam hardening and metal artefacts are more prominent than for example in iterative reconstruction.\cite{buzug}
 
 \chapter{Simulation of CT}
-par bla\cite{deMan}
+\par In general the simulation of computed tomography consists of two parts: Forward projection and backprojection.
+\par For this clinical project a CT simulator was programmed from ground up in the C programming language without any major libraries like OpenCV, OpenGL or OpenMP. Only standard libraries like \verb!Math.h!, \verb!stdio.h!, \verb!stdlib.h! and the like were included as well as \verb!windows.h! for performance measurements and basic multi threading.
+\par The reason for the decision on C was that originally it was intended to port the code to CUDA-C for calculation on the graphics card to boost performance by multiple orders of magnitude. However due to the lack of time, experience and access to a PC with an NVidia graphics card this port was not completed. Generally the problem seems to be well suited for computation on the graphics card as every forward projection can be calculated in parallel, as well as the filtered backprojection which can also be sped up on the graphics card by a factor of over 200.\cite{CUDABackprojection}.
+\par The source code for this simulator is available in a git repository hosted at GitHub. It can be found in \url{https://github.com/Axelius/CTSim.git}
 \section{Forward Projection}
+\par The forward projection is in essence a forward Radon Transform with some special conditional statements to simulate effects that exist in physical reality but not in the mathematical model. The simulation especially focuses on the effects of beam hardening, so it simulates a virtual X-Ray tube and has lookup tables for attenuation values of different materials at different tube voltages.
+\par For this simulator basic parallel beam CT was chosen, although today fan beam or cone beam geometry is state of the art. But the artefacts in fan beam geometry should be the same as in parallel beam geometry as fan beam can be converted to parallel beam by simple reordering of the X-Ray beams.\cite{IIIP_3_4} In cone beam geometry no central slice theorem exists anyway, so reconstruction is \emph{not mathematically correct anyway} so the simulation of this was not considered\cite{IIIP_3_5}.
+\par To sum it up the forward projection can be formulated as the formula   \cite{deMan}
 \subsection{Overview over the forward projection}
 \subsection{Implementation of line integrals}
 \subsection{Implementation of beam hardening}
@@ -63,6 +129,7 @@ blabla\cite{AttenuationTable}
 \subsubsection{Ring artefacts}
 \subsubsection{Poisson noise}
 \subsubsection{Motion artefacts}
+merging sinogram parts from two simulations, with the moving object at two slightly different positions\cite{deMan}
 \subsection{Unresolved bugs}
 
 \chapter{Results}

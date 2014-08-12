@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.22)  11 AUG 2014 20:48
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.22)  12 AUG 2014 19:34
 entering extended mode
 **C:/Narvis/CTSim/Doku/main.tex
 (C:/Narvis/CTSim/Doku/main.tex
@@ -774,7 +774,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 42.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-<styles/IN_Black.pdf, id=121, 29.8716pt x 32.82263pt>
+<styles/IN_Black.pdf, id=133, 29.8716pt x 32.82263pt>
 File: styles/IN_Black.pdf Graphic file (type pdf)
 
 <use styles/IN_Black.pdf>
@@ -800,13 +800,10 @@ LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <20.74> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 59.
  (C:\Narvis\CTSim\Doku\main.toc
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 33.
-)
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 36.
+ [5])
 \tf@toc=\write5
- [5] [6
-
-
-]
+ [6]
 (C:\Narvis\CTSim\Doku\content.tex
 Chapter 1.
 
@@ -816,193 +813,267 @@ Class scrbook Warning: \float@addtolists detected!
 (scrbook)              Support for \float@addtolists may be removed from
 (scrbook)              `scrbook' soon .
 
+
+Overfull \hbox (11.9079pt too wide) in paragraph at lines 3--4
+\OT1/ppl/m/n/10.95 Man-nig-faltigkeiten" the math-e-mat-i-cal the-ory com-puted
+ to-mog-ra-phy is based on: He showed
+ []
+
 [1
+
+
 
 ] [2
 
 ]
 Chapter 2.
-<images/12_FBP.png, id=208, 481.8pt x 343.2825pt>
+<images/12_FBP.png, id=225, 481.8pt x 343.2825pt>
 File: images/12_FBP.png Graphic file (type png)
  <use images/12_FBP.png>
-Package pdftex.def Info: images/12_FBP.png used on input line 14.
+Package pdftex.def Info: images/12_FBP.png used on input line 15.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 20.
+(hyperref)                removing `\@ifnextchar' on input line 21.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 20.
+(hyperref)                removing `subscript' on input line 21.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 20.
+(hyperref)                removing `subscript' on input line 21.
 
 [3 <C:/Narvis/CTSim/Doku/images/12_FBP.png>]
-<images/spectrum.png, id=220, 970.3753pt x 606.01407pt>
+<images/spectrum.png, id=237, 970.3753pt x 606.01407pt>
 File: images/spectrum.png Graphic file (type png)
 
 <use images/spectrum.png>
-Package pdftex.def Info: images/spectrum.png used on input line 27.
+Package pdftex.def Info: images/spectrum.png used on input line 28.
 (pdftex.def)             Requested size: 390.01903pt x 243.5757pt.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 31.
+(hyperref)                removing `\@ifnextchar' on input line 32.
 
 [4 <C:/Narvis/CTSim/Doku/images/spectrum.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 36.
+(hyperref)                removing `\@ifnextchar' on input line 37.
 
-[5] [6]
-Chapter 3.
-[7
+[5] <images/shepp_logan.png, id=268, 513.92pt x 513.92pt>
+File: images/shepp_logan.png Graphic file (type png)
 
-] [8
+<use images/shepp_logan.png>
+Package pdftex.def Info: images/shepp_logan.png used on input line 53.
+(pdftex.def)             Requested size: 113.80771pt x 113.81102pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--54
+[][][]|\OT1/ppl/m/n/10 The fa-mous Shepp
+ []
+
+
+Underfull \hbox (badness 5022) in paragraph at lines 54--54
+\OT1/ppl/m/n/10 Lo-gan phan-tom (own
+ []
+
+<images/shepp_logan_sino.png, id=271, 513.92pt x 200.75pt>
+File: images/shepp_logan_sino.png Graphic file (type png)
+
+<use images/shepp_logan_sino.png>
+Package pdftex.def Info: images/shepp_logan_sino.png used on input line 60.
+(pdftex.def)             Requested size: 291.36124pt x 113.81102pt.
+
+<images/zeng1_Shopped.png, id=277, 539.76656pt x 436.63126pt>
+File: images/zeng1_Shopped.png Graphic file (type png)
+
+<use images/zeng1_Shopped.png>
+Package pdftex.def Info: images/zeng1_Shopped.png used on input line 72.
+(pdftex.def)             Requested size: 105.51349pt x 85.35826pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 73--73
+[][][]|\OT1/ppl/m/n/10 The sim-ple back-pro-jec-tion of a sin-gle
+ []
+
+<images/zeng2_Shopped.png, id=280, 507.39563pt x 369.63094pt>
+File: images/zeng2_Shopped.png Graphic file (type png)
+
+<use images/zeng2_Shopped.png>
+Package pdftex.def Info: images/zeng2_Shopped.png used on input line 79.
+(pdftex.def)             Requested size: 117.1708pt x 85.35826pt.
+
+Overfull \hbox (4.16101pt too wide) in paragraph at lines 70--83
+ [][]  [] 
+ []
+
+[6 <C:/Narvis/CTSim/Doku/images/shepp_logan.png> <C:/Narvis/CTSim/Doku/images/s
+hepp_logan_sino.png>]
+<images/zeng3_Shopped.png, id=297, 655.69969pt x 420.82219pt>
+File: images/zeng3_Shopped.png Graphic file (type png)
+
+<use images/zeng3_Shopped.png>
+Package pdftex.def Info: images/zeng3_Shopped.png used on input line 90.
+(pdftex.def)             Requested size: 132.99857pt x 85.35826pt.
+
+<images/zeng4_Shopped.png, id=300, 478.03593pt x 405.76593pt>
+File: images/zeng4_Shopped.png Graphic file (type png)
+
+<use images/zeng4_Shopped.png>
+Package pdftex.def Info: images/zeng4_Shopped.png used on input line 97.
+(pdftex.def)             Requested size: 100.55827pt x 85.35826pt.
+
+Underfull \hbox (badness 4060) in paragraph at lines 98--98
+[][][]|\OT1/ppl/m/n/10 ...re-sults in a crisp re-con-struc-tion of the
+ []
+
+
+Overfull \hbox (4.16101pt too wide) in paragraph at lines 88--101
+ [][]  [] 
+ []
+
+[7 <C:/Narvis/CTSim/Doku/images/zeng1_Shopped.png> <C:/Narvis/CTSim/Doku/images
+/zeng2_Shopped.png> <C:/Narvis/CTSim/Doku/images/zeng3_Shopped.png> <C:/Narvis/
+CTSim/Doku/images/zeng4_Shopped.png>] [8
 
 ]
+Chapter 3.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 107.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9]
+[10]
 Chapter 4.
-[9] [10
+[11
+
+] [12
 
 ]
 Chapter 5.
-[11] [12
+[13] [14
 
 ]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <24.88> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 80.
- [13] [14]
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 147.
+ [15] [16]
 Appendix A.
-<images/15_FBP.png, id=291, 324.21124pt x 292.09125pt>
+<images/15_FBP.png, id=369, 324.21124pt x 292.09125pt>
 File: images/15_FBP.png Graphic file (type png)
  <use images/15_FBP.png>
-Package pdftex.def Info: images/15_FBP.png used on input line 89.
+Package pdftex.def Info: images/15_FBP.png used on input line 156.
 (pdftex.def)             Requested size: 216.67871pt x 195.2143pt.
 
-<images/14_FBP.png, id=294, 481.8pt x 343.2825pt>
+<images/14_FBP.png, id=372, 481.8pt x 343.2825pt>
 File: images/14_FBP.png Graphic file (type png)
  <use images/14_FBP.png>
-Package pdftex.def Info: images/14_FBP.png used on input line 94.
+Package pdftex.def Info: images/14_FBP.png used on input line 161.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
-<images/13_FBP.png, id=297, 324.21124pt x 292.09125pt>
+<images/13_FBP.png, id=375, 324.21124pt x 292.09125pt>
 File: images/13_FBP.png Graphic file (type png)
  <use images/13_FBP.png>
-Package pdftex.def Info: images/13_FBP.png used on input line 99.
+Package pdftex.def Info: images/13_FBP.png used on input line 166.
 (pdftex.def)             Requested size: 216.67871pt x 195.2143pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/11_FBP.png, id=300, 481.8pt x 343.2825pt>
+<images/11_FBP.png, id=378, 481.8pt x 343.2825pt>
 File: images/11_FBP.png Graphic file (type png)
  <use images/11_FBP.png>
-Package pdftex.def Info: images/11_FBP.png used on input line 104.
+Package pdftex.def Info: images/11_FBP.png used on input line 171.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/06_FBP.png, id=303, 421.575pt x 330.23375pt>
+<images/06_FBP.png, id=381, 421.575pt x 330.23375pt>
 File: images/06_FBP.png Graphic file (type png)
  <use images/06_FBP.png>
-Package pdftex.def Info: images/06_FBP.png used on input line 109.
+Package pdftex.def Info: images/06_FBP.png used on input line 176.
 (pdftex.def)             Requested size: 216.67871pt x 169.73213pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/05_FBP.png, id=306, 481.8pt x 311.1625pt>
+<images/05_FBP.png, id=384, 481.8pt x 311.1625pt>
 File: images/05_FBP.png Graphic file (type png)
  <use images/05_FBP.png>
-Package pdftex.def Info: images/05_FBP.png used on input line 114.
+Package pdftex.def Info: images/05_FBP.png used on input line 181.
 (pdftex.def)             Requested size: 216.67871pt x 139.93637pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/09_FBP.png, id=309, 481.8pt x 343.2825pt>
+<images/09_FBP.png, id=387, 481.8pt x 343.2825pt>
 File: images/09_FBP.png Graphic file (type png)
  <use images/09_FBP.png>
-Package pdftex.def Info: images/09_FBP.png used on input line 119.
+Package pdftex.def Info: images/09_FBP.png used on input line 186.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/01_FBP.png, id=312, 481.8pt x 343.2825pt>
+<images/01_FBP.png, id=390, 481.8pt x 343.2825pt>
 File: images/01_FBP.png Graphic file (type png)
  <use images/01_FBP.png>
-Package pdftex.def Info: images/01_FBP.png used on input line 124.
+Package pdftex.def Info: images/01_FBP.png used on input line 191.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/03_FBP.png, id=315, 481.8pt x 343.2825pt>
+<images/03_FBP.png, id=393, 481.8pt x 343.2825pt>
 File: images/03_FBP.png Graphic file (type png)
  <use images/03_FBP.png>
-Package pdftex.def Info: images/03_FBP.png used on input line 129.
+Package pdftex.def Info: images/03_FBP.png used on input line 196.
 (pdftex.def)             Requested size: 216.67871pt x 154.3814pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<images/04_FBP.png, id=318, 481.8pt x 364.36125pt>
+<images/04_FBP.png, id=396, 481.8pt x 364.36125pt>
 File: images/04_FBP.png Graphic file (type png)
  <use images/04_FBP.png>
-Package pdftex.def Info: images/04_FBP.png used on input line 134.
+Package pdftex.def Info: images/04_FBP.png used on input line 201.
 (pdftex.def)             Requested size: 216.67871pt x 163.86096pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-) [15
+) [17
 
  <C:/Narvis/CTSim/Doku/images/15_FBP.png> <C:/Narvis/CTSim/Doku/images/14_FBP.p
-ng>] [16 <C:/Narvis/CTSim/Doku/images/13_FBP.png> <C:/Narvis/CTSim/Doku/images/
-11_FBP.png> <C:/Narvis/CTSim/Doku/images/06_FBP.png>] [17 <C:/Narvis/CTSim/Doku
+ng>] [18 <C:/Narvis/CTSim/Doku/images/13_FBP.png> <C:/Narvis/CTSim/Doku/images/
+11_FBP.png> <C:/Narvis/CTSim/Doku/images/06_FBP.png>] [19 <C:/Narvis/CTSim/Doku
 /images/05_FBP.png> <C:/Narvis/CTSim/Doku/images/09_FBP.png> <C:/Narvis/CTSim/D
-oku/images/01_FBP.png>] [18 <C:/Narvis/CTSim/Doku/images/03_FBP.png> <C:/Narvis
-/CTSim/Doku/images/04_FBP.png>] (C:\Narvis\CTSim\Doku\main.bbl
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 7.
+oku/images/01_FBP.png>] [20 <C:/Narvis/CTSim/Doku/images/03_FBP.png> <C:/Narvis
+/CTSim/Doku/images/04_FBP.png>] (C:\Narvis\CTSim\Doku\main.bbl [21
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-Underfull \hbox (badness 1990) in paragraph at lines 4--9
-\OT1/ppl/m/n/10.95 on-line at []$\OT1/pcr/m/n/10.95 http : / / wiki . arnesenfa
-mily . net / doku . php ? id = byu : projects :$
- []
 
-)
-
-Package caption Warning: Unused \captionsetup[sub] on input line 49.
-See the caption package documentation for explanation.
-
+])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 74.
-[19
 
-
-]
+[22]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 74.
  (C:\Narvis\CTSim\Doku\main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 74.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 74.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: A28751C63691C9F8816277B8BA072A7E;2119.
+(rerunfilecheck)             Checksum: 2C87BF12D1ECE6730A3FE74D684767FD;2340.
  ) 
 Here is how much of TeX's memory you used:
- 12695 strings out of 494045
- 189997 string characters out of 3145956
+ 12778 strings out of 494045
+ 191565 string characters out of 3145956
  322370 words of memory out of 3000000
- 15644 multiletter control sequences out of 15000+200000
- 24102 words of font info for 62 fonts, out of 3000000 for 9000
+ 15702 multiletter control sequences out of 15000+200000
+ 25204 words of font info for 64 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 51i,11n,55p,842b,400s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,11n,55p,842b,548s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc} <C:\Users
 \Alexander\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\public\yhmath\dpi600\yhcmex
 10.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.
@@ -1018,9 +1089,9 @@ TeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/
 fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
 pe1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/
 palatino/uplri8a.pfb>
-Output written on main.pdf (25 pages, 1358473 bytes).
+Output written on main.pdf (28 pages, 1597007 bytes).
 PDF statistics:
- 436 PDF objects out of 1000 (max. 8388607)
- 80 named destinations out of 1000 (max. 500000)
- 306 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 526 PDF objects out of 1000 (max. 8388607)
+ 98 named destinations out of 1000 (max. 500000)
+ 360 words of extra memory for PDF output out of 10000 (max. 10000000)
 

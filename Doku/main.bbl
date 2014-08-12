@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{CUDABackprojection}
 Adam Arnesen.
@@ -40,11 +40,64 @@ Markus Kowarschik.
   X-rays)}.
 \newblock November 2012.
 
+\bibitem{IIIP_3_4}
+Markus Kowarschik.
+\newblock {Interventional Imaging \& Image Processing: 2D angiographic
+  imaging}.
+\newblock January 2013.
+
+\bibitem{IIIP_3_5}
+Markus Kowarschik.
+\newblock {Interventional Imaging \& Image Processing: Flat-detector CT imaging
+  (3D angiographic imaging)}.
+\newblock January 2013.
+
+\bibitem{SchlechtGestellteProbleme}
+A.~K Louis.
+\newblock Inverse und schlecht gestellte probleme.
+\newblock {\em ZAMM - Journal of Applied Mathematics and Mechanics /
+  Zeitschrift f\"ur Angewandte Mathematik und Mechanik}, 70(9):409--409, 1990.
+
+\bibitem{Radon}
+Johann Radon.
+\newblock {\"U}ber die {B}estimmung von {F}unktionen durch ihre {I}ntegralwerte
+  l\"angs gewisser {M}annigfaltigkeiten.
+\newblock {\em Akad. Wiss.}, 69:262--277, 1917.
+
 \bibitem{revisionrads}
 {ReVision Radiology}.
 \newblock Ct metal artifact reduction using the metal deletion technique
   (mdt)., February 2014.
 \newblock Available online at \url{http://www.revisionrads.com/index.html}
   visited on August 8th 2014.
+
+\bibitem{shepploganphantom}
+L.A Shepp and B.F. Logan.
+\newblock The fourier reconstruction of a head section.
+\newblock {\em Nuclear Science, IEEE Transactions on}, 21(3):21--43, June 1974.
+
+\bibitem{wiktionaryGraphy}
+{Wiktionary}.
+\newblock -graphy, October 2013.
+\newblock Available online at
+  \url{http://en.wiktionary.org/wiki/-graphy#English} visited on August 12th
+  2014.
+
+\bibitem{wiktionaryTomo}
+{Wiktionary}.
+\newblock tomo-, December 2013.
+\newblock Available online at \url{http://en.wiktionary.org/wiki/tomo-#English}
+  visited on August 12th 2014.
+
+\bibitem{wiktionaryTomography}
+{Wiktionary}.
+\newblock tomography, July 2014.
+\newblock Available online at \url{http://en.wiktionary.org/wiki/tomography}
+  visited on August 12th 2014.
+
+\bibitem{zeng}
+G.~Zeng.
+\newblock {\em Medical Image Reconstruction: A Conceptual Tutorial}.
+\newblock Higher Education Press, 2010.
 
 \end{thebibliography}
