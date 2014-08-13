@@ -110,17 +110,127 @@ function, the simple backprojection smears back non-negative values over the ent
 \section{Forward Projection}
 \par The forward projection is in essence a forward Radon Transform with some special conditional statements to simulate effects that exist in physical reality but not in the mathematical model. The simulation especially focuses on the effects of beam hardening, so it simulates a virtual X-Ray tube and has lookup tables for attenuation values of different materials at different tube voltages.
 \par For this simulator basic parallel beam CT was chosen, although today fan beam or cone beam geometry is state of the art. But the artefacts in fan beam geometry should be the same as in parallel beam geometry as fan beam can be converted to parallel beam by simple reordering of the X-Ray beams.\cite{IIIP_3_4} In cone beam geometry no central slice theorem exists anyway, so reconstruction is \emph{not mathematically correct anyway} so the simulation of this was not considered\cite{IIIP_3_5}.
-\par To sum it up the forward projection can be formulated as the formula   \cite{deMan}
+\par To sum it up the forward projection can be formulated as the formula\[\sum_{p\in P}\sum_{en\in E}\sum_{d \in D}\sum_{l \in L}I_{0}\cdot \textrm{e}^{-\sum_{\eta \in M}\mu(\eta,x,y,en)}\] where \(p\in P\) is the projection angle, \(en\in E\) the energy level, \(d \in D\) the detector element, \(l \in L\) the length of the ray after leaving the X-Ray source and \(\eta \in M\) the material. \(x\) and \(y\) is the position of the currently examined pixel that is calculated from the projection angle, detector element and ray length as \(x = l\cdot sin(p) + d\cdot cos(p)\) and \(y = -l\cdot cos(p) + d\cdot sin(p)\). The general idea and the proof that CT can be simulated in this was is from \cite{deMan}. However they did their sum slightly different and in a different order. Still, this thesis was very helpful as a basis for how to tackle simulation of CT.
 \subsection{Overview over the forward projection}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{images/MainLoop.png}
+	\caption{Translation of the formula to source code}
+	\label{MainLoop}
+\end{figure}
+\par Figure \ref{MainLoop} shows a pseudo code snipped which was slightly modified from the simulation C code. It shows how the above mentioned formula translates to C style pseudo code.
+\par As mentioned above the forward projection is essentially a Radon Transform with some additions: Polychromaticity is modelled by summing a number of monochromatic simulations which makes it necessary to have a virtual model of the X-Ray tube spectrum (in this case simple lookup tables for different tube voltages). Also as X-Ray photons are differently attenuated at different energy levels for different materials another loop was included to loop over that materials. For the attenuation coefficients lookup tables for different materials were created from \cite{AttenuationTable} between whose values we interpolate linearly.
+\par The forward projection returns a sinogram of the specified object. This sinogram can then be passed to the backprojection for reconstruction.
+\par The source code for the forward projection is located in \verb!simulator.c!. The method \verb!int project(int projectionNumber, double angle)! calculates one complete projection for the specified angle and saves its result to \verb!result[projectionNumber]!. This method is called for every projection until the complete 180\textdegree of the projection is completed. A specified number of threads calls this function, but no race conditions have to be expected as every thread has its own range of projection angles and writes only to his own range of the array \verb!result!. As every thread has approximately the same number of projections and every projection takes about the same time no dynamic job distribution was needed and in the beginning the projections are statically distributed on the threads.
 \subsection{Implementation of line integrals}
+\par The calculation of line integrals is a straightforward discretization of the Radon transform: The integral is approximated by a sum of the attenuation values.
+\par As mentioned above we assume parallel beam geometry. Although in the 2D case fan beam geometry is state of the art (parallel beam was only common in the first generation of CTs) mathematically this is equivalent: Fan beam geometry can be transformed to parallel beam geometry by reordering of the beams.\cite{IIIP_3_4}
+\par So in parallel beam geometry every detector element has a perpendicular ray passing through the object. At the beginning this ray has the intensity \(I_{0}\) which is the the number of X-Ray photons described by the tube spectrum. This spectrum is dependent on the tube voltage, so we have implemented different spectra for common tube voltages of 80keV to 140keV from which the closest to the selected voltage is selected.
+\par This ray passes through the object. After every pixel the intensity is reduced according to the attenuation value of this pixel. This pixel's attenuation is a sum of all the single attenuation values of the materials that are present at this pixel.
 \subsection{Implementation of beam hardening}
-\section{Back Projection}
-blabla\cite{CUDABackprojection}
+\par As mentioned above in the mathematical model of Radon transform beam hardening does not exist but in reality it does as the detector basically measures an attenuation of \emph{infinity} (or at least very high numerical values). To simulate this behaviour the attenuation is simply capped at a certain value to simulate the fact that the ray has lost all its energy.
+\par Especially for beam hardening the X-Ray tube model was created as the shift of the spectrum after passing through an object is the main reason for beam hardening which could not be modelled realistically with equally distributed intensity over all energies.  
+\section{Backprojection}
+\par Backprojection is not really a simulation task as this has to be done in real CTs too. Thus not much time was spent on it and a nice implementation from \cite{CUDABackprojection} was adapted which implements a filtered backprojection in C. Moreover \cite{CUDABackprojection} describes how this algorithm can be ported to CUDA-C for execution of the graphics card which experimentally resulted in a speedup of over 200. Computation speed comparison is visualized in figure \ref{ArnesenSpeedup}.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{images/ArnesenSpeedupCombined.png}
+	\caption{Computation time of the reconstruction algorithm using calculation on the CPU and on the graphics card in 5 algorithm iterations\cite{CUDABackprojection}}
+	\label{ArnesenSpeedup}
+\end{figure}
 \section{Parts of the simulator}
+\par In this section we will have a closer look at the parts of the simulator other than forward projection and backprojection.
 \subsection{Segmented CT slice}
-\subsection{Simulation of X-Ray tube}
-\subsection{Look up tables for attenuation values}
-blabla\cite{AttenuationTable}
+\par The simulation of course needs information about the object to be "scanned" and reconstructed. As we use 2D parallel beam geometry a segmented 2D slice of the object to be simulated is sufficient. If one desires to create a whole volume several runs on successive slices can be performed using a batch file etc.
+\par The simulation accepts folders as input of the segmentation with separate image files for each material. They have to be in \verb!pgm! format and named \verb!air.pgm!, \verb!bone.pgm!, \verb!iron.pgm!, \verb!muscle.pgm!, \verb!tissue.pgm! and \verb!water.pgm! respectively as their name is hardcoded. In these single images white corresponds to the existence of this material on the respective position, black corresponds to the lack of this material on this position. Grey values correspond to intermediate values the simulation simply multiplies the grey value with the corresponding attenuation coefficient.
+\par The segmentation that was mainly used for development is based on an abdominal slice of the Visible Korean Human Project\cite{visibleKorean} in which arbitrarily a single metal object was placed close to the center. All the slices can be seen in figures \ref{korean1}, \ref{korean2}, \ref{korean3}, \ref{korean4}, \ref{korean5} and \ref{korean6}.
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/KoreanAir.png}
+		\caption{The air surrounding the dataset}
+		\label{korean1}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/KoreanBone.png}
+		\caption{The bones of the dataset\linebreak}
+		\label{korean2}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/KoreanIron.png}
+		\caption{The arbitrarily set iron object inside the dataset}
+		\label{korean3}
+	\end{subfigure}%
+	
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/KoreanMuscle.png}
+		\caption{The muscular structures of the dataset\\}
+		\label{korean4}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/KoreanTissue.png}
+		\caption{Tissue material of the dataset\\}
+		\label{korean5}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.3\textwidth}
+		\centering
+		\includegraphics[height=4cm]{images/KoreanWater.png}
+		\caption{Water can also be placed in the simulation but in this case we didn't.}
+		\label{korean6}
+	\end{subfigure}%
+\end{figure}
+\subsection{Simulation of an X-Ray tube}
+\par As mentioned before for a realistic simulation of beam hardening a virtual model of the X-Ray tube spectrum is needed.\cite{XRayTubeSpectrum}
+\par For this we simulation we use lookup tables based on \cite{XRayTubeSpectrum}. They provide relative photon counts of an X-Ray tube at different tube voltages which is also visualized in \ref{f5}. From this we created separated lookup tables for each tube voltage. For the use in our simulation we sampled the spectrum at intervals of 5keV resulting in \ref{SampledTubeSpectrum}. The relative X-Ray photon count is then used as the intensity \(I_{0}\) of the ray leaving the X-Ray tube. After passing through each pixel of the simulation area this intensity is reduced as suggested by Lambert-Beer's Law.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.6\linewidth]{images/F5large.jpg}
+	\caption{Spectrum of an X-Ray tube at different tube voltages\cite{XRayTubeSpectrum}}
+	\label{f5}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{images/tubeSpectrum.png}
+	\caption{Sampled X-Ray spectrum at equal distances of 5keV.}
+	\label{SampledTubeSpectrum}
+\end{figure}
+\subsection{Lookup tables for attenuation values}
+\par Different materials have different attenuation values. As mentioned before the attenuation value is dependent on the atomic mass \(Z\) but also on the density of the material. For our simulation we relied on measurements of \cite{AttenuationTable} who provide attenuation values for different elements but also compounds, mixtures and various human tissues at different photon energies. A visualization of such a table can be seen in figure \ref{muscleAtt}.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{images/muscle.png}
+	\caption{X-Ray Mass Attenuation Coefficients of skeletal muscle\cite{AttenuationTable}}
+	\label{muscleAtt}
+\end{figure}
+\par At each position of the simulation the intensity \(I_{0}\) of the photons of a certain energy level is reduced according to the attenuation which is linearly interpolated from these lookup tables. If the grey value in the segmentation is not pure white the corresponding value is multiplied by the ratio between the grey value and pure white.
+\subsection{Configuration file}
+\par The simulation can be configured using a simple configuration file like can be seen in listing \ref{configfile}.
+\lstset{ %
+  basicstyle=\footnotesize,
+}
+\begin{lstlisting}[caption={Sample configuration file},label=configfile,captionpos=b]
+pathToSlice=slices/Segmentation1
+pathToOutputReconstruction=outData.pgm
+pathToOutputSinogram=simulatedSinogram.pgm
+pathToXRaySpectra=Data/XRaySpectra
+minEnergy=20
+maxEnergy=140
+energyLevels=16
+numberOfProjectionAngles=64
+numberOfThreads=4
+tubeEnergy=140
+detectorThreshold=100
+attenuationMultiplicator=40
+\end{lstlisting}
 \section{Miscellaneous parts of the simulator}
 \subsection{Logger}
 \subsection{Image reading and writing}

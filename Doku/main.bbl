@@ -71,10 +71,22 @@ Johann Radon.
 \newblock Available online at \url{http://www.revisionrads.com/index.html}
   visited on August 8th 2014.
 
+\bibitem{XRayTubeSpectrum}
+J.~Anthony Seibert.
+\newblock X-ray imaging physics for nuclear medicine technologists. part 1:
+  Basic principles of x-ray production.
+\newblock {\em J. Nucl. Med. Technol.}, 32 no. 3,:139--147, 2004.
+
 \bibitem{shepploganphantom}
 L.A Shepp and B.F. Logan.
 \newblock The fourier reconstruction of a head section.
 \newblock {\em Nuclear Science, IEEE Transactions on}, 21(3):21--43, June 1974.
+
+\bibitem{visibleKorean}
+{Visible Korean Human Project}.
+\newblock Visible korean human, March 2005.
+\newblock Available online at \url{http://vkh.ajou.ac.kr/} visited on August
+  13th 2014.
 
 \bibitem{wiktionaryGraphy}
 {Wiktionary}.
