@@ -1,5 +1,18 @@
 \begin{thebibliography}{10}
 
+\bibitem{ApacheLog4jLevels}
+{Apache Software Foundation}.
+\newblock Class level, September 2012.
+\newblock Available online at
+  \url{https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Level.html}
+  visited on August 14th 2014.
+
+\bibitem{ApacheLog4j}
+{Apache Software Foundation}.
+\newblock Apache log4j 2, August 2014.
+\newblock Available online at \url{http://logging.apache.org/log4j/2.x/}
+  visited on August 14th 2014.
+
 \bibitem{CUDABackprojection}
 Adam Arnesen.
 \newblock Cuda ct backprojection reconstruction, February 2011.
@@ -23,6 +36,12 @@ Bruno De~Man.
 \newblock Iterative reconstruction for reduction of metal artifacts in computed
   tomography.
 \newblock {\em status: published}, 2001.
+
+\bibitem{ringArt}
+Omar Giyab.
+\newblock Ring artefact, April 2013.
+\newblock Available online at \url{http://radiopaedia.org/images/3234993}
+  visited on August 14th 2014.
 
 \bibitem{AttenuationTable}
 S.~M.~Seltzer J.~H.~Hubbell.
@@ -57,6 +76,12 @@ A.~K Louis.
 \newblock Inverse und schlecht gestellte probleme.
 \newblock {\em ZAMM - Journal of Applied Mathematics and Mechanics /
   Zeitschrift f\"ur Angewandte Mathematik und Mechanik}, 70(9):409--409, 1990.
+
+\bibitem{pgmNetPBM}
+Jef Poskanzer.
+\newblock pgm, November 2013.
+\newblock Available online at \url{http://netpbm.sourceforge.net/doc/pgm.html}
+  visited on August 14th 2014.
 
 \bibitem{Radon}
 Johann Radon.

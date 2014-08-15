@@ -231,19 +231,169 @@ tubeEnergy=140
 detectorThreshold=100
 attenuationMultiplicator=40
 \end{lstlisting}
+\par We will look at each entry separately:
+\begin{itemize}
+	\item\emph{pathToSlice}: Path to the folder in which the segmentation of the slice to be rendered is located. This folder should contain several \verb!.pgm! files named \verb!air.pgm!, \verb!bone.pgm!, \verb!iron.pgm!, \verb!muscle.pgm!, \verb!tissue.pgm! and \verb!water.pgm! respectively.
+	\item\emph{pathToOutputReconstruction}: Path to a \verb!.pgm! file to which the reconstruction is to be saved.
+	\item\emph{pathToOutputSinogram}: Path to a \verb!.pgm! file where the intermediate simulated sinogram is to be saved. Even if you are not interested in the sinogram only in the reconstruction a path has to be set, as the reconstruction only accepts an image and can't directly read the sinogram from RAM.
+	\item\emph{pathToXRaySpectra}: Path to where lookup tables for the X-Ray spectra are located. These should be named \verb!XRaySpectrum80keV.txt!, \verb!XRaySpectrum100keV.txt!, \verb!XRaySpectrum120keV.txt! and \verb!XRaySpectrum140keV.txt! as their name is hardcoded. The files themselves are simple textfiles with each line stating a certain energy and the corresponding relative photon count.
+	\item\emph{minEnergy}: Minimum energy in keV of the photons leaving the X-Ray tube. As Polychromaticity is simulated as a number of monochromatic simulation runs this is the lowest energy that is simulated. No photons are generated with an energy lower that this value.
+	\item\emph{maxEnergy}: Maximum energy in keV of the photons leaving the X-Ray tube. As polychromaticity is simulated as a number of monochromatic simulation runs this is the highest energy that is simulated. No photons are generated with an energy higher that this value.
+	\item\emph{energyLevels}: Number of monochromatic simulation runs to simulate polychromaticity. Higher values result in a better approximation of polychromaticity. Computation time is however direct proportional to the number of energy levels.
+	\item\emph{numberOfProjectionAngles}: Number of projections. With low values severe undersampling artefacts are encountered, high values result in smooth reconstructions. But beware that computation time is direct proportional to the number of projections.
+	\item\emph{numberOfThreads}: Number of threads for the forward projection. This should be the same number as cores in the computer that runs this program for maximum speedup. Computation time is almost indirect proportional to the number of threads if the number of threads is equal to the number of cores, higher values usually result in no speedup or even an increase in computation time. Note that the backprojection always only uses one thread (but as this part of the simulation only takes a few seconds this time should be negligible).
+	\item\emph{tubeEnergy}: Tube energy of the simulated X-Ray tube. For this only values of 80kev, 100keV, 120keV and 140keV are accepted, as only for these tube energies lookup tables exist. However these are reasonable values for medical X-Ray. If other values are set the closest match to the existing lookup tables is selected.
+	\item\emph{detectorThreshold}: Threshold of photon count below which the beam is assumed to have completely starved. No further simulation of the ray is carried out below this value. Higher values can result in more severe metal artefacts, but too high values result in completely images (as the X-Ray beam coming from the tube may already be below this threshold).
+	\item\emph{attenuationMultiplicator}: Multiplication factor of the attenuation coefficient. While not physically correct by tweaking this value sometimes more severe metal artefacts can be created. But as with the value before too high values might result in blank images as almost every ray is completely absorbed.
+\end{itemize}
+\par The simulation accepts the configuration file as the first parameter of the call to the executable. Note that reading theses configuration files is not too stably implemented and it it generally a good idea not to change the structure of these files but only set different values. Especially the value of each field should follow directly after the "\(=\)" sign without a whitespace in between.
 \section{Miscellaneous parts of the simulator}
+\par There are also some parts not directly related to the simulation of CT metal artefacts. But as the paradigm of this program was not to rely on any external libraries some more code had to be implemented. 
 \subsection{Logger}
+\par We implemented a simple logger to produce structured terminal output similar to libraries like log4j\cite{ApacheLog4j}. With such a logging framework you can \emph{plaster} your source code with logging statements, but select in which \emph{loglevel} you are interested in and only produce output of this loglevel (or higher). By specifying the current loglevel as a macro no messages with a lower loglevel will be produced.
+\par By heavily relying on macros messages on a lower loglevel hardly influence computation time as the method immediately returns.
+\par Messages can be filtered by loglevel according to their importance. The general order of these levels is: \[\verb!ALL > TRACE > DEBUG > INFO > WARN > ERR > FATAL > OFF!\] As a guideline these levels should be used as follows (inspired by the guidelines of log4j\cite{ApacheLog4jLevels}):
+\begin{itemize}
+	\item\emph{ALL}: No messages are filtered displaying all.
+	\item\emph{TRACE}: Elaborate debugging and comments
+	\item\emph{DEBUG}: General debugging and detailed information on the flow through the system
+	\item\emph{INFO}: General information like \verb!"program started"!, \verb!"program closed"!,\\ \verb!"Computation took that many seconds"! etc.
+	\item\emph{WARN}: Occurrence of runtime situations that are undesirable or unexpected, but not necessarily "wrong"
+	\item\emph{ERR}: Error, but execution continues
+	\item\emph{FATAL}: Critical errors that cause premature termination
+	\item\emph{OFF}: No messages will be printed, logging deactivated
+\end{itemize}
+\par The implemented logger can output its messages to the console or to a file. To file can be especially useful on higher loglevels as the output to the console of thousands of messages can really slow down the program execution.
+\par Moreover the logger can produce verbose or non verbose messages. In non verbose mode only the loglevel and message are printed, in verbose mode loglevel, source code file, function, line and message. So the call to \[\verb!logIt(INFO, "Starting simulation...")!\] results in non verbose mode in \[\verb![LogIt-INFO ] Starting simulation...!\] and in verbose mode in \[\verb![[LogIt-INFO ][..\src\Run.c].main.31] Starting simulation...!\] when it was called from the method \verb!main! in source code file \verb!Run.c! on line 31.
+\par The logger is completely independent in the source code files \verb!Logger.h! and \verb!Logger.c!, relies only on \verb!stdio.h!, \verb!stdarg.h! and \verb!String.h! and can be put in any C project by including \verb!Logger.h!.
 \subsection{Image reading and writing}
+\par As mentioned before we did not want to rely on any external libraries other than the standard libraries. So for image import and export we chose one of the easiest image file formats available which is the portable graymap format \verb!.pgm! which belongs to Portable Anymap or Netpbm format.
+\par In Portable GrayMap with the magic number \verb!P2! a simple and short header is followed by the greyvalues in ASCII in the range \(0-255\).
+\par An example from the Netpbm man page on PGM can be seen in listing \ref{feep1} with its graphical representation in figure \ref{feep2}
+\begin{lstlisting}[caption={PGM example from the Netpbm man page on PGM\cite{pgmNetPBM}},label=feep1,captionpos=b]
+P2
+# feep.pgm
+24 7
+15
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+0  3  3  3  3  0  0  7  7  7  7  0  0 11 11 11 11  0  0 15 15 15 15  0
+0  3  0  0  0  0  0  7  0  0  0  0  0 11  0  0  0  0  0 15  0  0 15  0
+0  3  3  3  0  0  0  7  7  7  0  0  0 11 11 11  0  0  0 15 15 15 15  0
+0  3  0  0  0  0  0  7  0  0  0  0  0 11  0  0  0  0  0 15  0  0  0  0
+0  3  0  0  0  0  0  7  7  7  7  0  0 11 11 11 11  0  0 15  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+\end{lstlisting}
+\par In the first line of listing \ref{feep1} the magic number \verb!P2! is set which specifies Portable Graymap in ASCII. The next line is a comment. In the third line width and height of the image is given. In the fourth line the maximum value for brightness is given, so in this example 15 corresponds to pure white. In the following lines the grey values of the pixels are given separated by whitespaces.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=4cm]{images/feep.png}
+	\caption{Graphical representation of the example from the Netpbm man page on PGM (own work, based on \cite{pgmNetPBM})}
+	\label{feep2}
+\end{figure}
+\par PGM import and export are located in the source code files \verb!pgmImportExport.h! and \verb!pgmImportExport.c!. For import it is crucial that the second line is in fact a commentary. For exporting the method \verb!exportPGM(FILE* out, unsigned int** write, int x, int y)! accepts a file pointer as output file, a two dimensional \verb!unsigned int! array containing the intensity values and integers \verb!x! and \verb!y! as the size of the image. All exported files are normalized to the range of \(0-255\).
 \section{Future Work}
 \subsection{More easily implementable artefacts}
+\par While metal artefacts, beam hardening and undersampling artefacts are some of the most prominent artefacts in CT reconstructions, they are of course not the only ones. In this section we will briefly mention some more artefacts which could easily be implemented should the current simulator be extended.
 \subsubsection{Ring artefacts}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=4cm]{images/ring.png}
+	\caption{Ring artefact in an abdominal slice\cite{ringArt}}
+	\label{ringArtefact}
+\end{figure}
+\par Ring artefacts are usually obvious and rarely is mistaken for pathology for their perfect circular shape. However they can obscure pathology in affected parts of the scan. Ring artifacts are caused by miscalibrated or defective detector elements, which results in rings as visible in \ref{ringArtefact}. In the sinogram they manifest themselves as lines perpendicular to the projection axis. These artefacts can often be fixed by recalibrating the detector.\cite{ringArt}\cite{CausesAndReductionTechniques}
+\par For every detector element a calibration is defined in the form of \(d = ax+b\) where \(b\) is an offset and \(a\) a multiplicative factor.
+\par Simulation of miscalibration could be easy: When the ray reaches the detector in the simulation (i.e. the loop over the ray length has finished) not the calculated intensity is added to the result array, but \(d = ax+b\), with random values for \(a\) and \(b\).
 \subsubsection{Poisson noise}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=4cm]{images/poisson.png}
+	\caption{Abdominal slice of a low dose CT scan on the left showing severe Poisson noise and a high dose scan on the right\cite{CausesAndReductionTechniques}}
+	\label{poissonNoise}
+\end{figure}
+\par \emph{Poisson noise} or \emph{shot noise} is caused by the discrete particle nature of light. Especially at low photon counts i.e. in low dose CT the small fluctuations in the photon count may be enough to result in random thin bright and dark streaks that appear preferentially in the direction of greatest attenuation obscuring soft tissue boundaries as can be seen in \ref{poissonNoise}.\cite{CausesAndReductionTechniques}
+\par Simulation of poisson noise should be fairly easy: Instead of randomly modifying the value at the end of the ray as in ring artefacts the relative photon count at the start of the ray can be randomly altered.
 \subsubsection{Motion artefacts}
-merging sinogram parts from two simulations, with the moving object at two slightly different positions\cite{deMan}
-\subsection{Unresolved bugs}
+\par Motion artefacts can also happen during a CT scan. They are cause by the patient moving during the scan. Thus some parts of the sinogram are taken with the patient in one position and other parts with the patient in other positions. This causes blurring and double images, as well as long range streaks. Faster scanners reduce motion artefact because the patient has less time to move during the acquisition. An example of motion artefacts can be seen in figure
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=4cm]{images/motion.png}
+	\caption{Motion artefact in a brain scan\cite{CausesAndReductionTechniques}}
+	\label{motion}
+\end{figure}
+\par Simulation of motion artefacts can be realized easily: By merging sinogram parts from two or more simulation runs, with the moving object at two slightly different positions.\cite{deMan}
 
 \chapter{Results}
+\par This section showcases several images of the simulation. Most of these images took rather long to compute (5-60 minutes) on a 2010 Acer Aspire 3820TG notebook with an Intel Core i5-430M processor and 4GB of RAM. The amount of RAM really shouldn't be a limiting factor, as the simulation usually takes less than 8MB of RAM. Processing power is however crucial as the forward projection completely maxes out all cores of the CPU during the simulation run.
+\par Most of these images were created using the same segmented dataset of the Visible Korean Human Project\cite{visibleKorean} with a small metal object placed arbitrarily close to the center of the abdomen.
+\par Most of these images are not the original outputs of the simulation, but have their windowing adjusted, so that they look nice and clear. The original images are usually flat and dull, as the windowing just linerly maps all intensities to grey values.
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim01.png}
+		\caption{One simulation run with only slight metal artefacts. Note that even tissue anatomy is visible.}
+		\label{sim01}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim02.png}
+		\caption{One simulation run with 3 metal objects placed in the data. Slight metal artefacts are visible as well as string undersampling.}
+		\label{sim02}
+	\end{subfigure}%
+\end{figure}
 
+\begin{figure}[h!]
+	\centering	
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim03.png}
+		\caption{Another simulation run with 3 metal objects in the dataset. Metal artefacts are more severe in this one.}
+		\label{sim03}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim04.png}
+		\caption{One 'failed' simulation run. While the metal object is clearly visible, almost no patient anatomy is visible.}
+		\label{sim04}
+	\end{subfigure}%
+\end{figure}
+
+\begin{figure}[h!]
+	\centering	
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim05.png}
+		\caption{In this simulation no metal artefacts are visible at all. Patient anatomy is however rendered very clearly and crisp.}
+		\label{sim05}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim06.png}
+		\caption{One of the first simulation runs in which metal artefacts could be seen. Also a lot of undersampling artefacts.}
+		\label{sim06}
+	\end{subfigure}%
+\end{figure}
+
+\begin{figure}[h!]
+	\centering		
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim07.png}
+		\caption{What can also happen with the simulator: Calculation of the attenuation coefficients was wrong resulting in an almost completely blank image.}
+		\label{sim07}
+	\end{subfigure}%
+	~
+	\begin{subfigure}[h]{0.45\textwidth}
+		\centering
+		\includegraphics[height=6cm]{images/sim08.png}
+		\caption{Another 'failed' run: While the metal object produces nice streaks absolutely no patient anatomy can be seen.}
+		\label{sim08}
+	\end{subfigure}%
+\end{figure}
 \chapter{Conclusion}
 
 

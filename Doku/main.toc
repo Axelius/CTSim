@@ -23,17 +23,16 @@
 \contentsline {subsection}{\numberline {3.3.2}Simulation of an X-Ray tube}{12}{subsection.3.3.2}
 \contentsline {subsection}{\numberline {3.3.3}Lookup tables for attenuation values}{12}{subsection.3.3.3}
 \contentsline {subsection}{\numberline {3.3.4}Configuration file}{14}{subsection.3.3.4}
-\contentsline {section}{\numberline {3.4}Miscellaneous parts of the simulator}{15}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Logger}{15}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}Image reading and writing}{15}{subsection.3.4.2}
-\contentsline {section}{\numberline {3.5}Future Work}{15}{section.3.5}
-\contentsline {subsection}{\numberline {3.5.1}More easily implementable artefacts}{15}{subsection.3.5.1}
-\contentsline {subsubsection}{Ring artefacts}{15}{section*.15}
-\contentsline {subsubsection}{Poisson noise}{15}{section*.16}
-\contentsline {subsubsection}{Motion artefacts}{15}{section*.17}
-\contentsline {subsection}{\numberline {3.5.2}Unresolved bugs}{15}{subsection.3.5.2}
-\contentsline {chapter}{\numberline {4}Results}{17}{chapter.4}
-\contentsline {chapter}{\numberline {5}Conclusion}{19}{chapter.5}
-\contentsline {part}{Appendix}{23}{part*.18}
-\contentsline {chapter}{\numberline {A}Real metal artefacts images for reference}{23}{appendix.A}
-\contentsline {chapter}{Bibliography}{27}{appendix*.29}
+\contentsline {section}{\numberline {3.4}Miscellaneous parts of the simulator}{16}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Logger}{16}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Image reading and writing}{17}{subsection.3.4.2}
+\contentsline {section}{\numberline {3.5}Future Work}{18}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}More easily implementable artefacts}{18}{subsection.3.5.1}
+\contentsline {subsubsection}{Ring artefacts}{18}{section*.16}
+\contentsline {subsubsection}{Poisson noise}{19}{section*.18}
+\contentsline {subsubsection}{Motion artefacts}{19}{section*.20}
+\contentsline {chapter}{\numberline {4}Results}{21}{chapter.4}
+\contentsline {chapter}{\numberline {5}Conclusion}{25}{chapter.5}
+\contentsline {part}{Appendix}{29}{part*.26}
+\contentsline {chapter}{\numberline {A}Real metal artefacts images for reference}{29}{appendix.A}
+\contentsline {chapter}{Bibliography}{33}{appendix*.37}
