@@ -237,6 +237,7 @@ int project(int projectionNumber, double angle){
 			result[projectionNumber][s+SINOGRAMSIZE/2] += (unsigned int)(intensity[s+SINOGRAMSIZE/2]);
 			//logIt(DEBUG, "result: %u", result[count][s+SINOGRAMSIZE/2]);
 		}
+
 	}
 	free(intensity);
 	QueryPerformanceCounter(&t2);
