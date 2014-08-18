@@ -3,14 +3,14 @@
 \par Almost 100 years ago on April 30th 1917 the Austrian mathematician Johann Radon described in "\"Uber die Bestimmung von Funktionen durch ihre Integralwerte l\"angs gewisser Mannigfaltigkeiten" the mathematical theory computed tomography is based on: He showed that the knowledge of a function \(f(x,y)\) in equivalent to the knowledge of all its line integrals. Thus the function can be reconstructed from an infinite set of its projections.\cite{Radon}
 \par X-Ray is an imaging modality which produces projection images of a volume which show also the internals of the object. So in a perfect world by taking X-Ray images from all angles around an object orthogonal slices of the object can be reconstructed perfectly: In an idealized situation with high radiation dose, monochromatic X-Rays, infinite detector resolution, perfect detectors, no motion and no scatter CT images would be a perfect reflection of reality.\cite{CausesAndReductionTechniques}
 \par In reality however these conditions are not met. Thus errors in the reconstruction occur resulting in image artefacts.
-\par Usually especially for commercial CT scanners which are used in medical imaging the reduction of these artefacts is of special interest. But to better understand the causes of these artefacts as well as training of medical doctors to make reasonable diagnoses in the presence of these artefacts simulation is also of interest. In this clinical project we developed a simulator of a CT which produces CT images from segmented patient datasets in which the artefacts usually visible in medical imaging are also simulated in a realistic fashion. Especially the simulation of metal artefacts is of major importance as the resulting image artefacts are a major concern in medical imaging as these artefacts degrade image quality considerably.
+\par Usually especially for commercial CT scanners which are used in medical imaging the reduction of these artefacts is of special interest. But to better understand the causes of these artefacts as well as training of medical doctors to make reasonable diagnoses in the presence of these artefacts simulation is also of interest. In this clinical project we developed a simulator of CT which produces CT images from segmented patient datasets in which the artefacts usually visible in medical imaging are also simulated in a realistic fashion. Especially the simulation of metal artefacts is of major importance as the resulting image artefacts are a major concern in medical imaging as these artefacts degrade image quality considerably.
 
 \chapter{Causes of metal artefacts in CT}
 \section{Examples of metal artefacts in CT}
 \par To know why metal artefacts in CT should be simulated, we should first know what these metal artefacts are and how they look like.
-\par The human body usually does not contain any metal objects. However many medical implants are composed of metal as well as many surgical tools. Thus metal can indeed be found quite often in patients who are scanned in CT scanners: Artificial hip bones, dental fillings, pacemakers, intramedullary rods, screws or in the case of inerventional CT surgical tools like needles, trocars etc. are found in many patients. If these patients are scanned in CT artefacts in the tomographic reconstruction are usually encountered, how severe these artefacts are depends mainly on their size and the material they are composed of.
+\par The human body usually does not contain any metal objects. However many medical implants are composed of metal as well as many surgical tools. Thus metal can indeed be found quite often in patients who are scanned in CT scanners: Artificial hip bones, dental fillings, pacemakers, intramedullary rods, screws or in the case of interventional CT surgical tools like needles, trocars etc. are found in many patients. If these patients are scanned in CT artefacts in the tomographic reconstruction are usually encountered, how severe these artefacts are depends mainly on their size and the material they are composed of.
 \par These artefacts usually consist of dark stripes between metal objects with light, pin-striped lines covering the surrounding tissue going through the whole or large portions of the reconstruction as can be seen in figure \ref{BilateralHipReplacements}. Especially in cases in which the radiation is completely absorbed due to the thickness of the materials, very bright strips are found radially around the object with the complete image losing its diagnostic value. More examples can be found in appendix \ref{chapter:RealMetal}.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{images/12_FBP.png}
 	\caption{Bilateral hip replacements (with streaks obscuring perirectal lymphadenopathy from rectal cancer)\cite{revisionrads}}
@@ -23,7 +23,7 @@
 \par Bremsstrahlung results in a continuous spectrum of EM radiation which is produced by the abrupt deceleration of charged particles ("Bremsstrahlung" is German for "braking radiation"). This deceleration is caused by deflection of electrons in the Coulomb field of the nuclei of the anode material.
 \par Characteristic rays are caused by the removal of inner shell electrons and subsequent filling of the holes with electrons from the outer shells. Shell energy differences determine the energies of the characteristic X-rays (this strongly depends on the anode material).
 \par Both effects together result in the total emission spectrum of the X-Ray source. This spectrum depends on tube voltage and heating current and anode material and anode angle. This spectrum usually looks like as depicted in figure \ref{spectrum}.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/spectrum.png}
 	\caption{Total X-Ray spectrum of a tungsten anode at an acceleration voltage of \(U_a\) = 80kV\cite{IIIP_3_1}}
@@ -38,7 +38,7 @@
 \par X-Ray is colloquially understood to have the property of effectively penetrating material. But from a physical point of view it can be seen that the radiation attenuation is not only dependent on path length but also wavelength dependent and also on the penetrated material.
 \par Thus Lambert-Beer's Law is indeed a simplification. The energy dependence of the attenuation coefficient along the path \(s\) also has to be taken into consideration \(\mu = \mu(\eta,E)\). This leads to \[I(s) = \int_0^{E_{\textrm{max}}}I_0(E)e^{-\int_0^{s}\mu(\eta,E)\textrm{d}\eta}\textrm{d}E\] where \(I_0(E)\) is the X-Ray spectrum.
 \par Reconstruction does not take this non-linear relationship due to the fact that different bands of the frequency spectrum are differently attenuated between the attenuation values, \(\mu\), and the measured values of the projection into account thus impairing the reconstruction.
-\par Soft X-ray beams are more strongly absorbed than high-energy, \emph{hard} X-Ray beams. The individual detector elements in practice only measure the integral intensity over all wavelengths, i.e., they cannot differentiate distinct energies. If a non monochromatic X-Ray beam passes through an object different bands of its spectrum are differently attenuated. Without taking this into account in the reconstruction this leads to so called beam hardening artefacts.
+\par Soft X-ray beams are more strongly absorbed than high-energy, \emph{hard} X-Ray beams. The individual detector elements in practice only measure the integral intensity over all wavelengths, i.e., they cannot differentiate between distinct energies. If a non monochromatic X-Ray beam passes through an object different bands of its spectrum are differently attenuated. Without taking this into account in the reconstruction this leads to so called beam hardening artefacts.
 \par The beam hardening effect is especially prominent for metals that are introduced into the human body as their atomic number Z is relatively high with absorption given by \[\alpha \propto Z^4\lambda^3\] (Due to this relationship for example lead (Pb, Z = 82) shields X-ray radiation about 1583 times better than aluminium (Al, Z = 13))
 \par Thus behind a thick metal object the system detects an \emph{infinitely high} attenuation coefficient. Filtered backprojection does not cope with the inconsistencies in the attenuation values. In the backprojection lines through the object are encountered with extremely high numerical values, which spread across the entire image and are not compensated for by any other projection direction creating star like streaks emanating from the metal object going through the whole or large portions of the reconstruction.\cite{buzug}
 \section{Fundamentals of CT reconstruction}
@@ -46,7 +46,7 @@
 \par As described in section \ref{intro} the knowledge of all line integrals of \emph{projections} of a function \(f(x,y)\) is equivalent to the knowledge of the function itself. With X-Ray being able to create projections of objects opaque to the human eye with this theorem we can create axial slices (or tomographies from \(\tau\acute{o}\mu o\varsigma\) \emph{tomos}, "slice, section" and \(\gamma\rho\acute{\alpha}\varphi\omega\) \emph{gr\'aph\=o}, "to write"\cite{wiktionaryTomography}\cite{wiktionaryTomo}\cite{wiktionaryGraphy}) when we take X-Rays from all angles around the object.
 \par An image of all the projections from a line detector of a single slice of an object is called \emph{sinogram} or mathematically Radon transform: In one axis of the image the angle is gradually increased and along the perpendicular line the projection values from the line detector is plotted.
 \par In figure \ref{shepplogan} the famous Shepp-Logan phantom can be seen created by Larry Shepp and Benjamin F. Logan which serves as a crude model of a human head to develop and test image reconstruction algorithms on. Figure \ref{shepplogansino} is the sinogram of this phantom.\cite{shepploganphantom}
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\begin{subfigure}[b]{0.28\textwidth}
 		\centering
@@ -63,7 +63,7 @@
 	\end{subfigure}%	
 \end{figure}
 \subsection{Simple Backprojection}
-\par To transform such a sinogram from \(p_\gamma(\xi)\) back into the image space \(f(x,y)\) the basic idea is to \emph{backproject} the values of the detector line along the angle these were acquired from into the image. In the case of \emph{simple backprojection} the would be to \emph{smear back} the values in the direction from which the radiation came. However, although intuitively thsi simple backprojection seems to reverse the process of projection, this procedure does not result in the desired outcome: Due to the fact that the projection \(p_\gamma(\xi)\) is a non-negative
+\par To transform such a sinogram from \(p_\gamma(\xi)\) back into the image space \(f(x,y)\) the basic idea is to \emph{backproject} the values of the detector line along the angle these were acquired from into the image. In the case of \emph{simple backprojection} the idea would be to \emph{smear back} the values in the direction from which the radiation came. However, although intuitively this simple backprojection seems to reverse the process of projection, this procedure does not result in the desired outcome: Due to the fact that the projection \(p_\gamma(\xi)\) is a non-negative
 function, the simple backprojection smears back non-negative values over the entire image, even in areas that were originally (close to) zero. The backprojections from other directions cannot correct these incorrect pixel entries, because the entire set of projections in the sinogram is a set of non-negative functions. Simple backprojection is visualized in \ref{zeng1} and \ref{zeng2} showing that it would result in an overall unacceptable blurring of the image.\cite{buzug}
 \begin{figure}[h!]
 	\centering
@@ -109,10 +109,10 @@ function, the simple backprojection smears back non-negative values over the ent
 \par The source code for this simulator is available in a git repository hosted at GitHub. It can be found in \url{https://github.com/Axelius/CTSim.git}
 \section{Forward Projection}
 \par The forward projection is in essence a forward Radon Transform with some special conditional statements to simulate effects that exist in physical reality but not in the mathematical model. The simulation especially focuses on the effects of beam hardening, so it simulates a virtual X-Ray tube and has lookup tables for attenuation values of different materials at different tube voltages.
-\par For this simulator basic parallel beam CT was chosen, although today fan beam or cone beam geometry is state of the art. But the artefacts in fan beam geometry should be the same as in parallel beam geometry as fan beam can be converted to parallel beam by simple reordering of the X-Ray beams.\cite{IIIP_3_4} In cone beam geometry no central slice theorem exists anyway, so reconstruction is \emph{not mathematically correct anyway} so the simulation of this was not considered\cite{IIIP_3_5}.
+\par For this simulator basic parallel beam CT was chosen, although today fan beam or cone beam geometry is state of the art. But the artefacts in fan beam geometry should be the same as in parallel beam geometry as fan beam can be converted to parallel beam by simple reordering of the X-Ray beams.\cite{IIIP_3_4} In cone beam geometry no central slice theorem exists, so reconstruction is \emph{not mathematically correct anyway} so the simulation of this was not considered\cite{IIIP_3_5}.
 \par To sum it up the forward projection can be formulated as the formula\[\sum_{p\in P}\sum_{en\in E}\sum_{d \in D}\sum_{l \in L}I_{0}\cdot \textrm{e}^{-\sum_{\eta \in M}\mu(\eta,x,y,en)}\] where \(p\in P\) is the projection angle, \(en\in E\) the energy level, \(d \in D\) the detector element, \(l \in L\) the length of the ray after leaving the X-Ray source and \(\eta \in M\) the material. \(x\) and \(y\) is the position of the currently examined pixel that is calculated from the projection angle, detector element and ray length as \(x = l\cdot sin(p) + d\cdot cos(p)\) and \(y = -l\cdot cos(p) + d\cdot sin(p)\). The general idea and the proof that CT can be simulated in this was is from \cite{deMan}. However they did their sum slightly different and in a different order. Still, this thesis was very helpful as a basis for how to tackle simulation of CT.
 \subsection{Overview over the forward projection}
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{images/MainLoop.png}
 	\caption{Translation of the formula to source code}
@@ -132,7 +132,7 @@ function, the simple backprojection smears back non-negative values over the ent
 \par Especially for beam hardening the X-Ray tube model was created as the shift of the spectrum after passing through an object is the main reason for beam hardening which could not be modelled realistically with equally distributed intensity over all energies.  
 \section{Backprojection}
 \par Backprojection is not really a simulation task as this has to be done in real CTs too. Thus not much time was spent on it and a nice implementation from \cite{CUDABackprojection} was adapted which implements a filtered backprojection in C. Moreover \cite{CUDABackprojection} describes how this algorithm can be ported to CUDA-C for execution of the graphics card which experimentally resulted in a speedup of over 200. Computation speed comparison is visualized in figure \ref{ArnesenSpeedup}.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{images/ArnesenSpeedupCombined.png}
 	\caption{Computation time of the reconstruction algorithm using calculation on the CPU and on the graphics card in 5 algorithm iterations\cite{CUDABackprojection}}
@@ -142,9 +142,9 @@ function, the simple backprojection smears back non-negative values over the ent
 \par In this section we will have a closer look at the parts of the simulator other than forward projection and backprojection.
 \subsection{Segmented CT slice}
 \par The simulation of course needs information about the object to be "scanned" and reconstructed. As we use 2D parallel beam geometry a segmented 2D slice of the object to be simulated is sufficient. If one desires to create a whole volume several runs on successive slices can be performed using a batch file etc.
-\par The simulation accepts folders as input of the segmentation with separate image files for each material. They have to be in \verb!pgm! format and named \verb!air.pgm!, \verb!bone.pgm!, \verb!iron.pgm!, \verb!muscle.pgm!, \verb!tissue.pgm! and \verb!water.pgm! respectively as their name is hardcoded. In these single images white corresponds to the existence of this material on the respective position, black corresponds to the lack of this material on this position. Grey values correspond to intermediate values the simulation simply multiplies the grey value with the corresponding attenuation coefficient.
+\par The simulation accepts folders as input of the segmentation with separate image files for each material. They have to be in \verb!pgm! format and named \verb!air.pgm!, \verb!bone.pgm!, \verb!iron.pgm!, \verb!muscle.pgm!, \verb!tissue.pgm! and \verb!water.pgm! respectively as their names are hardcoded. In these single images white corresponds to the existence of this material on the respective position, black corresponds to the lack of this material on this position. Grey values correspond to intermediate values, the simulation simply multiplies the grey value with the corresponding attenuation coefficient.
 \par The segmentation that was mainly used for development is based on an abdominal slice of the Visible Korean Human Project\cite{visibleKorean} in which arbitrarily a single metal object was placed close to the center. All the slices can be seen in figures \ref{korean1}, \ref{korean2}, \ref{korean3}, \ref{korean4}, \ref{korean5} and \ref{korean6}.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\begin{subfigure}[h]{0.3\textwidth}
 		\centering
@@ -191,13 +191,13 @@ function, the simple backprojection smears back non-negative values over the ent
 \subsection{Simulation of an X-Ray tube}
 \par As mentioned before for a realistic simulation of beam hardening a virtual model of the X-Ray tube spectrum is needed.\cite{XRayTubeSpectrum}
 \par For this we simulation we use lookup tables based on \cite{XRayTubeSpectrum}. They provide relative photon counts of an X-Ray tube at different tube voltages which is also visualized in \ref{f5}. From this we created separated lookup tables for each tube voltage. For the use in our simulation we sampled the spectrum at intervals of 5keV resulting in \ref{SampledTubeSpectrum}. The relative X-Ray photon count is then used as the intensity \(I_{0}\) of the ray leaving the X-Ray tube. After passing through each pixel of the simulation area this intensity is reduced as suggested by Lambert-Beer's Law.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\linewidth]{images/F5large.jpg}
 	\caption{Spectrum of an X-Ray tube at different tube voltages\cite{XRayTubeSpectrum}}
 	\label{f5}
 \end{figure}
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{images/tubeSpectrum.png}
 	\caption{Sampled X-Ray spectrum at equal distances of 5keV.}
@@ -205,7 +205,7 @@ function, the simple backprojection smears back non-negative values over the ent
 \end{figure}
 \subsection{Lookup tables for attenuation values}
 \par Different materials have different attenuation values. As mentioned before the attenuation value is dependent on the atomic mass \(Z\) but also on the density of the material. For our simulation we relied on measurements of \cite{AttenuationTable} who provide attenuation values for different elements but also compounds, mixtures and various human tissues at different photon energies. A visualization of such a table can be seen in figure \ref{muscleAtt}.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\linewidth]{images/muscle.png}
 	\caption{X-Ray Mass Attenuation Coefficients of skeletal muscle\cite{AttenuationTable}}
@@ -236,19 +236,19 @@ attenuationMultiplicator=40
 	\item\emph{pathToSlice}: Path to the folder in which the segmentation of the slice to be rendered is located. This folder should contain several \verb!.pgm! files named \verb!air.pgm!, \verb!bone.pgm!, \verb!iron.pgm!, \verb!muscle.pgm!, \verb!tissue.pgm! and \verb!water.pgm! respectively.
 	\item\emph{pathToOutputReconstruction}: Path to a \verb!.pgm! file to which the reconstruction is to be saved.
 	\item\emph{pathToOutputSinogram}: Path to a \verb!.pgm! file where the intermediate simulated sinogram is to be saved. Even if you are not interested in the sinogram only in the reconstruction a path has to be set, as the reconstruction only accepts an image and can't directly read the sinogram from RAM.
-	\item\emph{pathToXRaySpectra}: Path to where lookup tables for the X-Ray spectra are located. These should be named \verb!XRaySpectrum80keV.txt!, \verb!XRaySpectrum100keV.txt!, \verb!XRaySpectrum120keV.txt! and \verb!XRaySpectrum140keV.txt! as their name is hardcoded. The files themselves are simple textfiles with each line stating a certain energy and the corresponding relative photon count.
-	\item\emph{minEnergy}: Minimum energy in keV of the photons leaving the X-Ray tube. As Polychromaticity is simulated as a number of monochromatic simulation runs this is the lowest energy that is simulated. No photons are generated with an energy lower that this value.
-	\item\emph{maxEnergy}: Maximum energy in keV of the photons leaving the X-Ray tube. As polychromaticity is simulated as a number of monochromatic simulation runs this is the highest energy that is simulated. No photons are generated with an energy higher that this value.
+	\item\emph{pathToXRaySpectra}: Path to where lookup tables for the X-Ray spectra are located. These should be named \verb!XRaySpectrum80keV.txt!, \verb!XRaySpectrum100keV.txt!, \verb!XRaySpectrum120keV.txt! and \verb!XRaySpectrum140keV.txt! as their names are hardcoded. The files themselves are simple textfiles with each line stating a certain energy and the corresponding relative photon count.
+	\item\emph{minEnergy}: Minimum energy in keV of the photons leaving the X-Ray tube. As Polychromaticity is simulated as a number of monochromatic simulation runs this is the lowest energy that is simulated. No photons are generated with an energy lower than this value.
+	\item\emph{maxEnergy}: Maximum energy in keV of the photons leaving the X-Ray tube. As polychromaticity is simulated as a number of monochromatic simulation runs this is the highest energy that is simulated. No photons are generated with an energy higher than this value.
 	\item\emph{energyLevels}: Number of monochromatic simulation runs to simulate polychromaticity. Higher values result in a better approximation of polychromaticity. Computation time is however direct proportional to the number of energy levels.
 	\item\emph{numberOfProjectionAngles}: Number of projections. With low values severe undersampling artefacts are encountered, high values result in smooth reconstructions. But beware that computation time is direct proportional to the number of projections.
-	\item\emph{numberOfThreads}: Number of threads for the forward projection. This should be the same number as cores in the computer that runs this program for maximum speedup. Computation time is almost indirect proportional to the number of threads if the number of threads is equal to the number of cores, higher values usually result in no speedup or even an increase in computation time. Note that the backprojection always only uses one thread (but as this part of the simulation only takes a few seconds this time should be negligible).
-	\item\emph{tubeEnergy}: Tube energy of the simulated X-Ray tube. For this only values of 80kev, 100keV, 120keV and 140keV are accepted, as only for these tube energies lookup tables exist. However these are reasonable values for medical X-Ray. If other values are set the closest match to the existing lookup tables is selected.
-	\item\emph{detectorThreshold}: Threshold of photon count below which the beam is assumed to have completely starved. No further simulation of the ray is carried out below this value. Higher values can result in more severe metal artefacts, but too high values result in completely images (as the X-Ray beam coming from the tube may already be below this threshold).
+	\item\emph{numberOfThreads}: Number of threads for the forward projection. This should be the same number as cores in the computer that runs this program for maximum speedup. Computation time is almost indirect proportional to the number of threads if the number of threads is less or equal to the number of cores, higher values usually result in no speedup or even an increase in computation time. Note that the backprojection always only uses one thread (but as this part of the simulation only takes a few seconds this time should be negligible).
+	\item\emph{tubeEnergy}: Tube energy of the simulated X-Ray tube. For this only values of 80keV, 100keV, 120keV and 140keV are accepted, as only for these tube energies lookup tables exist. However these are reasonable values for medical X-Ray. If other values are set the closest match to the existing lookup tables is selected.
+	\item\emph{detectorThreshold}: Threshold of photon count below which the beam is assumed to have completely starved. No further simulation of the ray is carried out below this value. Higher values can result in more severe metal artefacts, but too high values result in completely blank images (as the X-Ray beam coming from the tube may already be below this threshold).
 	\item\emph{attenuationMultiplicator}: Multiplication factor of the attenuation coefficient. While not physically correct by tweaking this value sometimes more severe metal artefacts can be created. But as with the value before too high values might result in blank images as almost every ray is completely absorbed.
 \end{itemize}
 \par The simulation accepts the configuration file as the first parameter of the call to the executable. Note that reading theses configuration files is not too stably implemented and it it generally a good idea not to change the structure of these files but only set different values. Especially the value of each field should follow directly after the "\(=\)" sign without a whitespace in between.
 \section{Miscellaneous parts of the simulator}
-\par There are also some parts not directly related to the simulation of CT metal artefacts. But as the paradigm of this program was not to rely on any external libraries some more code had to be implemented. 
+\par There are also some parts not directly related to the simulation of CT metal artefacts. But as the paradigm of this project was not to rely on any external libraries some more code had to be implemented. 
 \subsection{Logger}
 \par We implemented a simple logger to produce structured terminal output similar to libraries like log4j\cite{ApacheLog4j}. With such a logging framework you can \emph{plaster} your source code with logging statements, but select in which \emph{loglevel} you are interested in and only produce output of this loglevel (or higher). By specifying the current loglevel as a macro no messages with a lower loglevel will be produced.
 \par By heavily relying on macros messages on a lower loglevel hardly influence computation time as the method immediately returns.
@@ -270,6 +270,8 @@ attenuationMultiplicator=40
 \par As mentioned before we did not want to rely on any external libraries other than the standard libraries. So for image import and export we chose one of the easiest image file formats available which is the portable graymap format \verb!.pgm! which belongs to Portable Anymap or Netpbm format.
 \par In Portable GrayMap with the magic number \verb!P2! a simple and short header is followed by the greyvalues in ASCII in the range \(0-255\).
 \par An example from the Netpbm man page on PGM can be seen in listing \ref{feep1} with its graphical representation in figure \ref{feep2}
+
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[caption={PGM example from the Netpbm man page on PGM\cite{pgmNetPBM}},label=feep1,captionpos=b]
 P2
 # feep.pgm
@@ -283,68 +285,70 @@ P2
 0  3  0  0  0  0  0  7  7  7  7  0  0 11 11 11 11  0  0 15  0  0  0  0
 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
 \end{lstlisting}
+\end{minipage}
 \par In the first line of listing \ref{feep1} the magic number \verb!P2! is set which specifies Portable Graymap in ASCII. The next line is a comment. In the third line width and height of the image is given. In the fourth line the maximum value for brightness is given, so in this example 15 corresponds to pure white. In the following lines the grey values of the pixels are given separated by whitespaces.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
-	\includegraphics[height=4cm]{images/feep.png}
+	\includegraphics[height=2.5cm]{images/feep.png}
 	\caption{Graphical representation of the example from the Netpbm man page on PGM (own work, based on \cite{pgmNetPBM})}
 	\label{feep2}
 \end{figure}
-\par PGM import and export are located in the source code files \verb!pgmImportExport.h! and \verb!pgmImportExport.c!. For import it is crucial that the second line is in fact a commentary. For exporting the method \verb!exportPGM(FILE* out, unsigned int** write, int x, int y)! accepts a file pointer as output file, a two dimensional \verb!unsigned int! array containing the intensity values and integers \verb!x! and \verb!y! as the size of the image. All exported files are normalized to the range of \(0-255\).
+\par PGM import and export are located in the source code files \verb!pgmImportExport.h! and \verb!pgmImportExport.c!. For import it is crucial that the second line is in fact a comment. For exporting the method \verb!exportPGM(FILE* out, unsigned int** write,! \verb!int x,! \verb!int y)! accepts a file pointer as output file, a two dimensional \verb!unsigned int! array containing the intensity values and integers \verb!x! and \verb!y! as the size of the image. All exported files are normalized to the range of \(0-255\).
 \section{Future Work}
 \subsection{More easily implementable artefacts}
 \par While metal artefacts, beam hardening and undersampling artefacts are some of the most prominent artefacts in CT reconstructions, they are of course not the only ones. In this section we will briefly mention some more artefacts which could easily be implemented should the current simulator be extended.
 \subsubsection{Ring artefacts}
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[height=4cm]{images/ring.png}
 	\caption{Ring artefact in an abdominal slice\cite{ringArt}}
 	\label{ringArtefact}
 \end{figure}
-\par Ring artefacts are usually obvious and rarely is mistaken for pathology for their perfect circular shape. However they can obscure pathology in affected parts of the scan. Ring artifacts are caused by miscalibrated or defective detector elements, which results in rings as visible in \ref{ringArtefact}. In the sinogram they manifest themselves as lines perpendicular to the projection axis. These artefacts can often be fixed by recalibrating the detector.\cite{ringArt}\cite{CausesAndReductionTechniques}
+\par Ring artefacts are usually obvious and rarely is mistaken for pathology for their perfect circular shape. However they can obscure pathology in affected parts of the scan. Ring artefacts are caused by miscalibrated or defective detector elements, which results in rings as visible in \ref{ringArtefact}. In the sinogram they manifest themselves as lines perpendicular to the projection axis. These artefacts can often be fixed by recalibrating the detector.\cite{ringArt}\cite{CausesAndReductionTechniques}
 \par For every detector element a calibration is defined in the form of \(d = ax+b\) where \(b\) is an offset and \(a\) a multiplicative factor.
 \par Simulation of miscalibration could be easy: When the ray reaches the detector in the simulation (i.e. the loop over the ray length has finished) not the calculated intensity is added to the result array, but \(d = ax+b\), with random values for \(a\) and \(b\).
 \subsubsection{Poisson noise}
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[height=4cm]{images/poisson.png}
 	\caption{Abdominal slice of a low dose CT scan on the left showing severe Poisson noise and a high dose scan on the right\cite{CausesAndReductionTechniques}}
 	\label{poissonNoise}
 \end{figure}
 \par \emph{Poisson noise} or \emph{shot noise} is caused by the discrete particle nature of light. Especially at low photon counts i.e. in low dose CT the small fluctuations in the photon count may be enough to result in random thin bright and dark streaks that appear preferentially in the direction of greatest attenuation obscuring soft tissue boundaries as can be seen in \ref{poissonNoise}.\cite{CausesAndReductionTechniques}
-\par Simulation of poisson noise should be fairly easy: Instead of randomly modifying the value at the end of the ray as in ring artefacts the relative photon count at the start of the ray can be randomly altered.
+\par Simulation of Poisson noise should be fairly easy: Instead of randomly modifying the value at the end of the ray as in ring artefacts the relative photon count at the start of the ray can be randomly altered.
 \subsubsection{Motion artefacts}
-\par Motion artefacts can also happen during a CT scan. They are cause by the patient moving during the scan. Thus some parts of the sinogram are taken with the patient in one position and other parts with the patient in other positions. This causes blurring and double images, as well as long range streaks. Faster scanners reduce motion artefact because the patient has less time to move during the acquisition. An example of motion artefacts can be seen in figure
-\begin{figure}[h!]
-	\centering
-	\includegraphics[height=4cm]{images/motion.png}
+\begin{wrapfigure}{l}{0.3\textwidth}
+	\begin{center}
+		\vspace{-24pt}
+		\includegraphics[width=0.25\textwidth]{images/motion.png}
+	\end{center}
 	\caption{Motion artefact in a brain scan\cite{CausesAndReductionTechniques}}
 	\label{motion}
-\end{figure}
+\end{wrapfigure}
+\par Motion artefacts can also happen during a CT scan. They are cause by the patient moving during the scan. Thus some parts of the sinogram are taken with the patient in one position and other parts with the patient in other positions. This causes blurring and double images, as well as long range streaks. Faster scanners reduce motion artefact because the patient has less time to move during the acquisition. An example of motion artefacts can be seen in figure \ref{motion}.
 \par Simulation of motion artefacts can be realized easily: By merging sinogram parts from two or more simulation runs, with the moving object at two slightly different positions.\cite{deMan}
-
+\addtocontents{toc}{\protect\newpage}
 \chapter{Results}
 \par This section showcases several images of the simulation. Most of these images took rather long to compute (5-60 minutes) on a 2010 Acer Aspire 3820TG notebook with an Intel Core i5-430M processor and 4GB of RAM. The amount of RAM really shouldn't be a limiting factor, as the simulation usually takes less than 8MB of RAM. Processing power is however crucial as the forward projection completely maxes out all cores of the CPU during the simulation run.
 \par Most of these images were created using the same segmented dataset of the Visible Korean Human Project\cite{visibleKorean} with a small metal object placed arbitrarily close to the center of the abdomen.
-\par Most of these images are not the original outputs of the simulation, but have their windowing adjusted, so that they look nice and clear. The original images are usually flat and dull, as the windowing just linerly maps all intensities to grey values.
-\begin{figure}[h!]
+\par Most of these images are not the original outputs of the simulation, but have their windowing adjusted, so that they look nice and clear. The original images are usually flat and dull, as the windowing just linearly maps all intensities to grey values.
+\begin{figure}[h]
 	\centering
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
 		\includegraphics[height=6cm]{images/sim01.png}
-		\caption{One simulation run with only slight metal artefacts. Note that even tissue anatomy is visible.}
+		\caption{One simulation run with only slight metal artefacts. Note that even tissue anatomy is visible.\\}
 		\label{sim01}
 	\end{subfigure}%
 	~
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
 		\includegraphics[height=6cm]{images/sim02.png}
-		\caption{One simulation run with 3 metal objects placed in the data. Slight metal artefacts are visible as well as string undersampling.}
+		\caption{One simulation run with 3 metal objects placed in the data. Slight metal artefacts are visible as well as strong undersampling.}
 		\label{sim02}
 	\end{subfigure}%
 \end{figure}
-
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering	
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
@@ -360,8 +364,7 @@ P2
 		\label{sim04}
 	\end{subfigure}%
 \end{figure}
-
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering	
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
@@ -377,8 +380,7 @@ P2
 		\label{sim06}
 	\end{subfigure}%
 \end{figure}
-
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering		
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
@@ -390,12 +392,16 @@ P2
 	\begin{subfigure}[h]{0.45\textwidth}
 		\centering
 		\includegraphics[height=6cm]{images/sim08.png}
-		\caption{Another 'failed' run: While the metal object produces nice streaks absolutely no patient anatomy can be seen.}
+		\caption{Another 'failed' run: While the metal object produces nice streaks absolutely no patient anatomy can be seen.\\}
 		\label{sim08}
 	\end{subfigure}%
 \end{figure}
 \chapter{Conclusion}
-
+\par In this clinical project we tackled the problem of simulating CT metal artefacts. This topic turned out to be more challenging than expected as metal artefacts proved to be not easily simulated on their own but required a full CT simulator.
+\par We concluded that metal artefacts are in fact a side effect of beam hardening: Metal artefacts in which the beam is (almost) completely starved can be understood as the epitome of beam  hardening.
+\par Thus we developed a full CT simulator, complete with a simulated X-Ray tube whose rays are calculated to be attenuated according to the physical model mainly based on Lambert-Beer's Law.
+\par While not scientifically ground breaking, as simulation of CT has in fact be done before, it proved to be a great learning experience and deepened our understanding of how CT works and especially X-Ray physics.
+\par With our own full CT simulator other CT artefacts like Poisson noise, Ring artefacts or motion artefacts could easily be integrated in a future iteration. Especially with C as a programming language a port to CUDA-C should be possible with reasonable work for a speedup of several orders of magnitude.
 
 
 

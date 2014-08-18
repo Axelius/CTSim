@@ -16,7 +16,9 @@
 \end{center}
 \vspace{1cm}
 
-\par Blablabla
-
-
-
+\par Metal artefacts are a major problem in medical computed tomography (CT). They occur because the X-Ray attenuation coefficients of metals are much higher than of other materials in the human body. With such high attenuation values beam hardening becomes a major effect degrading image quality considerably. When the beam is (almost) completely 'hardened' i.e. the X-Ray beam is attenuated so much that it gets lost in the noise of the detector element the attenuation is considered infinity in the reconstruction which is of course not true, but the only reasonable assumption for the reconstruction.
+\par For medical products the reduction of these metal artefacts is of major importance. But for scientific reasons we decided to implement a simulator that created these metal artefacts to better understand the effects contributing to these artefacts.
+\par In this clinical project we tackled the problem of simulating such metal artefacts. It proved to be impossible to only simulate the metal artefacts on their own, thus a full CT simulation was developed in the C programming language, complete with an X-Ray tube simulation, attenuation of different materials and the important physical formulas of the field of X-Ray physics.
+\par Our simulation takes a segmentation of a CT slice as input, performs the forward projection and backprojection and outputs the result of the simulation as an image. The user can set important parameters of the simulation, like tube energy, detector threshold and number of projections.
+\par We found several artefacts in the output of the simulation runs. However to achieve realistic results some tweaking of the user inputs is needed. So some aspects of the physical attenuation model requires further research.
+ 
